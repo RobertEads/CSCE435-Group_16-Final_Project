@@ -123,13 +123,18 @@ void quickSort(int arr[], int low, int high) {
 ### Algorithm 4: Sample Sort
   #### MPI
   ```
-  Sample splitters on all processess
-  Send splitters to all other processes using MPI_Allgather
-  Sort the splitters and decide upon bucket cutoffs
+  FOR number of splitters selected by each process 
+        Push back randomly selected value from local data to sample vector
+  Allocate memory for all sampled splitters
+  MPI_Allgather sampled splitters to each process
+  Sort sampled splitters and choose bucket bounds from thoughout sampled splitters
   Evaluate local elements and place into send buffers
-  Calculate and communicate buffer sizes using MPI_Gather
+  Calculate required buffer size from each process
+  FOR number of processes
+        MPI_Gather the buffer sizes from each process on each process
   Allocate receive buffer for incoming data
-  Send data in buffers to the appropriate process with MPI_Gatherv
+  FOR number of processes
+        MPI_Gatherv to send data to the correct process
   Sort with sequential quicksort
   ```
 
