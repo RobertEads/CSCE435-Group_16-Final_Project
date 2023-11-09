@@ -188,6 +188,31 @@ __global__ void mergeSortParallelCUDA(int* arr, int size) {
 
 ### Algorithm 3: Quick Sort
 
+#### MPI
+
+```
+1. Distribute the data among processes using MPI_Scatter.
+2. Each process applies the quicksort algorithm to its portion of the data.
+3. Communicate with neighboring processes to partition and exchange data using MPI_Send and MPI_Recv.
+4. Recursively apply quicksort on the subarrays, ensuring elements are correctly placed relative to the pivot.
+5. Repeat the quicksort and data exchange steps for the required number of iterations (in parallel) to ensure a fully sorted dataset.
+6. Verify the correctness of the sorted data.
+```
+
+
+#### CUDA
+```
+1. Each CUDA thread loads a portion of the data into shared memory
+2. Apply quicksort within shared memory.
+3. Use CUDA parallel reduction for pivot selection.
+4. Broadcast pivot elements to all threads.
+5. Partition data around pivot.
+6. Calculate offsets for each partition.
+7. Use CUDA scatter to move elements to partitions.
+8. Recursively apply quicksort to each partition.
+9. Optionally perform parallel merging (depending on partition size).
+```
+ 
 ```
 int partition(int arr[], int low, int high) {
 
@@ -213,6 +238,8 @@ void quickSort(int arr[], int low, int high) {
   }
 }
 ```
+
+
 
 ### Algorithm 4: Sample Sort
 
