@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <mpi.h>
 
+#include <vector>
+#include <string>
+#include <iostream>
+
+#include <caliper/cali.h>
+#include <caliper/cali-manager.h>
+#include <adiak.hpp>
+
 void swap(int* a, int* b) {
     int t = *a;
     *a = *b;
