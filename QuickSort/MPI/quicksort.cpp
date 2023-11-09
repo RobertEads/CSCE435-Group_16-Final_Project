@@ -62,6 +62,7 @@ void quicksort(int* arr, int low, int high) {
 int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
 
+    CALI_MARK_BEGIN(mainFunction);
     int world_size;
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
@@ -108,6 +109,8 @@ int main(int argc, char** argv) {
 
         free(sub_arr);
     }
+
+    CALI_MARK_END(mainFunction);
 
     adiak::init(NULL);
     adiak::launchdate();    // launch date of the job
