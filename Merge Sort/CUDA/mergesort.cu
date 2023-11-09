@@ -1,73 +1,173 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <cstdlib>
+#include <string>
+#include <cuda_runtime.h>
 #include <cuda.h>
 
-__global__ void merge(float *d_array, int l, int m, int r)
-{
-    // Get the thread ID.
-    int threadId = blockIdx.x * blockDim.x + threadIdx.x;
+using namespace std;
 
-    // Merge the two sub-arrays.
-    for (int i = l; i < m; i++)
+int THREADS;
+int BLOCKS;
+int NUM_VALS;
+
+__global__ void generateData(int *dataArray, int size, int inputType)
+{
+    int idx = threadIdx.x + blockDim.x * blockIdx.x;
+
+    switch (inputType)
     {
-        if (d_array[i] > d_array[m + 1])
+    case 0:
+    { // Random
+        if (idx < size)
         {
-            float temp = d_array[i];
-            d_array[i] = d_array[m + 1];
-            d_array[m + 1] = temp;
+            unsigned int x = 12345687 + idx;
+            x ^= (x << 16);
+            x ^= (x << 25);
+            x ^= (x << 4);
+            dataArray[idx] = abs(static_cast<int>(x) % size);
         }
+        break;
+    }
+    case 1:
+    { // Sorted
+        if (idx < size)
+        {
+            dataArray[idx] = idx;
+        }
+        break;
+    }
+    case 2:
+    { // Reverse sorted
+        if (idx < size)
+        {
+            dataArray[idx] = size - 1 - idx;
+        }
+        break;
+    }
     }
 }
 
-__global__ void mergesort(float *d_array, int n)
+__device__ void merge(int *input, int *output, int left, int mid, int right)
 {
-    // Check if the array is empty.
-    if (n <= 1)
+    int i = left + threadIdx.x;
+    int j = mid + threadIdx.x;
+    int k = left + threadIdx.x;
+
+    while (i < mid && j < right)
+    {
+        if (input[i] < input[j])
+        {
+            output[k++] = input[i++];
+        }
+        else
+        {
+            output[k++] = input[j++];
+        }
+    }
+
+    while (i < mid)
+    {
+        output[k++] = input[i++];
+    }
+
+    while (j < right)
+    {
+        output[k++] = input[j++];
+    }
+
+    for (int idx = left + threadIdx.x; idx < right; idx += blockDim.x)
+    {
+        input[idx] = output[idx];
+    }
+}
+
+__global__ void mergeSort(int *input, int *output, int left, int right)
+{
+    if (right - left <= 1)
     {
         return;
     }
 
-    // Divide the array into two halves.
-    int m = n / 2;
+    int mid = left + (right - left) / 2;
 
-    // Recursively sort the two halves.
-    mergesort(d_array, m);
-    mergesort(d_array + m, n - m);
+    mergeSort(input, output, left, mid);
+    mergeSort(input, output, mid, right);
 
-    // Merge the two sorted halves.
-    merge(d_array, 0, m - 1, n - 1);
+    merge(input, output, left, mid, right);
 }
 
-void main()
+void launchMergeSort(int *d_unsortedArray, int *d_tempArray, int numVals)
 {
-    // Get the number of elements in the array.
-    int n = 10;
+    mergeSort<<<1, numVals>>>(d_unsortedArray, d_tempArray, 0, numVals);
+}
 
-    // Allocate memory for the array on the GPU.
-    float *d_array = (float *)malloc(sizeof(float) * n);
-
-    // Initialize the array.
-    for (int i = 0; i < n; i++)
+__global__ void checkArraySorted(int *array, bool *isSorted, int size)
+{
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < size - 1)
     {
-        d_array[i] = rand() / (float)RAND_MAX;
+        isSorted[idx] = (array[idx] <= array[idx + 1]);
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    int sortingType;
+
+    sortingType = atoi(argv[1]);
+    THREADS = atoi(argv[2]);
+    NUM_VALS = atoi(argv[3]);
+    BLOCKS = NUM_VALS / THREADS;
+
+    printf("Input sorting type: %d\n", sortingType);
+    printf("Number of threads: %d\n", THREADS);
+    printf("Number of values: %d\n", NUM_VALS);
+    printf("Number of blocks: %d\n", BLOCKS);
+
+    int *d_unsortedArray;
+    int *d_tempArray;
+
+    cudaMalloc((void **)&d_unsortedArray, NUM_VALS * sizeof(int));
+    cudaMalloc((void **)&d_tempArray, NUM_VALS * sizeof(int));
+
+    generateData<<<BLOCKS, THREADS>>>(d_unsortedArray, NUM_VALS, sortingType);
+    cudaDeviceSynchronize();
+
+    launchMergeSort(d_unsortedArray, d_tempArray, NUM_VALS);
+
+    int sortedArray[NUM_VALS];
+    cudaMemcpy(sortedArray, d_unsortedArray, NUM_VALS * sizeof(int), cudaMemcpyDeviceToHost);
+
+    bool isSorted[NUM_VALS - 1];
+    bool *d_isSorted;
+    cudaMalloc((void **)&d_isSorted, (NUM_VALS - 1) * sizeof(bool));
+    checkArraySorted<<<BLOCKS, THREADS>>>(d_unsortedArray, d_isSorted, NUM_VALS);
+    cudaDeviceSynchronize();
+    cudaMemcpy(isSorted, d_isSorted, (NUM_VALS - 1) * sizeof(bool), cudaMemcpyDeviceToHost);
+
+    bool sorted = true;
+    for (int i = 0; i < NUM_VALS - 1; i++)
+    {
+        if (!isSorted[i])
+        {
+            sorted = false;
+            break;
+        }
     }
 
-    // Launch the mergesort kernel.
-    mergesort<<<1, 1024>>>(d_array, n);
+    cudaFree(d_unsortedArray);
+    cudaFree(d_tempArray);
+    cudaFree(d_isSorted);
 
-    // Copy the results back to the CPU.
-    float *h_array = (float *)malloc(sizeof(float) * n);
-    cudaMemcpy(h_array, d_array, sizeof(float) * n, cudaMemcpyDeviceToHost);
-
-    // Print the sorted array.
-    for (int i = 0; i < n; i++)
+    if (sorted)
     {
-        printf("%f ", h_array[i]);
+        printf("The array is sorted!\n");
+    }
+    else
+    {
+        printf("The array is not sorted!\n");
     }
 
-    // Free the memory on the GPU.
-    cudaFree(d_array);
-
-    // Free the memory on the CPU.
-    free(h_array);
+    return 0;
 }
