@@ -1,8 +1,6 @@
-#include <iostream>
-#include <stdlib.h>
 #include "mpi.h"
-
 #include <vector>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string>
 #include <iostream>
@@ -11,83 +9,25 @@
 #include <caliper/cali-manager.h>
 #include <adiak.hpp>
 
-/********** Merge Function **********/
-void merge(int *a, int *b, int l, int m, int r)
+using std::string;
+using std::swap;
+using std::vector;
+
+int inputSize, numProcesses;
+
+const char *mainFunction = "main";
+const char *data_init = "data_init";
+const char *correctness_check = "correctness_check";
+const char *comm = "comm";
+const char *comm_large = "comm_large";
+const char *comm_small = "comm_small";
+const char *comp = "comp";
+const char *comp_large = "comp_large";
+const char *comp_small = "comp_small";
+
+void generateData(vector<int> &localData, int startingSortChoice, int amountToGenerate, int startingPosition, int my_rank)
 {
-
-    int h, i, j, k;
-    h = l;
-    i = l;
-    j = m + 1;
-
-    while ((h <= m) && (j <= r))
-    {
-
-        if (a[h] <= a[j])
-        {
-
-            b[i] = a[h];
-            h++;
-        }
-
-        else
-        {
-
-            b[i] = a[j];
-            j++;
-        }
-
-        i++;
-    }
-
-    if (m < h)
-    {
-
-        for (k = j; k <= r; k++)
-        {
-
-            b[i] = a[k];
-            i++;
-        }
-    }
-
-    else
-    {
-
-        for (k = h; k <= m; k++)
-        {
-
-            b[i] = a[k];
-            i++;
-        }
-    }
-
-    for (k = l; k <= r; k++)
-    {
-
-        a[k] = b[k];
-    }
-}
-
-/********** Recursive Merge Function **********/
-void mergeSort(int *a, int *b, int l, int r)
-{
-
-    int m;
-
-    if (l < r)
-    {
-
-        m = (l + r) / 2;
-
-        mergeSort(a, b, l, m);
-        mergeSort(a, b, (m + 1), r);
-        merge(a, b, l, m, r);
-    }
-}
-
-void generateData(int *localData, int startingSortChoice, int amountToGenerate, int startingPosition, int my_rank)
-{
+    CALI_MARK_BEGIN(data_init);
     switch (startingSortChoice)
     {
     case 0:
@@ -95,7 +35,7 @@ void generateData(int *localData, int startingSortChoice, int amountToGenerate, 
         srand((my_rank + 5) * (my_rank + 12) * 1235);
         for (int i = 0; i < amountToGenerate; i++)
         {
-            localData[i] = rand() % amountToGenerate; // Changed inputSize to amountToGenerate
+            localData.push_back(rand() % inputSize);
         }
         break;
     }
@@ -105,27 +45,159 @@ void generateData(int *localData, int startingSortChoice, int amountToGenerate, 
         int endValue = startingPosition + amountToGenerate;
         for (int i = startingPosition; i < endValue; i++)
         {
-            localData[i - startingPosition] = i; // Changed push_back to direct assignment
+            localData.push_back(i);
         }
         break;
     }
     case 2:
-    {                                                             // Reverse sorted
-        int startValue = amountToGenerate - 1 - startingPosition; // Changed inputSize to amountToGenerate
-        int endValue = amountToGenerate - startingPosition;
+    { // Reverse sorted
+        int startValue = inputSize - 1 - startingPosition;
+        int endValue = inputSize - amountToGenerate - startingPosition;
         for (int i = startValue; i >= endValue; i--)
         {
-            localData[startValue - i] = i; // Changed push_back to direct assignment
+            localData.push_back(i);
         }
         break;
     }
     }
+    CALI_MARK_END(data_init);
 }
 
-/*bool verifyCorrect(int *sortedData, int my_rank, int numProcesses)
+void merge(int arr[], int left, int mid, int right)
 {
-    // Verify local data is in order
-    for (int i = 1; i < numProcesses; i++)
+    CALI_MARK_BEGIN(comp);
+
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    int *leftArray = new int[n1];
+    int *rightArray = new int[n2];
+
+    for (int i = 0; i < n1; i++)
+        leftArray[i] = arr[left + i];
+    for (int i = 0; i < n2; i++)
+        rightArray[i] = arr[mid + 1 + i];
+
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2)
+    {
+        if (leftArray[i] <= rightArray[j])
+        {
+            arr[k] = leftArray[i];
+            i++;
+        }
+        else
+        {
+            arr[k] = rightArray[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1)
+    {
+        arr[k] = leftArray[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2)
+    {
+        arr[k] = rightArray[j];
+        j++;
+        k++;
+    }
+
+    delete[] leftArray;
+    delete[] rightArray;
+    CALI_MARK_END(comp);
+}
+
+void mergeSort(int arr[], int left, int right)
+{
+    if (left < right)
+    {
+        int mid = left + (right - left) / 2;
+
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        merge(arr, left, mid, right);
+    }
+}
+
+void parallelMerge(vector<int> &localData, vector<int> &partnerData, vector<int> &mergedData, int my_rank, int partner_rank, int localSize, int partnerSize)
+{
+    int *localArray = localData.data();
+    int *partnerArray = partnerData.data();
+
+    int left = 0, mid = localSize - 1, right = localSize + partnerSize - 1;
+    int i = 0, j = 0, k = 0;
+
+    CALI_MARK_BEGIN(comp_small);
+
+    while (i <= mid && j <= partnerSize)
+    {
+        if (localArray[i] <= partnerArray[j])
+        {
+            mergedData[k++] = localArray[i++];
+        }
+        else
+        {
+            mergedData[k++] = partnerArray[j++];
+        }
+    }
+
+    while (i <= mid)
+    {
+        mergedData[k++] = localArray[i++];
+    }
+
+    while (j < partnerSize)
+    {
+        mergedData[k++] = partnerArray[j++];
+    }
+
+    swap(localData, mergedData);
+
+    CALI_MARK_END(comp_small);
+}
+
+void parallelMergeSort(vector<int> &localData, int my_rank)
+{
+    CALI_MARK_BEGIN(comp_large);
+
+    int *localArray = localData.data();
+    int localSize = localData.size();
+
+    mergeSort(localArray, 0, localSize - 1);
+
+    for (int step = 1; step < numProcesses; step <<= 1)
+    {
+        int partner_rank = my_rank ^ step;
+
+        if (partner_rank < numProcesses)
+        {
+            vector<int> partnerData(localArray, localArray + localSize);
+            vector<int> mergedData(localSize + localSize);
+
+            CALI_MARK_BEGIN(comm_small);
+
+            MPI_Sendrecv(localArray, localSize, MPI_INT, partner_rank, 0, partnerData.data(), localSize, MPI_INT, partner_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+            CALI_MARK_END(comm_small);
+
+            parallelMerge(localData, partnerData, mergedData, my_rank, partner_rank, localSize, localSize);
+        }
+    }
+    CALI_MARK_END(comp_large);
+}
+
+bool verifyCorrect(vector<int> &sortedData, int my_rank)
+{
+    CALI_MARK_BEGIN(correctness_check);
+
+    for (int i = 1; i < sortedData.size(); i++)
     {
         if (sortedData[i - 1] > sortedData[i])
         {
@@ -133,30 +205,19 @@ void generateData(int *localData, int startingSortChoice, int amountToGenerate, 
             return false;
         }
     }
-
-    // Verify my start and end line up
-    int myDataBounds[] = {sortedData[0], sortedData[numProcesses - 1]};
-    int boundsArraySize = 2 * numProcesses;
-    int allDataBounds[boundsArraySize];
-    MPI_Allgather(&myDataBounds, 2, MPI_INT, &allDataBounds, 2, MPI_INT, MPI_COMM_WORLD);
-
-    for (int i = 1; i < boundsArraySize; i++)
-    {
-        if (allDataBounds[i - 1] > allDataBounds[i])
-        {
-            printf("Sorting error on bounds regions: %d\n", my_rank);
-            return false;
-        }
-    }
+    CALI_MARK_END(correctness_check);
 
     return true;
 }
-*/
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-    int sortingType, numProcesses, inputSize;
 
+    CALI_MARK_BEGIN(mainFunction);
+    cali::ConfigManager mgr;
+    mgr.start();
+
+    int sortingType;
     if (argc == 4)
     {
         sortingType = atoi(argv[1]);
@@ -169,7 +230,7 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    std::string inputType;
+    string inputType;
     switch (sortingType)
     {
     case 0:
@@ -189,91 +250,97 @@ int main(int argc, char **argv)
     }
     }
 
-    printf("\n\n");
+    int my_rank, num_ranks, rc;
 
-    /********** Create and populate the array using generateData **********/
-    int n = inputSize;
-    int *original_array = new int[n];
+    CALI_MARK_BEGIN(comm);
 
-    int c;
-    srand(time(NULL));
-    std::cout << "This is the " << inputType << " array: ";
-    generateData(original_array, sortingType, n, 0, 0); // Generate data directly into original_array
-
-    for (c = 0; c < n; c++)
-    {
-        std::cout << original_array[c] << " ";
-    }
-
-    /********** Initialize MPI **********/
-    int world_rank;
-    int world_size;
-
+    /* MPI Setup */
     MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-
-    /********** Divide the array in equal-sized chunks **********/
-    int size = n / world_size;
-
-    /********** Send each subarray to each process **********/
-    int *sub_array = new int[size];
-    MPI_Scatter(original_array, size, MPI_INT, sub_array, size, MPI_INT, 0, MPI_COMM_WORLD);
-
-    /********** Perform the mergesort on each process **********/
-    int *tmp_array = new int[size];
-    mergeSort(sub_array, tmp_array, 0, (size - 1));
-
-    /********** Gather the sorted subarrays into one **********/
-    int *sorted = nullptr;
-    if (world_rank == 0)
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
+    if (num_ranks < 2)
     {
-
-        sorted = new int[n];
+        printf("Need at least two MPI tasks. Quitting...\n");
+        MPI_Abort(MPI_COMM_WORLD, rc);
+        exit(1);
+    }
+    if (num_ranks != numProcesses)
+    {
+        printf("Target number of processes and actual number of ranks do not match. Quitting...\n");
+        MPI_Abort(MPI_COMM_WORLD, rc);
+        exit(1);
     }
 
-    MPI_Gather(sub_array, size, MPI_INT, sorted, size, MPI_INT, 0, MPI_COMM_WORLD);
+    CALI_MARK_END(comm);
 
-    /********** Make the final mergeSort call **********/
-    if (world_rank == 0)
+    if (my_rank == 0)
     {
-
-        int *other_array = new int[n];
-        mergeSort(sorted, other_array, 0, (n - 1));
-
-        /********** Display the sorted array **********/
-        std::cout << "This is the sorted array: ";
-        for (c = 0; c < n; c++)
-        {
-
-            std::cout << sorted[c] << " ";
-        }
-
-        std::cout << "\n\n";
-
-        /*
-        if (verifyCorrect(sorted, world_rank, numProcesses))
-        {
-            std::cout << "Sorting verified.\n";
-        }
-        else
-        {
-            std::cout << "Sorting verification failed.\n";
-        }
-        */
-
-        /********** Clean up root **********/
-        delete[] sorted;
-        delete[] other_array;
+        printf("Input type: %d\n", sortingType);
+        printf("Number Processes: %d\n", numProcesses);
+        printf("Input Size: %d\n", inputSize);
     }
 
-    /********** Clean up rest **********/
-    delete[] original_array;
-    delete[] sub_array;
-    delete[] tmp_array;
+    // Data generation
+    vector<int> myLocalData;
+    int amountToGenerateMyself = inputSize / numProcesses;
+    int startingPos = my_rank * (amountToGenerateMyself);
+    generateData(myLocalData, sortingType, amountToGenerateMyself, startingPos, my_rank);
 
-    /********** Finalize MPI **********/
-    MPI_Barrier(MPI_COMM_WORLD);
+    // Print original array
+    printf("Original Array (Rank %d):\n", my_rank);
+    for (int i = 0; i < myLocalData.size(); i++)
+    {
+        printf("%d ", myLocalData[i]);
+    }
+    printf("\n");
+
+    // Main Alg
+    CALI_MARK_BEGIN(comm_large);
+    parallelMergeSort(myLocalData, my_rank);
+    CALI_MARK_END(comm_large);
+
+    // Print sorted array
+    printf("Sorted Array (Rank %d):\n", my_rank);
+    for (int i = 0; i < myLocalData.size(); i++)
+    {
+        printf("%d ", myLocalData[i]);
+    }
+    printf("\n");
+    CALI_MARK_END(mainFunction);
+    // Verification
+    bool correct = verifyCorrect(myLocalData, my_rank);
+
+    if (!correct)
+    {
+        printf("There is a problem with the sorting. Quitting...\n");
+    }
+    else
+    {
+        if (my_rank == 0)
+        {
+            printf("\nAll data sorted correctly!");
+        }
+    }
+
+    adiak::init(NULL);
+    adiak::launchdate();                                           // launch date of the job
+    adiak::libraries();                                            // Libraries used
+    adiak::cmdline();                                              // Command line used to launch the job
+    adiak::clustername();                                          // Name of the cluster
+    adiak::value("Algorithm", "SampleSort");                       // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
+    adiak::value("ProgrammingModel", "MPI");                       // e.g., "MPI", "CUDA", "MPIwithCUDA"
+    adiak::value("Datatype", "int");                               // The datatype of input elements (e.g., double, int, float)
+    adiak::value("SizeOfDatatype", sizeof(int));                   // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
+    adiak::value("InputSize", inputSize);                          // The number of elements in input dataset (1000)
+    adiak::value("InputType", inputType);                          // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
+    adiak::value("num_procs", numProcesses);                       // The number of processors (MPI ranks)
+    adiak::value("group_num", 16);                                 // The number of your group (integer, e.g., 1, 10)
+    adiak::value("implementation_source", "Handwritten & Online"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
+
+    // Flush Caliper output before finalizing MPI
+    mgr.stop();
+    mgr.flush();
+
     MPI_Finalize();
 
     return 0;
