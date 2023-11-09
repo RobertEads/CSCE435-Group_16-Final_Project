@@ -2,6 +2,10 @@
 #include <cstdlib>
 #include <string>
 
+#include <stdlib.h>
+#include <cuda_runtime.h>
+#include <cuda.h>
+
 __device__ void swap(int* a, int* b) {
     int t = *a;
     *a = *b;
