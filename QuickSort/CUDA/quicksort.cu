@@ -37,6 +37,17 @@ __global__ void quicksort(int* arr, int low, int high) {
     }
 }
 
+/* Verification */
+// CUDA kernel to check if the array is sorted
+__global__ void checkArraySorted(int *array, bool *isSorted, int size)
+{
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < size - 1)
+    {
+        isSorted[idx] = (array[idx] <= array[idx + 1]);
+    }
+}
+
 int main() {
     int n = 10;
     int h_arr[n] = {4, 1, 7, 3, 9, 8, 2, 5, 6, 0};
