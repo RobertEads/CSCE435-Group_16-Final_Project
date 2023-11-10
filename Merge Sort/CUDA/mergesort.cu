@@ -1,18 +1,10 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <cstdlib>
-#include <string>
+#include <stdlib.h>
 #include <caliper/cali.h>
 #include <caliper/cali-manager.h>
 #include <adiak.hpp>
 #include <cuda_runtime.h>
 #include <cuda.h>
-
-using namespace std;
-
-int THREADS;
-int BLOCKS;
-int NUM_VALS;
 
 /* Define Caliper region names */
 const char *mainFunction = "main";
@@ -62,67 +54,51 @@ __global__ void generateData(int *dataArray, int size, int inputType)
     }
 }
 
-__device__ void merge(int *input, int *output, int left, int mid, int right)
+__device__ void merge(int *arr, int *temp, int left, int mid, int right)
 {
-    CALI_MARK_BEGIN(comp);
+    int i = left;
+    int j = mid + 1;
+    int k = left;
 
-    int i = left + threadIdx.x;
-    int j = mid + threadIdx.x;
-    int k = left + threadIdx.x;
-
-    while (i < mid && j < right)
+    while (i <= mid && j <= right)
     {
-        if (input[i] < input[j])
+        if (arr[i] <= arr[j])
         {
-            output[k++] = input[i++];
+            temp[k++] = arr[i++];
         }
         else
         {
-            output[k++] = input[j++];
+            temp[k++] = arr[j++];
         }
     }
 
-    while (i < mid)
+    while (i <= mid)
     {
-        output[k++] = input[i++];
+        temp[k++] = arr[i++];
     }
 
-    while (j < right)
+    while (j <= right)
     {
-        output[k++] = input[j++];
+        temp[k++] = arr[j++];
     }
 
-    for (int idx = left + threadIdx.x; idx < right; idx += blockDim.x)
+    for (int i = left; i <= right; i++)
     {
-        input[idx] = output[idx];
+        arr[i] = temp[i];
     }
-    CALI_MARK_END(comp);
 }
 
-__global__ void mergeSort(int *input, int *output, int left, int right)
+__global__ void mergeSort(int *arr, int *temp, int size)
 {
-    CALI_MARK_BEGIN(comp_large);
-
-    if (right - left <= 1)
+    for (int currSize = 1; currSize <= size - 1; currSize = 2 * currSize)
     {
-        return;
+        for (int leftStart = 0; leftStart < size - 1; leftStart += 2 * currSize)
+        {
+            int mid = min(leftStart + currSize - 1, size - 1);
+            int rightEnd = min(leftStart + 2 * currSize - 1, size - 1);
+            merge(arr, temp, leftStart, mid, rightEnd);
+        }
     }
-
-    int mid = left + (right - left) / 2;
-
-    mergeSort(input, output, left, mid);
-    mergeSort(input, output, mid, right);
-
-    merge(input, output, left, mid, right);
-    CALI_MARK_END(comp_large);
-}
-
-void launchMergeSort(int *d_unsortedArray, int *d_tempArray, int numVals)
-{
-    CALI_MARK_BEGIN(comp_small);
-
-    mergeSort<<<1, numVals>>>(d_unsortedArray, d_tempArray, 0, numVals);
-    CALI_MARK_END(comp_small);
 }
 
 __global__ void checkArraySorted(int *array, bool *isSorted, int size)
@@ -134,122 +110,123 @@ __global__ void checkArraySorted(int *array, bool *isSorted, int size)
     }
 }
 
-int main(int argc, char *argv[])
+const char *mainFunction = "main";
+const char *data_init = "data_init";
+const char *correctness_check = "correctness_check";
+const char *comm = "comm";
+const char *comm_large = "comm_large";
+const char *comm_small = "comm_small";
+const char *comp = "comp";
+const char *comp_large = "comp_large";
+const char *comp_small = "comp_small";
+
+int main(int argc, char **argv)
 {
 
-    int sortingType;
+    if (argc != 4)
+    {
+        printf("Usage: %s <sorting_type> <num_processors> <num_elements>\n", argv[0]);
+        return 1;
+    }
 
-    sortingType = atoi(argv[1]);
-    THREADS = atoi(argv[2]);
-    NUM_VALS = atoi(argv[3]);
-    BLOCKS = NUM_VALS / THREADS;
+    int sortingType = atoi(argv[1]);
+    int numProcessors = atoi(argv[2]);
+    int numElements = atoi(argv[3]);
 
-    printf("Input sorting type: %d\n", sortingType);
-    printf("Number of threads: %d\n", THREADS);
-    printf("Number of values: %d\n", NUM_VALS);
-    printf("Number of blocks: %d\n", BLOCKS);
+    int *h_arr = new int[numElements];
+    int *d_arr;
+    int *temp;
 
     CALI_MARK_BEGIN(mainFunction);
-
-    // Create caliper ConfigManager object
     cali::ConfigManager mgr;
     mgr.start();
 
     CALI_MARK_BEGIN(data_init);
-    int *d_unsortedArray;
-    int *d_tempArray;
 
-    cudaMalloc((void **)&d_unsortedArray, NUM_VALS * sizeof(int));
-    cudaMalloc((void **)&d_tempArray, NUM_VALS * sizeof(int));
-
-    generateData<<<BLOCKS, THREADS>>>(d_unsortedArray, NUM_VALS, sortingType);
-    cudaDeviceSynchronize();
+    // Call generateData kernel to initialize array based on sorting type
+    int *d_generateResult;
+    cudaMalloc((void **)&d_generateResult, sizeof(int) * numElements);
+    generateData<<<(numElements + 255) / 256, 256>>>(d_generateResult, numElements, sortingType);
+    cudaMemcpy(h_arr, d_generateResult, sizeof(int) * numElements, cudaMemcpyDeviceToHost);
+    cudaFree(d_generateResult);
     CALI_MARK_END(data_init);
-
-    launchMergeSort(d_unsortedArray, d_tempArray, NUM_VALS);
-
-    int sortedArray[NUM_VALS];
-    CALI_MARK_BEGIN(comm_small);
-    cudaMemcpy(sortedArray, d_unsortedArray, NUM_VALS * sizeof(int), cudaMemcpyDeviceToHost);
-    CALI_MARK_END(comm_small);
-
-    bool isSorted[NUM_VALS - 1];
-    bool *d_isSorted;
-    cudaMalloc((void **)&d_isSorted, (NUM_VALS - 1) * sizeof(bool));
-    CALI_MARK_BEGIN(correctness_check);
-
-    checkArraySorted<<<BLOCKS, THREADS>>>(d_unsortedArray, d_isSorted, NUM_VALS);
-    cudaDeviceSynchronize();
-    CALI_MARK_END(correctness_check);
 
     CALI_MARK_BEGIN(comm);
     CALI_MARK_BEGIN(comm_large);
-    cudaMemcpy(isSorted, d_isSorted, (NUM_VALS - 1) * sizeof(bool), cudaMemcpyDeviceToHost);
+    cudaMalloc((void **)&d_arr, sizeof(int) * numElements);
+    CALI_MARK_BEGIN(comm_small);
+    cudaMemcpy(d_arr, h_arr, sizeof(int) * numElements, cudaMemcpyHostToDevice);
+    CALI_MARK_END(comm_small);
+    cudaMalloc((void **)&temp, sizeof(int) * numElements);
     CALI_MARK_END(comm_large);
     CALI_MARK_END(comm);
+
+    CALI_MARK_BEGIN(comp);
+    CALI_MARK_BEGIN(comp_large);
+    // Call mergeSort kernel
+    mergeSort<<<1, 1>>>(d_arr, temp, numElements);
+    cudaDeviceSynchronize();
+
+    CALI_MARK_END(comp_large);
+    CALI_MARK_END(comp);
+
+    CALI_MARK_BEGIN(correctness_check);
+
+    // Call checkArraySorted kernel
+    bool *d_isSorted;
+    bool *h_isSorted = new bool[numElements - 1];
+    cudaMalloc((void **)&d_isSorted, sizeof(bool) * (numElements - 1));
+    checkArraySorted<<<(numElements + 255) / 256, 256>>>(d_arr, d_isSorted, numElements);
+    cudaMemcpy(h_isSorted, d_isSorted, sizeof(bool) * (numElements - 1), cudaMemcpyDeviceToHost);
+
+    CALI_MARK_END(correctness_check);
+
+    // Print sorted array
+    printf("Sorted Array: ");
+    for (int i = 0; i < numElements; i++)
+        printf("%d ", h_arr[i]);
+    printf("\n");
+
+    // Check if the array is sorted
     bool sorted = true;
-    for (int i = 0; i < NUM_VALS - 1; i++)
+    for (int i = 0; i < numElements - 1; i++)
     {
-        if (!isSorted[i])
+        if (!h_isSorted[i])
         {
             sorted = false;
             break;
         }
     }
 
-    cudaFree(d_unsortedArray);
-    cudaFree(d_tempArray);
-    cudaFree(d_isSorted);
-
-    CALI_MARK_END(mainFunction);
-
     if (sorted)
     {
-        printf("The array is sorted!\n");
+        printf("Array is sorted.\n");
     }
     else
     {
-        printf("The array is not sorted!\n");
+        printf("Array is not sorted.\n");
     }
 
-    string inputType;
-    switch (sortingType)
-    {
-    case 0:
-    {
-        inputType = "Randomized";
-        break;
-    }
-    case 1:
-    {
-        inputType = "Sorted";
-        break;
-    }
-    case 2:
-    {
-        inputType = "Reverse Sorted";
-        break;
-    }
-    }
-
-    adiak::init(NULL);
-    adiak::launchdate();                                       // launch date of the job
-    adiak::libraries();                                        // Libraries used
-    adiak::cmdline();                                          // Command line used to launch the job
-    adiak::clustername();                                      // Name of the cluster
-    adiak::value("Algorithm", "SampleSort");                   // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
-    adiak::value("ProgrammingModel", "CUDA");                  // e.g., "MPI", "CUDA", "MPIwithCUDA"
-    adiak::value("Datatype", "int");                           // The datatype of input elements (e.g., double, int, float)
-    adiak::value("SizeOfDatatype", sizeof(int));               // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
-    adiak::value("InputSize", NUM_VALS);                       // The number of elements in input dataset (1000)
-    adiak::value("InputType", inputType);                      // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
-    adiak::value("num_threads", THREADS);                      // The number of CUDA or OpenMP threads
-    adiak::value("num_blocks", BLOCKS);                        // The number of CUDA blocks
-    adiak::value("group_num", 16);                             // The number of your group (integer, e.g., 1, 10)
-    adiak::value("implementation_source", "AI & Handwritten"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
+    delete[] h_arr;
+    delete[] h_isSorted;
+    cudaFree(d_arr);
+    cudaFree(temp);
+    cudaFree(d_isSorted);
 
     // Flush Caliper output
     mgr.stop();
     mgr.flush();
-    return 0;
-}
+
+    CALI_MARK_END(mainFunction);
+
+    adiak::init(NULL);
+    adiak::launchdate();                         // launch date of the job
+    adiak::libraries();                          // Libraries used
+    adiak::cmdline();                            // Command line used to launch the job
+    adiak::clustername();                        // Name of the cluster
+    adiak::value("Algorithm", "Merge Sort");     // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
+    adiak::value("ProgrammingModel", "CUDA");    // e.g., "MPI", "CUDA", "MPIwithCUDA"
+    adiak::value("Datatype", "int");             // The datatype of input elements (e.g., double, int, float)
+    adiak::value("SizeOfDatatype", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
+    adiak::value("InputSize", numElements);      // The number of elements in input dataset (1000)
+    adiak::value("InputType", sortingType);      // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%pert
