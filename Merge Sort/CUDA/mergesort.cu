@@ -110,16 +110,6 @@ __global__ void checkArraySorted(int *array, bool *isSorted, int size)
     }
 }
 
-const char *mainFunction = "main";
-const char *data_init = "data_init";
-const char *correctness_check = "correctness_check";
-const char *comm = "comm";
-const char *comm_large = "comm_large";
-const char *comm_small = "comm_small";
-const char *comp = "comp";
-const char *comp_large = "comp_large";
-const char *comp_small = "comp_small";
-
 int main(int argc, char **argv)
 {
 
@@ -230,3 +220,6 @@ int main(int argc, char **argv)
     adiak::value("SizeOfDatatype", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
     adiak::value("InputSize", numElements);      // The number of elements in input dataset (1000)
     adiak::value("InputType", sortingType);      // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%pert
+
+    return 0;
+}
