@@ -16,13 +16,13 @@
 #
 ##First Executable Line
 #
-array_size=$1
+input_type=$1
 processes=$2
 input_size=$3
 
 module load intel/2020b       # load Intel software stack
 module load CMake/3.12.1
 
-CALI_CONFIG="spot(output=p${processes}-a${array_size}-i${input_size}.cali, \
+CALI_CONFIG="spot(output=p${processes}-s${input_size}-t${input_type}.cali, \
     time.variance)" \
 mpirun -np $processes ./Bubble_Sort $input_type $processes $input_size
