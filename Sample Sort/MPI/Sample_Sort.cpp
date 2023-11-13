@@ -21,7 +21,7 @@ const char* data_init = "data_init";
 const char* correctness_check = "correctness_check ";
 const char* comm = "comm";
 const char* comm_large = "comm_large";
-const char* comm_small = "comm _small";
+const char* comm_small = "comm_small";
 const char* comp = "comp";
 const char* comp_large = "comp_large";
 const char* comp_small = "comp_small";
@@ -131,7 +131,9 @@ void sampleSort(vector<int> &localData, vector<int> &sortedData, int my_rank) {
 
     CALI_MARK_BEGIN(comm);
     CALI_MARK_BEGIN(comm_small);
+    CALI_MARK_BEGIN("MPI_Allgather");
     MPI_Allgather(&sampledSplitters[0], numSplitters, MPI_INT, &allSplitters[0], numSplitters, MPI_INT, MPI_COMM_WORLD);
+    CALI_MARK_END("MPI_Allgather");
     CALI_MARK_END(comm_small);
     CALI_MARK_END(comm);
 
@@ -169,17 +171,19 @@ void sampleSort(vector<int> &localData, vector<int> &sortedData, int my_rank) {
     CALI_MARK_END(comp);
 
     /* Send/Receive Data */ 
-    CALI_MARK_BEGIN(comm);
-    CALI_MARK_BEGIN(comm_small);
     //Gather sizes
     int localBucketSizes[numProcesses];
     for(int i = 0; i < numProcesses; i++) {localBucketSizes[i] = sendBuckets.at(i).size();}
 
     //Communicate sizes
     int targetSizes[numProcesses];
+    CALI_MARK_BEGIN(comm);
+    CALI_MARK_BEGIN(comm_small);
+    CALI_MARK_BEGIN("MPI_Gather");
     for(int i = 0; i < numProcesses; i++) {
         MPI_Gather(&localBucketSizes[i], 1, MPI_INT, &targetSizes[0], 1, MPI_INT, i, MPI_COMM_WORLD);
     }
+    CALI_MARK_END("MPI_Gather");
     CALI_MARK_END(comm_small);
     CALI_MARK_END(comm);
 
@@ -201,9 +205,11 @@ void sampleSort(vector<int> &localData, vector<int> &sortedData, int my_rank) {
     //Gather data
     CALI_MARK_BEGIN(comm);
     CALI_MARK_BEGIN(comm_large);
+    CALI_MARK_BEGIN("MPI_Gatherv");
     for(int i = 0; i < numProcesses; i++) {
         MPI_Gatherv(&sendBuckets[i][0], sendBuckets.at(i).size(), MPI_INT, &unsortedData, targetSizes, displacements, MPI_INT, i, MPI_COMM_WORLD);
     }
+    CALI_MARK_END("MPI_Gatherv");
     CALI_MARK_END(comm_large);
     CALI_MARK_END(comm);
 
@@ -214,6 +220,7 @@ void sampleSort(vector<int> &localData, vector<int> &sortedData, int my_rank) {
     sortedData.insert(sortedData.end(), &unsortedData[0], &unsortedData[myTotalSize]);
     CALI_MARK_END(comp_large);
     CALI_MARK_END(comp);
+    
 }
 
 /* Verify */
@@ -296,10 +303,10 @@ int main (int argc, char *argv[])
     mgr.start();
 
     //Data generation
-    CALI_MARK_BEGIN(data_init);
     vector<int> myLocalData;
     int amountToGenerateMyself = inputSize/numProcesses; //Should aways be based around powers of 2
     int startingPos = my_rank * (amountToGenerateMyself);
+    CALI_MARK_BEGIN(data_init);
     generateData(myLocalData, sortingType, amountToGenerateMyself, startingPos, my_rank);
     CALI_MARK_END(data_init);
 
@@ -329,7 +336,7 @@ int main (int argc, char *argv[])
     adiak::value("InputType", inputType); // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
     adiak::value("num_procs", numProcesses); // The number of processors (MPI ranks)
     adiak::value("group_num", 16); // The number of your group (integer, e.g., 1, 10)
-    adiak::value("implementation_source", "Handwritten & Online"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
+    adiak::value("implementation_source", "Online"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
 
     // Flush Caliper output before finalizing MPI
    mgr.stop();

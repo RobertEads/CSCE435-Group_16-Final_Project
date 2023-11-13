@@ -21,7 +21,7 @@ const char* data_init = "data_init";
 const char* correctness_check = "correctness_check ";
 const char* comm = "comm";
 const char* comm_large = "comm_large";
-const char* comm_small = "comm _small";
+const char* comm_small = "comm_small";
 const char* comp = "comp";
 const char* comp_large = "comp_large";
 const char* comp_small = "comp_small";
@@ -224,11 +224,13 @@ int main(int argc, char *argv[]) {
     CALI_MARK_END(comp_large);
     CALI_MARK_END(comp);
 
-    CALI_MARK_BEGIN(comm);
-    CALI_MARK_BEGIN(comm_large);
     // Copy data back to the host
     int sortedArray[NUM_VALS];
+    CALI_MARK_BEGIN(comm);
+    CALI_MARK_BEGIN(comm_large);
+    CALI_MARK_BEGIN("cudaMemcpy");
     cudaMemcpy(sortedArray, d_groupedData, NUM_VALS * sizeof(int), cudaMemcpyDeviceToHost);
+    CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END(comm_large);
     CALI_MARK_END(comm);
 
@@ -294,7 +296,7 @@ int main(int argc, char *argv[]) {
     adiak::value("num_threads", THREADS); // The number of CUDA or OpenMP threads
     adiak::value("num_blocks", BLOCKS); // The number of CUDA blocks 
     adiak::value("group_num", 16); // The number of your group (integer, e.g., 1, 10)
-    adiak::value("implementation_source", "AI & Handwritten"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
+    adiak::value("implementation_source", "AI"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
 
     // Flush Caliper output
     mgr.stop();
