@@ -153,9 +153,11 @@ int main(int argc, char **argv)
 
     CALI_MARK_BEGIN(comp);
     CALI_MARK_BEGIN(comp_large);
+    CALI_MARK_BEGIN(comp_small);
     // Call mergeSort kernel
     mergeSort<<<1, 1>>>(d_arr, temp, numElements);
     cudaDeviceSynchronize();
+    CALI_MARK_END(comp_small);
 
     CALI_MARK_END(comp_large);
     CALI_MARK_END(comp);
@@ -171,11 +173,11 @@ int main(int argc, char **argv)
 
     CALI_MARK_END(correctness_check);
 
-    // Print sorted array
-    printf("Sorted Array: ");
-    for (int i = 0; i < numElements; i++)
-        printf("%d ", h_arr[i]);
-    printf("\n");
+    // // Print sorted array
+    // printf("Sorted Array: ");
+    // for (int i = 0; i < numElements; i++)
+    //     printf("%d ", h_arr[i]);
+    // printf("\n");
 
     // Check if the array is sorted
     bool sorted = true;
