@@ -10,7 +10,7 @@
 
 const char *mainFunction = "main";
 const char *data_init = "data_init";
-const char *correctness_check = "correctness_check";
+c const char *correctness_check = "correctness_check";
 const char *comm = "comm";
 const char *comm_large = "comm_large";
 const char *comm_small = "comm_small";
@@ -199,15 +199,15 @@ int main(int argc, char *argv[])
     }
 
     // Output initial array
-    if (rank == 0)
-    {
-        printf("Process %d: Initial Array: ", rank);
-        for (int i = 0; i < num_elements; ++i)
-        {
-            printf("%d ", arr[i]);
-        }
-        printf("\n");
-    }
+    // if (rank == 0)
+    // {
+    //     printf("Process %d: Initial Array: ", rank);
+    //     for (int i = 0; i < num_elements; ++i)
+    //     {
+    //         printf("%d ", arr[i]);
+    //     }
+    //     printf("\n");
+    // }
 
     // Start time measurement
     double start_time = MPI_Wtime();
@@ -252,12 +252,12 @@ int main(int argc, char *argv[])
             std::cout << "Sorting is incorrect." << std::endl;
         }
 
-        printf("Process %d: Final Array: ", rank);
-        for (int i = 0; i < num_elements; ++i)
-        {
-            printf("%d ", arr[i]);
-        }
-        printf("\n");
+        // printf("Process %d: Final Array: ", rank);
+        // for (int i = 0; i < num_elements; ++i)
+        // {
+        //     printf("%d ", arr[i]);
+        // }
+        // printf("\n");
 
         // Output time taken
         std::cout << "Time taken: " << end_time - start_time << " seconds." << std::endl;
