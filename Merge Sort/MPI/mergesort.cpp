@@ -10,13 +10,15 @@
 
 const char *mainFunction = "main";
 const char *data_init = "data_init";
-c const char *correctness_check = "correctness_check";
+const char *correctness_check = "correctness_check";
 const char *comm = "comm";
 const char *comm_large = "comm_large";
 const char *comm_small = "comm_small";
 const char *comp = "comp";
 const char *comp_large = "comp_large";
 const char *comp_small = "comp_small";
+const char *gather = "gather";
+const char *scatter = "scatter";
 
 void merge(std::vector<int> &arr, int l, int m, int r)
 {
@@ -92,33 +94,30 @@ void generateData(std::vector<int> &localData, int startingSortChoice, int amoun
     switch (startingSortChoice)
     {
     case 0:
-    { // Random
+        // Random
         for (int i = 0; i < amountToGenerate; i++)
         {
             localData.push_back(rand() % inputSize);
         }
         break;
-    }
+
     case 1:
-    { // Sorted
-        int endValue = startingPosition + amountToGenerate;
-        for (int i = startingPosition; i < endValue; i++)
+        // Sorted
+        for (int i = startingPosition; i < startingPosition + amountToGenerate; i++)
         {
             localData.push_back(i);
         }
         break;
-    }
+
     case 2:
-    { // Reverse sorted
-        int startValue = inputSize - 1 - startingPosition;
-        int endValue = inputSize - amountToGenerate - startingPosition;
-        for (int i = startValue; i >= endValue; i--)
+        // Reverse sorted
+        for (int i = startingPosition + amountToGenerate - 1; i >= startingPosition; i--)
         {
             localData.push_back(i);
         }
         break;
     }
-    }
+
     CALI_MARK_END(data_init);
 }
 
@@ -214,21 +213,28 @@ int main(int argc, char *argv[])
 
     // Perform local merge sort
     int local_size = num_elements / size;
-    std::vector<int> local_arr(arr.begin() + rank * local_size, arr.begin() + (rank + 1) * local_size);
+    std::vector<int> local_arr(local_size);
+
+    CALI_MARK_BEGIN(comm);
+    CALI_MARK_BEGIN(comm_large);
+    CALI_MARK_BEGIN(scatter);
+    MPI_Scatter(&arr[0], local_size, MPI_INT, &local_arr[0], local_size, MPI_INT, 0, MPI_COMM_WORLD);
+    CALI_MARK_END(scatter);
+    CALI_MARK_END(comm_large);
+    CALI_MARK_END(comm);
 
     CALI_MARK_BEGIN(comp);
     mergeSort(local_arr, 0, local_size - 1);
     CALI_MARK_END(comp);
 
-    // Gather sorted local arrays to the root process);
     CALI_MARK_BEGIN(comm);
-    CALI_MARK_BEGIN(comm_large);
     CALI_MARK_BEGIN(comm_small);
-    MPI_Gather(&local_arr[0], local_size, MPI_INT, &arr[0], local_size, MPI_INT, 0, MPI_COMM_WORLD);
-    CALI_MARK_END(comm_small);
-    CALI_MARK_END(comm_large);
-    CALI_MARK_END(comm);
+    CALI_MARK_BEGIN(gather);
 
+    MPI_Gather(&local_arr[0], local_size, MPI_INT, &arr[0], local_size, MPI_INT, 0, MPI_COMM_WORLD);
+    CALI_MARK_END(gather);
+    CALI_MARK_END(comm_small);
+    CALI_MARK_END(comm);
     // Perform final merge on the root process
     if (rank == 0)
     {
