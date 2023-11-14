@@ -101,13 +101,26 @@ __global__ void mergeSort(int *arr, int *temp, int size)
     }
 }
 
-__global__ void checkArraySorted(int *array, bool *isSorted, int size)
+void printArray(int *arr, int size)
 {
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < size - 1)
+    printf("Array: ");
+    for (int i = 0; i < size; i++)
     {
-        isSorted[idx] = (array[idx] <= array[idx + 1]);
+        printf("%d ", arr[i]);
     }
+    printf("\n");
+}
+
+bool isSorted(int *arr, int size)
+{
+    for (int i = 0; i < size - 1; i++)
+    {
+        if (arr[i] > arr[i + 1])
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 int main(int argc, char **argv)
@@ -122,6 +135,23 @@ int main(int argc, char **argv)
     int sortingType = atoi(argv[1]);
     int numProcessors = atoi(argv[2]);
     int numElements = atoi(argv[3]);
+
+    const char *sorting_type_name;
+    switch (sortingType)
+    {
+    case 0:
+        sorting_type_name = "Random";
+        break;
+    case 1:
+        sorting_type_name = "Sorted";
+        break;
+    case 2:
+        sorting_type_name = "ReverseSorted";
+        break;
+    default:
+        sorting_type_name = "Unknown";
+        break;
+    }
 
     int *h_arr = new int[numElements];
     int *d_arr;
@@ -139,6 +169,7 @@ int main(int argc, char **argv)
     generateData<<<(numElements + 255) / 256, 256>>>(d_generateResult, numElements, sortingType);
     cudaMemcpy(h_arr, d_generateResult, sizeof(int) * numElements, cudaMemcpyDeviceToHost);
     cudaFree(d_generateResult);
+
     CALI_MARK_END(data_init);
 
     CALI_MARK_BEGIN(comm);
@@ -151,6 +182,12 @@ int main(int argc, char **argv)
     CALI_MARK_END(comm_large);
     CALI_MARK_END(comm);
 
+    // Print initial array if size is less than or equal to 32
+    // if (numElements <= 1024)
+    // {
+    //     printArray(h_arr, numElements);
+    // }
+
     CALI_MARK_BEGIN(comp);
     CALI_MARK_BEGIN(comp_large);
     CALI_MARK_BEGIN(comp_small);
@@ -162,34 +199,17 @@ int main(int argc, char **argv)
     CALI_MARK_END(comp_large);
     CALI_MARK_END(comp);
 
+    // Print sorted array if size is less than or equal to 32
+    // if (numElements <= 1024)
+    // {
+    cudaMemcpy(h_arr, d_arr, sizeof(int) * numElements, cudaMemcpyDeviceToHost);
+    //     printArray(h_arr, numElements);
+    // }
+
     CALI_MARK_BEGIN(correctness_check);
 
-    // Call checkArraySorted kernel
-    bool *d_isSorted;
-    bool *h_isSorted = new bool[numElements - 1];
-    cudaMalloc((void **)&d_isSorted, sizeof(bool) * (numElements - 1));
-    checkArraySorted<<<(numElements + 255) / 256, 256>>>(d_arr, d_isSorted, numElements);
-    cudaMemcpy(h_isSorted, d_isSorted, sizeof(bool) * (numElements - 1), cudaMemcpyDeviceToHost);
-
-    CALI_MARK_END(correctness_check);
-
-    // // Print sorted array
-    // printf("Sorted Array: ");
-    // for (int i = 0; i < numElements; i++)
-    //     printf("%d ", h_arr[i]);
-    // printf("\n");
-
     // Check if the array is sorted
-    bool sorted = true;
-    for (int i = 0; i < numElements - 1; i++)
-    {
-        if (!h_isSorted[i])
-        {
-            sorted = false;
-            break;
-        }
-    }
-
+    bool sorted = isSorted(h_arr, numElements);
     if (sorted)
     {
         printf("Array is sorted.\n");
@@ -199,11 +219,11 @@ int main(int argc, char **argv)
         printf("Array is not sorted.\n");
     }
 
+    CALI_MARK_END(correctness_check);
+
     delete[] h_arr;
-    delete[] h_isSorted;
     cudaFree(d_arr);
     cudaFree(temp);
-    cudaFree(d_isSorted);
 
     // Flush Caliper output
     mgr.stop();
@@ -212,16 +232,19 @@ int main(int argc, char **argv)
     CALI_MARK_END(mainFunction);
 
     adiak::init(NULL);
-    adiak::launchdate();                         // launch date of the job
-    adiak::libraries();                          // Libraries used
-    adiak::cmdline();                            // Command line used to launch the job
-    adiak::clustername();                        // Name of the cluster
-    adiak::value("Algorithm", "Merge Sort");     // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
-    adiak::value("ProgrammingModel", "CUDA");    // e.g., "MPI", "CUDA", "MPIwithCUDA"
-    adiak::value("Datatype", "int");             // The datatype of input elements (e.g., double, int, float)
-    adiak::value("SizeOfDatatype", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
-    adiak::value("InputSize", numElements);      // The number of elements in input dataset (1000)
-    adiak::value("InputType", sortingType);      // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%pert
+    adiak::launchdate();
+    adiak::libraries();
+    adiak::cmdline();
+    adiak::clustername();
+    adiak::value("Algorithm", "Merge Sort");
+    adiak::value("ProgrammingModel", "CUDA");
+    adiak::value("Datatype", "int");
+    adiak::value("SizeOfDatatype", sizeof(int));
+    adiak::value("InputSize", numElements);
+    adiak::value("InputType", sorting_type_name);
+    adiak::value("num_processors", numProcessors);
+    adiak::value("group_num", 16);
+    adiak::value("implementation_source", "AI & Handwritten & Online");
 
     return 0;
 }
