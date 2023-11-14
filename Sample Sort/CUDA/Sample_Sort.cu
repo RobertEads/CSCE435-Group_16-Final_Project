@@ -255,6 +255,11 @@ int main(int argc, char *argv[]) {
     }
     CALI_MARK_END(correctness_check);
 
+    CALI_MARK_BEGIN(comm);
+    CALI_MARK_BEGIN(comm_small);
+    CALI_MARK_END(comm_small);
+    CALI_MARK_END(comm);
+
     // Free GPU memory
     cudaFree(d_samples);
     cudaFree(d_bucketOffsets);
