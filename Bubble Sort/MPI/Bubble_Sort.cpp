@@ -5,6 +5,10 @@
 #include <string>
 #include <iostream>
 
+#include <caliper/cali.h>
+#include <caliper/cali-manager.h>
+#include <adiak.hpp>
+
 using std::string;
 using std::swap;
 using std::vector;
@@ -63,13 +67,16 @@ void generateData(vector<int> &localData, int startingSortChoice, int amountToGe
 void bubbleSort(std::vector<int> &data)
 {
     int n = data.size();
-    for (int i = 0; i < n - 1; i++)
+    if (n > 0)
     {
-        for (int j = 0; j < n - i - 1; j++)
+        for (int i = 0; i < n - 1; i++)
         {
-            if (data[j] > data[j + 1])
+            for (int j = 0; j < n - i - 1; j++)
             {
-                std::swap(data[j], data[j + 1]);
+                if (data[j] > data[j + 1])
+                {
+                    std::swap(data[j], data[j + 1]);
+                }
             }
         }
     }
@@ -79,15 +86,7 @@ void bubbleSort(std::vector<int> &data)
 void parallelBubbleSort(vector<int> &localData, vector<int> &sortedData, int my_rank, int numProcesses)
 {
     int localN = localData.size();
-    int *globalData = nullptr;
-
-    // Gather data on the root process
-    CALI_MARK_BEGIN(comp_small);
-    if (my_rank == 0)
-    {
-        globalData = new int[localN * numProcesses];
-    }
-    CALI_MARK_END(comp_small);
+    int *globalData = new int[localN * numProcesses];
 
     CALI_MARK_BEGIN(comm);
     CALI_MARK_BEGIN(comm_large);
@@ -99,18 +98,19 @@ void parallelBubbleSort(vector<int> &localData, vector<int> &sortedData, int my_
     CALI_MARK_BEGIN(comp_large);
     if (my_rank == 0)
     {
-        // Perform global bubble sort
-        bubbleSort(std::vector<int>(globalData, globalData + localN * numProcesses));
+        std::vector<int> myVector(globalData, globalData + localN * numProcesses);
+        bubbleSort(myVector);
 
-        CALI_MARK_BEGIN(comm_small);
-        // Scatter sorted data back to all processes
         MPI_Scatter(globalData, localN, MPI_INT, localData.data(), localN, MPI_INT, 0, MPI_COMM_WORLD);
-        CALI_MARK_END(comm_small);
-
-        delete[] globalData;
     }
 
-    sortedData.insert(sortedData.end(), &globalData[0], &globalData[localN]);
+    delete[] globalData;
+
+    // Only insert data if my_rank == 0.
+    if (my_rank == 0)
+    {
+        sortedData.insert(sortedData.end(), &globalData[0], &globalData[localN]);
+    }
     CALI_MARK_END(comp_large);
     CALI_MARK_END(comp);
 }
@@ -118,28 +118,31 @@ void parallelBubbleSort(vector<int> &localData, vector<int> &sortedData, int my_
 /* Verify */
 bool verifyCorrect(vector<int> &sortedData, int my_rank)
 {
-    // Verify local data is in order
-    for (int i = 1; i < sortedData.size() - 1; i++)
+    if (sortedData.size() > 0)
     {
-        if (sortedData.at(i - 1) > sortedData.at(i))
+        // Verify local data is in order
+        for (int i = 1; i < sortedData.size() - 1; i++)
         {
-            printf("Sorting error on process with rank: %d\n", my_rank);
-            return false;
+            if (sortedData.at(i - 1) > sortedData.at(i))
+            {
+                printf("Sorting error on process with rank: %d\n", my_rank);
+                return false;
+            }
         }
-    }
 
-    // Verify start and end line up
-    int myDataBounds[] = {sortedData.at(0), sortedData.at(sortedData.size() - 1)};
-    int boundsArraySize = 2 * numProcesses;
-    int allDataBounds[boundsArraySize];
-    MPI_Allgather(&myDataBounds, 2, MPI_INT, &allDataBounds, 2, MPI_INT, MPI_COMM_WORLD);
+        // Verify start and end line up
+        int myDataBounds[] = {sortedData.at(0), sortedData.at(sortedData.size() - 1)};
+        int boundsArraySize = 2 * numProcesses;
+        int allDataBounds[boundsArraySize];
+        MPI_Allgather(&myDataBounds, 2, MPI_INT, &allDataBounds, 2, MPI_INT, MPI_COMM_WORLD);
 
-    for (int i = 1; i < boundsArraySize - 1; i++)
-    {
-        if (allDataBounds[i - 1] > allDataBounds[i])
+        for (int i = 1; i < boundsArraySize - 1; i++)
         {
-            printf("Sorting error on bounds regions: %d\n", my_rank);
-            return false;
+            if (allDataBounds[i - 1] > allDataBounds[i])
+            {
+                printf("Sorting error on bounds regions: %d\n", my_rank);
+                return false;
+            }
         }
     }
 
@@ -244,22 +247,20 @@ int main(int argc, char **argv)
     }
 
     adiak::init(NULL);
-    adiak::launchdate();                                               // launch date of the job
-    adiak::libraries();                                                // Libraries used
-    adiak::cmdline();                                                  // Command line used to launch the job
-    adiak::clustername();                                              // Name of the cluster
-    adiak::value("Algorithm", "Bubble Sort");                          // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
-    adiak::value("ProgrammingModel", "MPI");                           // e.g., "MPI", "CUDA", "MPIwithCUDA"
-    adiak::value("Datatype", "int");                                   // The datatype of input elements (e.g., double, int, float)
-    adiak::value("SizeOfDatatype", sizeof(int));                       // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
-    adiak::value("InputSize", inputSize);                              // The number of elements in input dataset (1000)
-    adiak::value("InputType", inputType);                              // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
-    adiak::value("num_procs", numProcesses);                           // The number of processors (MPI ranks)
-    adiak::value("group_num", "16");                                   // The number of your group (integer, e.g., 1, 10)
-    adiak::value("implementation_source", "Handwritten, AI, & Online") // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
-
-        // Flush Caliper output before finalizing MPI
-        mgr.stop();
+    adiak::launchdate();                         // launch date of the job
+    adiak::libraries();                          // Libraries used
+    adiak::cmdline();                            // Command line used to launch the job
+    adiak::clustername();                        // Name of the cluster
+    adiak::value("Algorithm", "Bubble Sort");    // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
+    adiak::value("ProgrammingModel", "MPI");     // e.g., "MPI", "CUDA", "MPIwithCUDA"
+    adiak::value("Datatype", "int");             // The datatype of input elements (e.g., double, int, float)
+    adiak::value("SizeOfDatatype", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
+    adiak::value("InputSize", inputSize);        // The number of elements in input dataset (1000)
+    adiak::value("InputType", inputType);        // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
+    adiak::value("num_procs", numProcesses);     // The number of processors (MPI ranks)
+    adiak::value("group_num", "16");             // The number of your group (integer, e.g., 1, 10)
+    adiak::value("implementation_source", "Handwritten, AI, & Online");
+    mgr.stop();
     mgr.flush();
     MPI_Finalize();
 }
