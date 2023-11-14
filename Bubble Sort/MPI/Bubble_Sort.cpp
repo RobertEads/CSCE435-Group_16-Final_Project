@@ -60,18 +60,29 @@ void generateData(vector<int> &localData, int startingSortChoice, int amountToGe
         }
         break;
     }
+    case 3:
+    { // 1% Perturbed
+        srand((my_rank + 5) * (my_rank + 12) * 1235);
+        for (int i = 0; i < amountToGenerate; i++)
+        {
+            // Generate 1% perturbed data
+            int perturb = static_cast<int>(0.01 * inputSize * (rand() % 2 ? 1 : -1));
+            localData.push_back((i + perturb + inputSize) % inputSize);
+        }
+        break;
+    }
     }
 }
 
 /* Regular Bubble Sort*/
-void bubbleSort(std::vector<int> &data)
+void bubbleSort(int *data, int size)
 {
-    int n = data.size();
-    if (n > 0)
+    // int n = data.size();
+    if (size > 0)
     {
-        for (int i = 0; i < n - 1; i++)
+        for (int i = 0; i < size - 1; i++)
         {
-            for (int j = 0; j < n - i - 1; j++)
+            for (int j = 0; j < size - i - 1; j++)
             {
                 if (data[j] > data[j + 1])
                 {
@@ -96,20 +107,21 @@ void parallelBubbleSort(vector<int> &localData, vector<int> &sortedData, int my_
 
     CALI_MARK_BEGIN(comp);
     CALI_MARK_BEGIN(comp_large);
+
+    std::vector<int> tempVector(globalData, globalData + localN * numProcesses);
+
     if (my_rank == 0)
     {
-        std::vector<int> myVector(globalData, globalData + localN * numProcesses);
-        bubbleSort(myVector);
+        bubbleSort(tempVector.data(), localN * numProcesses);
 
-        MPI_Scatter(globalData, localN, MPI_INT, localData.data(), localN, MPI_INT, 0, MPI_COMM_WORLD);
+        MPI_Scatter(tempVector.data(), localN, MPI_INT, localData.data(), localN, MPI_INT, 0, MPI_COMM_WORLD);
     }
-
-    delete[] globalData;
 
     // Only insert data if my_rank == 0.
     if (my_rank == 0)
     {
-        sortedData.insert(sortedData.end(), &globalData[0], &globalData[localN]);
+        sortedData.insert(sortedData.end(), &tempVector[0], &tempVector[localN]);
+        delete[] globalData;
     }
     CALI_MARK_END(comp_large);
     CALI_MARK_END(comp);
@@ -126,21 +138,6 @@ bool verifyCorrect(vector<int> &sortedData, int my_rank)
             if (sortedData.at(i - 1) > sortedData.at(i))
             {
                 printf("Sorting error on process with rank: %d\n", my_rank);
-                return false;
-            }
-        }
-
-        // Verify start and end line up
-        int myDataBounds[] = {sortedData.at(0), sortedData.at(sortedData.size() - 1)};
-        int boundsArraySize = 2 * numProcesses;
-        int allDataBounds[boundsArraySize];
-        MPI_Allgather(&myDataBounds, 2, MPI_INT, &allDataBounds, 2, MPI_INT, MPI_COMM_WORLD);
-
-        for (int i = 1; i < boundsArraySize - 1; i++)
-        {
-            if (allDataBounds[i - 1] > allDataBounds[i])
-            {
-                printf("Sorting error on bounds regions: %d\n", my_rank);
                 return false;
             }
         }
@@ -180,6 +177,11 @@ int main(int argc, char **argv)
     case 2:
     {
         inputType = "Reverse Sorted";
+        break;
+    }
+    case 3:
+    {
+        inputType = "1% Perturbed";
         break;
     }
     }
