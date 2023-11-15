@@ -21,10 +21,9 @@ const char *data_init = "data_init";
 const char *correctness_check = "correctness_check";
 const char *comm = "comm";
 const char *comm_large = "comm_large";
-const char *comm_small = "comm_small";
 const char *comp = "comp";
 const char *comp_large = "comp_large";
-const char *comp_small = "comp_small";
+const char *cudamemcpy = "cudaMemcpy";
 
 /* Data generation */
 __global__ void generateData(int *dataArray, int size, int inputType)
@@ -136,28 +135,20 @@ int main(int argc, char *argv[])
     bubbleSort<<<BLOCKS, THREADS>>>(d_unsortedArray, NUM_VALS);
     cudaDeviceSynchronize();
     CALI_MARK_END(comp_large);
-
-    // Not used
-    CALI_MARK_BEGIN(comp_small);
-    CALI_MARK_END(comp_small);
-
     CALI_MARK_END(comp);
 
     CALI_MARK_BEGIN(comm);
     CALI_MARK_BEGIN(comm_large);
     // Copy data back to the host
     int sortedArray[NUM_VALS];
+    CALI_MARK_BEGIN(cudamemcpy);
     cudaMemcpy(sortedArray, d_unsortedArray, NUM_VALS * sizeof(int), cudaMemcpyDeviceToHost);
+    CALI_MARK_END(cudamemcpy);
     CALI_MARK_END(comm_large);
     CALI_MARK_END(comm);
 
-    // Ignore
-    CALI_MARK_BEGIN(comm_small);
-    CALI_MARK_END(comm_small);
-
     CALI_MARK_BEGIN(correctness_check);
     /* Verify Correctness */
-    // bool isSorted[NUM_VALS - 1];
     bool isSorted[NUM_VALS];
     bool *d_isSorted;
     cudaMalloc((void **)&d_isSorted, (NUM_VALS - 1) * sizeof(bool));
