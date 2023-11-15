@@ -19,7 +19,7 @@ Our team's primary method of communication will be GroupMe with Slack as a secon
 
 ## 2b. Brief project description (what algorithms will you be comparing and on what architectures)
 
-Each of the selected sort algorithms, Bubble, Merge, Quick, & Sample will be run in parallel using MPI and CUDA separately.
+Each of the selected sort algorithms, Bubble, Merge, Selection, & Sample will be run in parallel using MPI and CUDA separately.
 
 ## 2c. Pseudocode for each parallel algorithm
 
@@ -182,60 +182,59 @@ __global__ void mergeSortParallelCUDA(int* arr, int size) {
 
 ```
 
-### Algorithm 3: Quick Sort
+### Algorithm 3: Selection Sort
 
 #### MPI
 
 ```
 1. Distribute the data among processes using MPI_Scatter.
-2. Each process applies the quicksort algorithm to its portion of the data.
-3. Communicate with neighboring processes to partition and exchange data using MPI_Send and MPI_Recv.
-4. Recursively apply quicksort on the subarrays, ensuring elements are correctly placed relative to the pivot.
-5. Repeat the quicksort and data exchange steps for the required number of iterations (in parallel) to ensure a fully sorted dataset.
+2. Each process applies the selection sort algorithm to its portion of the data. 
+3. The sort selects the minimum element and swaps it with the first unsorted element so that there is a local sorted segment.
+3. Communicate with neighboring processes using MPI_Send and MPI_Recv to exchange boundary data so that elements are placed correctly.
+4. There is no need for a scatter operation, as Selection Sort is an in-place sorting algorithm.
+5. Repeat the Selection Sort for the required number of iterations, ensuring all elements are correctly sorted.
 6. Verify the correctness of the sorted data.
 ```
-
 
 #### CUDA
 ```
 1. Each CUDA thread loads a portion of the data into shared memory
-2. Apply quicksort within shared memory.
-3. Use CUDA parallel reduction for pivot selection.
-4. Broadcast pivot elements to all threads.
-5. Partition data around pivot.
-6. Calculate offsets for each partition.
-7. Use CUDA scatter to move elements to partitions.
-8. Recursively apply quicksort to each partition.
-9. Optionally perform parallel merging (depending on partition size).
+2. Implement selection sort within the shared memory to locally sort the data.
+3. Utilize CUDA parallel reduction techniques to find the minimum element within the shared memory.
+4. Share the minimum element among all threads.
+5. Partition the data based on the broadcasted minimum element.
+6. Determine offsets for each partition to facilitate data movement.
+7. Utilize CUDA scatter operations to move elements to their respective partitions.
+8. Continue the selection sort for a certain number of iterations. 
+9. As selection sort is an exchange-based sorting algorithm that works directly on the data in place, there is no merging.  
 ```
  
 ```
-int partition(int arr[], int low, int high) {
 
-   int pivot = arr[high];
-   int i = (low-1);
-
-   for (int j = low; j <= high; j++) {
-    if (arr[j] < pivot) {
-      i++;
-      swap(arr[i], arr[j]);
+void selectionSort(int arr[], int n)
+{
+    int i, j, min_idx;
+ 
+    // One by one move boundary of
+    // unsorted subarray
+    for (i = 0; i < n - 1; i++) {
+ 
+        // Find the minimum element in
+        // unsorted array
+        min_idx = i;
+        for (j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_idx])
+                min_idx = j;
+        }
+ 
+        // Swap the found minimum element
+        // with the first element
+        if (min_idx != i)
+            swap(arr[min_idx], arr[i]);
     }
-   }
-   swap(arr[i+1], arr[high]);
-   return (i+1);
 }
 
-void quickSort(int arr[], int low, int high) {
-  if (low < high) {
-    int pi = partition(arr, low, high);
-
-    quickSort(arr, low, pi-1);
-    quickSort(arr, pi+1, high);
-  }
-}
 ```
-
-
 
 ### Algorithm 4: Sample Sort
 
@@ -277,7 +276,7 @@ Transfer data from GPU to CPU
 - https://www.geeksforgeeks.org/quick-sort/
 - https://cse.buffalo.edu/faculty/miller/Courses/CSE702/Nicolas-Barrios-Fall-2021.pdf
 - https://en.wikipedia.org/wiki/Samplesort
-- https://www.geeksforgeeks.org/cpp-program-for-quicksort/#
+- https://www.geeksforgeeks.org/selection-sort/
 - https://pushkar2196.wordpress.com/2017/04/19/mergesort-cuda-implementation/
 
 ## 2e. Evaluation plan - what and how will you measure and compare
