@@ -37,7 +37,7 @@ __global__ void generateData(int *dataArray, int size, int inputType)
     { // Random
         if (idx < size)
         {
-            unsigned int x = 12345687 + idx;
+            unsigned int x = 12345687 + idx + blockIdx.x * blockDim.x; // Use block and thread indices
             x ^= (x << 16);
             x ^= (x << 25);
             x ^= (x << 4);
@@ -69,20 +69,20 @@ __global__ void generateData(int *dataArray, int size, int inputType)
 __global__ void bubbleSort(int *array, int size)
 {
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (tid < size)
+
+    for (int i = 0; i < size - 1; i++)
     {
-        for (int i = 0; i < size - 1; i++)
+        for (int j = 0; j < size - i - 1; j++)
         {
-            for (int j = 0; j < size - i - 1; j++)
+            int currentIdx = j + tid;
+            if (currentIdx < size - 1 && array[currentIdx] > array[currentIdx + 1])
             {
-                if (array[j] > array[j + 1])
-                {
-                    int temp = array[j];
-                    array[j] = array[j + 1];
-                    array[j + 1] = temp;
-                }
+                int temp = array[currentIdx];
+                array[currentIdx] = array[currentIdx + 1];
+                array[currentIdx + 1] = temp;
             }
         }
+        __syncthreads(); // Ensure all threads finish current iteration before moving to the next one
     }
 }
 
@@ -106,6 +106,7 @@ int main(int argc, char *argv[])
     THREADS = atoi(argv[2]);
     NUM_VALS = atoi(argv[3]);
     BLOCKS = NUM_VALS / THREADS;
+    BLOCKS = (BLOCKS == 0) ? 1 : BLOCKS;
 
     printf("Input sorting type: %d\n", sortingType);
     printf("Number of threads: %d\n", THREADS);
@@ -131,27 +132,33 @@ int main(int argc, char *argv[])
     /* Main Alg */
     CALI_MARK_BEGIN(comp);
     CALI_MARK_BEGIN(comp_large);
-    CALI_MARK_BEGIN(comp_small);
     // Launch the Bubble Sort kernel
     bubbleSort<<<BLOCKS, THREADS>>>(d_unsortedArray, NUM_VALS);
     cudaDeviceSynchronize();
-    CALI_MARK_END(comp_small);
     CALI_MARK_END(comp_large);
+
+    // Not used
+    CALI_MARK_BEGIN(comp_small);
+    CALI_MARK_END(comp_small);
+
     CALI_MARK_END(comp);
 
     CALI_MARK_BEGIN(comm);
     CALI_MARK_BEGIN(comm_large);
-    CALI_MARK_BEGIN(comm_small);
     // Copy data back to the host
     int sortedArray[NUM_VALS];
     cudaMemcpy(sortedArray, d_unsortedArray, NUM_VALS * sizeof(int), cudaMemcpyDeviceToHost);
-    CALI_MARK_END(comm_small);
     CALI_MARK_END(comm_large);
     CALI_MARK_END(comm);
 
+    // Ignore
+    CALI_MARK_BEGIN(comm_small);
+    CALI_MARK_END(comm_small);
+
     CALI_MARK_BEGIN(correctness_check);
     /* Verify Correctness */
-    bool isSorted[NUM_VALS - 1];
+    // bool isSorted[NUM_VALS - 1];
+    bool isSorted[NUM_VALS];
     bool *d_isSorted;
     cudaMalloc((void **)&d_isSorted, (NUM_VALS - 1) * sizeof(bool));
     checkArraySorted<<<BLOCKS, THREADS>>>(d_unsortedArray, d_isSorted, NUM_VALS);
