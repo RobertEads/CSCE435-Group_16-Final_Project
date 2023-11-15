@@ -17,12 +17,10 @@ const char *comm_small = "comm_small";
 const char *comp = "comp";
 const char *comp_large = "comp_large";
 const char *comp_small = "comp_small";
-const char *gather = "gather";
-const char *scatter = "scatter";
+
 
 void merge(std::vector<int> &arr, int l, int m, int r)
 {
-    CALI_MARK_BEGIN(comp_small);
     int i, j, k;
     int n1 = m - l + 1;
     int n2 = r - m;
@@ -65,12 +63,11 @@ void merge(std::vector<int> &arr, int l, int m, int r)
         j++;
         k++;
     }
-    CALI_MARK_END(comp_small);
 }
 
 void mergeSort(std::vector<int> &arr, int l, int r)
 {
-    CALI_MARK_BEGIN(comp_large);
+
     if (l < r)
     {
         // Same as (l+r)/2, but avoids overflow for large l and r
@@ -83,7 +80,6 @@ void mergeSort(std::vector<int> &arr, int l, int r)
         // Merge the sorted halves
         merge(arr, l, m, r);
     }
-    CALI_MARK_END(comp_large);
 }
 
 void generateData(std::vector<int> &localData, int startingSortChoice, int amountToGenerate, int startingPosition, int my_rank, int inputSize)
@@ -116,7 +112,20 @@ void generateData(std::vector<int> &localData, int startingSortChoice, int amoun
             localData.push_back(i);
         }
         break;
+        
+    //  case 3:
+    { // 1% Perturbed
+        srand((my_rank + 5) * (my_rank + 12) * 1235);
+        for (int i = 0; i < amountToGenerate; i++)
+        {
+            // Generate 1% perturbed data
+            int perturb = static_cast<int>(0.01 * inputSize * (rand() % 2 ? 1 : -1));
+            localData.push_back((i + perturb + inputSize) % inputSize);
+        }
+        break;
+    
     }
+
 
     CALI_MARK_END(data_init);
 }
@@ -138,11 +147,8 @@ bool verifyCorrect(std::vector<int> &sortedData, int my_rank)
     return true;
 }
 
-int main(int argc, char *argv[])
-{
-    CALI_MARK_BEGIN(mainFunction);
-    cali::ConfigManager mgr;
-    mgr.start();
+int main(int argc, char *argv[]) {
+    
     if (argc != 4)
     {
         std::cerr << "Usage: " << argv[0] << " <sorting_type> <num_processors> <num_elements>" << std::endl;
@@ -153,144 +159,69 @@ int main(int argc, char *argv[])
     int sorting_type = std::atoi(argv[1]);
     int num_processors = std::atoi(argv[2]);
     int num_elements = std::atoi(argv[3]);
-
-    // MPI Initialization
+    
     MPI_Init(&argc, &argv);
 
-    // Get the rank and size of the communicator
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    if (size != num_processors)
-    {
-        if (rank == 0)
-        {
-            std::cerr << "Number of processors specified does not match the actual number of processors." << std::endl;
-        }
-        MPI_Finalize();
-        return 1;
-    }
+    std::vector<int> input_array;
 
-    std::vector<int> arr;
+    if (rank == 0) {
+    // Manually create the input array
+    generateData(input_array, sorting_type, num_elements / size, rank * (num_elements / size), rank, num_elements);
 
-    // Generate data based on sorting type
-    if (sorting_type == 0)
-    {
-        // Random data
-        generateData(arr, 0, num_elements, 0, rank, num_elements);
+    // Print the initial array
+    std::cout << "Initial Array: ";
+    for (int i = 0; i < num_elements; ++i) {
+        std::cout << input_array[i] << " ";
     }
-    else if (sorting_type == 1)
-    {
-        // Sorted data
-        generateData(arr, 1, num_elements, rank * (num_elements / size), rank, num_elements);
-    }
-    else if (sorting_type == 2)
-    {
-        // Reverse sorted data
-        generateData(arr, 2, num_elements, rank * (num_elements / size), rank, num_elements);
-    }
-    else
-    {
-        std::cerr << "Invalid sorting type. Please use 0 for random data, 1 for sorted data, or 2 for reverse sorted data." << std::endl;
-        MPI_Finalize();
-        return 1;
-    }
+    std::cout << std::endl;
+}
 
-    // Output initial array
-    // if (rank == 0)
-    // {
-    //     printf("Process %d: Initial Array: ", rank);
-    //     for (int i = 0; i < num_elements; ++i)
-    //     {
-    //         printf("%d ", arr[i]);
-    //     }
-    //     printf("\n");
-    // }
 
-    // Start time measurement
-    double start_time = MPI_Wtime();
-
-    // Perform local merge sort
     int local_size = num_elements / size;
     std::vector<int> local_arr(local_size);
 
-    CALI_MARK_BEGIN(comm);
-    CALI_MARK_BEGIN(comm_large);
-    CALI_MARK_BEGIN(scatter);
-    MPI_Scatter(&arr[0], local_size, MPI_INT, &local_arr[0], local_size, MPI_INT, 0, MPI_COMM_WORLD);
-    CALI_MARK_END(scatter);
-    CALI_MARK_END(comm_large);
-    CALI_MARK_END(comm);
+    // Scatter the input array among processes
+    MPI_Scatter(&input_array[0], local_size, MPI_INT, &local_arr[0], local_size, MPI_INT, 0, MPI_COMM_WORLD);
 
-    CALI_MARK_BEGIN(comp);
+    // Display initial elements on each rank
+    for (int i = 0; i < size; ++i) {
+        MPI_Barrier(MPI_COMM_WORLD);
+        if (i == rank) {
+            std::cout << "Rank " << rank << ": Initial Elements: ";
+            for (int j = 0; j < local_size; ++j) {
+                std::cout << local_arr[j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    // Perform local merge sort
     mergeSort(local_arr, 0, local_size - 1);
-    CALI_MARK_END(comp);
 
-    CALI_MARK_BEGIN(comm);
-    CALI_MARK_BEGIN(comm_small);
-    CALI_MARK_BEGIN(gather);
+    // Gather the sorted local arrays back to the root process
+    MPI_Gather(&local_arr[0], local_size, MPI_INT, &input_array[0], local_size, MPI_INT, 0, MPI_COMM_WORLD);
 
-    MPI_Gather(&local_arr[0], local_size, MPI_INT, &arr[0], local_size, MPI_INT, 0, MPI_COMM_WORLD);
-    CALI_MARK_END(gather);
-    CALI_MARK_END(comm_small);
-    CALI_MARK_END(comm);
-    // Perform final merge on the root process
-    if (rank == 0)
-    {
-        mergeSort(arr, 0, num_elements - 1);
+    // Merge the sorted local arrays on the root process
+    if (rank == 0) {
+    std::vector<int> sorted_result(num_elements);
+
+    // Merge all sorted halves
+    for (int i = 0; i < size; ++i) {
+        merge(input_array, i * local_size, (i + 1) * local_size - 1, std::min((i + 2) * local_size - 1, num_elements - 1));
     }
 
-    // Stop time measurement
-    double end_time = MPI_Wtime();
-
-    // Output results or time taken
-    if (rank == 0)
-    {
-
-        // Verify correctness
-        if (verifyCorrect(arr, rank))
-        {
-            std::cout << "Sorting is correct." << std::endl;
-        }
-        else
-        {
-            std::cout << "Sorting is incorrect." << std::endl;
-        }
-
-        // printf("Process %d: Final Array: ", rank);
-        // for (int i = 0; i < num_elements; ++i)
-        // {
-        //     printf("%d ", arr[i]);
-        // }
-        // printf("\n");
-
-        // Output time taken
-        std::cout << "Time taken: " << end_time - start_time << " seconds." << std::endl;
+    // Display the final sorted array on rank 0
+    std::cout << "Rank 0: Final Sorted Array: ";
+    for (int i = 0; i < num_elements; ++i) {
+        std::cout << input_array[i] << " ";
     }
-
-    CALI_MARK_END(mainFunction);
-
-    adiak::init(NULL);
-    adiak::launchdate();                                              // launch date of the job
-    adiak::libraries();                                               // Libraries used
-    adiak::cmdline();                                                 // Command line used to launch the job
-    adiak::clustername();                                             // Name of the cluster
-    adiak::value("Algorithm", "Merge Sort");                          // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
-    adiak::value("ProgrammingModel", "MPI");                          // e.g., "MPI", "CUDA", "MPIwithCUDA"
-    adiak::value("Datatype", "int");                                  // The datatype of input elements (e.g., double, int, float)
-    adiak::value("SizeOfDatatype", sizeof(int));                      // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
-    adiak::value("InputSize", num_elements);                          // The number of elements in input dataset (1000)
-    adiak::value("InputType", sorting_type);                          // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
-    adiak::value("num_procs", num_processors);                        // The number of processors (MPI ranks)
-    adiak::value("group_num", 16);                                    // The number of your group (integer, e.g., 1, 10)
-    adiak::value("implementation_source", "Handwritten, Online, AI"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
-
-    // Flush Caliper output before finalizing MPI
-    mgr.stop();
-    mgr.flush();
+    std::cout << std::endl;
+}
 
     MPI_Finalize();
-
     return 0;
 }

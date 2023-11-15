@@ -51,7 +51,7 @@ __global__ void generateData(int *dataArray, int size, int inputType)
         }
         break;
     }
-    }
+        }
 }
 
 __device__ void merge(int *arr, int *temp, int left, int mid, int right)
@@ -167,17 +167,25 @@ int main(int argc, char **argv)
     int *d_generateResult;
     cudaMalloc((void **)&d_generateResult, sizeof(int) * numElements);
     generateData<<<(numElements + 255) / 256, 256>>>(d_generateResult, numElements, sortingType);
-    cudaMemcpy(h_arr, d_generateResult, sizeof(int) * numElements, cudaMemcpyDeviceToHost);
-    cudaFree(d_generateResult);
-
     CALI_MARK_END(data_init);
 
     CALI_MARK_BEGIN(comm);
+    CALI_MARK_BEGIN(comm_small);
+    CALI_MARK_BEGIN("cudaMemcpy");
+
+    cudaMemcpy(h_arr, d_generateResult, sizeof(int) * numElements, cudaMemcpyDeviceToHost);
+    CALI_MARK_END("cudaMemcpy");
+
+    cudaFree(d_generateResult);
+
+    CALI_MARK_END(comm_small);
+
     CALI_MARK_BEGIN(comm_large);
     cudaMalloc((void **)&d_arr, sizeof(int) * numElements);
-    CALI_MARK_BEGIN(comm_small);
+    CALI_MARK_BEGIN("cudaMemcpy");
     cudaMemcpy(d_arr, h_arr, sizeof(int) * numElements, cudaMemcpyHostToDevice);
-    CALI_MARK_END(comm_small);
+    CALI_MARK_END("cudaMemcpy");
+
     cudaMalloc((void **)&temp, sizeof(int) * numElements);
     CALI_MARK_END(comm_large);
     CALI_MARK_END(comm);
@@ -190,13 +198,14 @@ int main(int argc, char **argv)
 
     CALI_MARK_BEGIN(comp);
     CALI_MARK_BEGIN(comp_large);
-    CALI_MARK_BEGIN(comp_small);
     // Call mergeSort kernel
     mergeSort<<<1, 1>>>(d_arr, temp, numElements);
     cudaDeviceSynchronize();
-    CALI_MARK_END(comp_small);
 
     CALI_MARK_END(comp_large);
+
+    CALI_MARK_BEGIN(comp_small);
+    CALI_MARK_END(comp_small);
     CALI_MARK_END(comp);
 
     // Print sorted array if size is less than or equal to 32
