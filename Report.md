@@ -285,3 +285,10 @@ Transfer data from GPU to CPU
 Each algorithm with be run with the input types of sorted, reverse sorted, and randomized. The input sizes are planned to be 2^16, 2^20, and 2^24.
 Both weak and strong scaling will be analyzed and compared against the other algorithms being tested.
 The number of threads in a block on the GPU will be [64, 128, 512, 1024].
+
+
+## 3. Project Implementation
+
+The listed algorithms were fully implemented using both MPI and CUDA.
+
+## 4. Performance Evaluation
