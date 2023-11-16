@@ -19,7 +19,7 @@ Our team's primary method of communication will be GroupMe with Slack as a secon
 
 ## 2b. Brief project description (what algorithms will you be comparing and on what architectures)
 
-Each of the selected sort algorithms, Bubble, Merge, Quick, & Sample will be run in parallel using MPI and CUDA separately.
+Each of the selected sort algorithms, Bubble, Merge, Selection, & Sample will be run in parallel using MPI and CUDA separately.
 
 ## 2c. Pseudocode for each parallel algorithm
 
@@ -182,60 +182,60 @@ __global__ void mergeSortParallelCUDA(int* arr, int size) {
 
 ```
 
-### Algorithm 3: Quick Sort
+### Algorithm 3: Selection Sort
 
 #### MPI
 
 ```
 1. Distribute the data among processes using MPI_Scatter.
-2. Each process applies the quicksort algorithm to its portion of the data.
-3. Communicate with neighboring processes to partition and exchange data using MPI_Send and MPI_Recv.
-4. Recursively apply quicksort on the subarrays, ensuring elements are correctly placed relative to the pivot.
-5. Repeat the quicksort and data exchange steps for the required number of iterations (in parallel) to ensure a fully sorted dataset.
+2. Each process applies the selection sort algorithm to its portion of the data.
+3. The sort selects the minimum element and swaps it with the first unsorted element so that there is a local sorted segment.
+3. Communicate with neighboring processes using MPI_Send and MPI_Recv to exchange boundary data so that elements are placed correctly.
+4. There is no need for a scatter operation, as Selection Sort is an in-place sorting algorithm.
+5. Repeat the Selection Sort for the required number of iterations, ensuring all elements are correctly sorted.
 6. Verify the correctness of the sorted data.
 ```
 
-
 #### CUDA
+
 ```
 1. Each CUDA thread loads a portion of the data into shared memory
-2. Apply quicksort within shared memory.
-3. Use CUDA parallel reduction for pivot selection.
-4. Broadcast pivot elements to all threads.
-5. Partition data around pivot.
-6. Calculate offsets for each partition.
-7. Use CUDA scatter to move elements to partitions.
-8. Recursively apply quicksort to each partition.
-9. Optionally perform parallel merging (depending on partition size).
+2. Implement selection sort within the shared memory to locally sort the data.
+3. Utilize CUDA parallel reduction techniques to find the minimum element within the shared memory.
+4. Share the minimum element among all threads.
+5. Partition the data based on the broadcasted minimum element.
+6. Determine offsets for each partition to facilitate data movement.
+7. Utilize CUDA scatter operations to move elements to their respective partitions.
+8. Continue the selection sort for a certain number of iterations.
+9. As selection sort is an exchange-based sorting algorithm that works directly on the data in place, there is no merging.
 ```
- 
+
 ```
-int partition(int arr[], int low, int high) {
 
-   int pivot = arr[high];
-   int i = (low-1);
+void selectionSort(int arr[], int n)
+{
+    int i, j, min_idx;
 
-   for (int j = low; j <= high; j++) {
-    if (arr[j] < pivot) {
-      i++;
-      swap(arr[i], arr[j]);
+    // One by one move boundary of
+    // unsorted subarray
+    for (i = 0; i < n - 1; i++) {
+
+        // Find the minimum element in
+        // unsorted array
+        min_idx = i;
+        for (j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_idx])
+                min_idx = j;
+        }
+
+        // Swap the found minimum element
+        // with the first element
+        if (min_idx != i)
+            swap(arr[min_idx], arr[i]);
     }
-   }
-   swap(arr[i+1], arr[high]);
-   return (i+1);
 }
 
-void quickSort(int arr[], int low, int high) {
-  if (low < high) {
-    int pi = partition(arr, low, high);
-
-    quickSort(arr, low, pi-1);
-    quickSort(arr, pi+1, high);
-  }
-}
 ```
-
-
 
 ### Algorithm 4: Sample Sort
 
@@ -292,13 +292,14 @@ The listed algorithms were fully implemented using both MPI and CUDA.
 
 ## 4. Performance Evaluation
 
-
-
 ### Sample Sort
 
 #### MPI
+
 ##### Randomized
+
 <!-- Strong -->
+
 For randomized inputs, this sample sort implementation clearly displays a lack of strong scaling on all three input sizes tested, 2^16, 2^18, & 2^20. While there is a minor decrease in runtime for 64 processes, the rest of the graph does not share this trend. The pattern presented below can most likely be attributed to the computation portion of its runtime due to the increase in overhead and therefore required time when adding more processes.
 
 ![Total time-main-Randomized-Strong_Scaling](./Report_Images/SS-MPI_0.png)
@@ -306,6 +307,7 @@ For randomized inputs, this sample sort implementation clearly displays a lack o
 ![Total time-comp-Randomized-Strong_Scaling](./Report_Images/SS-MPI_2.png)
 
 <!-- Weak -->
+
 Weak scaling for this sample sort implementation presents an interesting graph shape for randomized input data. While the main and comm sections have decent weak scaling performace between 16 and 64 processes and then have poor weak scaling after that, the computation portion of the algorithm has no indication of anything but poor weak scaling performance. This is likely to hamper the algorithms performance when working with larger inputs.
 
 ![main-Randomized-Weak_Scaling](./Report_Images/SS-MPI_3.png)
@@ -313,7 +315,9 @@ Weak scaling for this sample sort implementation presents an interesting graph s
 ![comp-Randomized-Weak_Scaling](./Report_Images/SS-MPI_5.png)
 
 ##### Sorted
+
 <!-- Strong -->
+
 For sorted inputs, while not quite true strong scaling, the sample sort implementation does a much better job with lower numbers of processes. The computation time stays roughly same from 2 processes up to 32 processes before fluxuating and eventually rising. The communication time shows a similar pattern to that of randomized inputs, and the graph for overall time moves closer to the computation graph for the beginning portion. This flat lining of computation time near the beginning could be due to the few number of buckets and underlying quick sort algorithm enabling it to only need a small number of runs to verifiy the data is sorted.
 
 ![Total time-main-Sorted-Strong_Scaling](./Report_Images/SS-MPI_6.png)
@@ -321,6 +325,7 @@ For sorted inputs, while not quite true strong scaling, the sample sort implemen
 ![Total time-comp-Sorted-Strong_Scaling](./Report_Images/SS-MPI_8.png)
 
 <!-- Weak -->
+
 Weak scaling performance for a sorted input is very similar to that of the randomized input. Interesting to note however, the larger impact of the comp section can be seen as the main graph has less of a flatline between 16 and 64 processes.
 
 ![main-Sorted-Weak_Scaling](./Report_Images/SS-MPI_9.png)
@@ -328,7 +333,9 @@ Weak scaling performance for a sorted input is very similar to that of the rando
 ![comp-Sorted-Weak_Scaling](./Report_Images/SS-MPI_11.png)
 
 ##### Reverse Sorted
+
 <!-- Strong -->
+
 A very similar story is told by the reverse sorted graphs as by the sorted graph. Computation flatlines until about 32 processes and then increases wildly, communication displays poor strong scaling performance, and the overall graphs is good mix of the two. As this is the third comm graph to display a sharp decrease in runtime at the 64 process mark, it is likely this benifit is due to the CPUs on Grace being 24 cores each, 48 hardware threads, which means at 64 processes the second CPU is being used and the additional cache memory is now introduced into the equation during communication.
 
 ![Total time-main-Reverse-Strong_Scaling](./Report_Images/SS-MPI_12.png)
@@ -336,6 +343,7 @@ A very similar story is told by the reverse sorted graphs as by the sorted graph
 ![Total time-comp-Reverse-Strong_Scaling](./Report_Images/SS-MPI_14.png)
 
 <!-- Weak -->
+
 The weak scaling for reverse sorted inputs looks very similar to the other two input types. Comm has moderate weak scaling in the beginning, but comp's poor weak scaling performance over shadows any positives when it comes to overall runtime.
 
 ![main-Sorted-Weak_Scaling](./Report_Images/SS-MPI_15.png)
@@ -343,8 +351,11 @@ The weak scaling for reverse sorted inputs looks very similar to the other two i
 ![comp-Sorted-Weak_Scaling](./Report_Images/SS-MPI_17.png)
 
 #### CUDA
+
 ##### Randomized
+
 <!-- Strong -->
+
 The CUDA implementation of sample sort does seem to display decent strong scaling performance for the larger input sizes. This is mainly due to the computation time as the comm graph is mostly flat and seems to have little overall impact if any. The sharp drop seen at 1024 threads for 2^16 input size seems to be an outlier as that data point does not make sense given the rest of the graph.
 
 ![Total time-main-Randomized-Strong_Scaling](./Report_Images/SS-CUDA_0.png)
@@ -352,6 +363,7 @@ The CUDA implementation of sample sort does seem to display decent strong scalin
 ![Total time-comp-Randomized-Strong_Scaling](./Report_Images/SS-CUDA_2.png)
 
 <!-- Weak -->
+
 There is not much to be said about the weak scaling performance of this sample sort implementation. It has very poor performance overall due to the similarly poor graphs in both the comm and comp regions.
 
 ![main-Randomized-Weak_Scaling](./Report_Images/SS-CUDA_3.png)
@@ -359,7 +371,9 @@ There is not much to be said about the weak scaling performance of this sample s
 ![comp-Randomized-Weak_Scaling](./Report_Images/SS-CUDA_5.png)
 
 ##### Sorted
+
 <!-- Strong -->
+
 When looking at strong scaling performance with sorted input, no clear picture emerges one way or the other. When compared to randomized input, sorted input seems to have worse overall strong scaling performance, but it's can be hard to tell due to the inconsistent shape of the graph. The comm regions are roughly the same between the two inputs, but computation for sorted is much less strongly scaled than randomized, leading to the main graph looking a bit wild.
 
 ![Total time-main-Sorted-Strong_Scaling](./Report_Images/SS-CUDA_6.png)
@@ -367,6 +381,7 @@ When looking at strong scaling performance with sorted input, no clear picture e
 ![Total time-comp-Sorted-Strong_Scaling](./Report_Images/SS-CUDA_8.png)
 
 <!-- Weak -->
+
 While the strong scaling got worse with sorted input, the weak scaling seems to be a little bit better. While comm did not change much, the comp regions' scaling improved and so the main graphs looks a little bit better between 64 an 256 threads.
 
 ![main-Sorted-Weak_Scaling](./Report_Images/SS-CUDA_9.png)
@@ -374,33 +389,51 @@ While the strong scaling got worse with sorted input, the weak scaling seems to 
 ![comp-Sorted-Weak_Scaling](./Report_Images/SS-CUDA_11.png)
 
 ##### Reverse Sorted
+
 <!-- Strong -->
-Reverse sorted inputs for this sample sort implementation seems have decent strong scaling performance and get better as the size of the input increases. While the communication portion is still relatively flat, computation has fairly good strong scaling performance and that translates to the main graph as well. The trend being seen with this input type is most likely due to the underlying sorting algorithm being insertion sort. Because reverse sorted input is typically the worst case for insertion sort, being able to break it into smaller chunks likely helps to combact that usual disadvtanges that come with the algorithm. 
+
+Reverse sorted inputs for this sample sort implementation seems have decent strong scaling performance and get better as the size of the input increases. While the communication portion is still relatively flat, computation has fairly good strong scaling performance and that translates to the main graph as well. The trend being seen with this input type is most likely due to the underlying sorting algorithm being insertion sort. Because reverse sorted input is typically the worst case for insertion sort, being able to break it into smaller chunks likely helps to combact that usual disadvtanges that come with the algorithm.
 
 ![Total time-main-Reverse-Strong_Scaling](./Report_Images/SS-CUDA_12.png)
 ![Total time-comm-Reverse-Strong_Scaling](./Report_Images/SS-CUDA_13.png)
 ![Total time-comp-Reverse-Strong_Scaling](./Report_Images/SS-CUDA_14.png)
 
 <!-- Weak -->
+
 Weaking scaling for reverse sorted inputs appears to fall somewhere in between randomized and sorted. Comm is pretty much the same as before and comp is only slightly better than with randomized input, so the main graphs has fairly poor weak scaling performance overall.
 
 ![main-Reverse-Weak_Scaling](./Report_Images/SS-CUDA_15.png)
 ![comm-Reverse-Weak_Scaling](./Report_Images/SS-CUDA_16.png)
 ![comp-Reverse-Weak_Scaling](./Report_Images/SS-CUDA_17.png)
 
-
-
 ### Merge Sort
 
 #### Weak Scaling
+
 ##### MPI
+
 One thing to note when I did my weak scaling is that I chose to measure the average time per rank over number of processors. The reason I chose average time over total time is that disussing with the TA about how these sorts work, total time is always going to grow as you increase processors because its an aggregate of all times over all processors. Additionally, I wanted to begin by focusing on the main function times for everything because I thought a good introduction to the analysis is how the program as a whole ran on average.
 
 For the inital analysis, I wanted to view how the weak scaling was viewed for 2^16 elements across the four different types of input arrays. We can see that up to about 32 processors, everything is about equal. After that, we beging to see some divergence. We see that randomized and 1% perturbed tend to perform a little better. Once I get further into my analysis and greatly increase the number of processors, we shall see how these trends begin to change.
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/WS-MPI-16-main.png)
 
 ##### CUDA
+
 For the CUDA weak scaling of 2^16 elements, we had a lot more strange activity. There seemed to be a lot more fluctuations with this one, but most of the arrays seemed to be generally the same time. One thing to note however is that the time scale has decreased to less than a second, which means and slight changes in time are emphasized. This is also a good introduction to see how much more efficient CUDA is being programmed here. Overall, regardless of the shape of the graph, at this point, we see very minimal changes between the different sorting types, but a general trend in increasing time.
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/WS-CUDA-16-main.png)
 
+### Bubble Sort
 
+#### Weak Scaling
+
+##### MPI
+
+Like Shawn for merge sort, I also opted to assess the average time per rank in relation to the number of processors instead of total time since total time invariably increases with the addition of processors, as it represents an aggregate of all times across all processors.
+
+For this analysis, I examined weak scaling using 2^16 elements across all four input types (sorted, reverse sorted, randomized, and 1% perturbed). It is evident that as the number of processors increases, the sorted array consistently exhibits the fastest runtime. This scenario represents the optimal condition for bubble sort, as it involves zero swaps for elements. The efficiency of this input type remains largely unaffected by the increase in processors, given its inherently efficient nature. The next fastest is the 1% perturbed input, which demonstrates a noticeable increase in runtime as the number of processors grows. The subsequent rankings alternate between reverse sorted and randomized inputs, as expected, considering they require a greater number of swaps. Reverse sorted input is relatively insensitive to the number of processors, as it consistently involves the maximum number of swaps.
+![Bubble-main-Weak-MPI](./Report_Images/BubbleSort/BubbleSort-MPI-Weak-Main-65536.jpg)
+
+##### CUDA
+
+For this analysis, I examined weak scaling using 2^16 elements across three input types (sorted, reverse sorted, and randomized). The results are unexpected, as all average times increase with the number of threads used. One would anticipate a decrease for some time, given that parallelization should enhance efficiency. Furthermore, similar to MPI, we observe that "Sorted" consistently ranks as the fastest, as expected, since no swaps are required. "Reverse sorted" and "randomized" exhibit variations in their next fastest rankings, which aligns with expectations as they entail more swaps. The graph suggests that for this input size (65536), parallelization is not beneficial. With additional graphs featuring different input sizes, we can discern the general trend.
+![Bubble-main-Weak-CUDA](./Report_Images/BubbleSort/BubbleSort-CUDA-Weak-Main-65536.jpg)
