@@ -437,3 +437,17 @@ For this analysis, I examined weak scaling using 2^16 elements across all four i
 
 For this analysis, I examined weak scaling using 2^16 elements across three input types (sorted, reverse sorted, and randomized). The results are unexpected, as all average times increase with the number of threads used. One would anticipate a decrease for some time, given that parallelization should enhance efficiency. Furthermore, similar to MPI, we observe that "Sorted" consistently ranks as the fastest, as expected, since no swaps are required. "Reverse sorted" and "randomized" exhibit variations in their next fastest rankings, which aligns with expectations as they entail more swaps. The graph suggests that for this input size (65536), parallelization is not beneficial. With additional graphs featuring different input sizes, we can discern the general trend.
 ![Bubble-main-Weak-CUDA](./Report_Images/BubbleSort/BubbleSort-CUDA-Weak-Main-65536.jpg)
+
+
+### Bubble Sort
+
+#### Weak Scaling
+
+##### MPI
+For the analysis, weak scaling was examined across the sorted input type. 2, 4, and 8 processors were run and it showed that there was an increase in average time. However, this was interesting as usually as the number of processors increases, the time should decrease due to parallelization and efficiency. However, since smaller numbers were run it might not be as easy to tell. Therefore, as more trials with more data is run, then the graph will show parallelization. The rest of the input types with the number of processors and threads will be run as the next time in order to gather more accurate data creating the various graphs. 
+![selection-main-Weak-MPI](./Report_Images/SelectionSort/weakscale.png)
+
+##### CUDA
+For the analysis, for CUDA only two cali files with 16 were run so only two points are showing. It does seem that one of the points has a higher average time. Due to the small number of trials, not much can be observed from the graph. The jobs were queued on grace portal so the data was not fully able to be collected for this implementation. However, as the number of processors increases, the average time should decrease as the the paralleization of the tasks has been implemented. Therefore, the rest of the input types will be run 
+
+![selection-main-Weak-CUDA](./Report_Images/SelectionSort/weakscaleCUDA.jpeg)
