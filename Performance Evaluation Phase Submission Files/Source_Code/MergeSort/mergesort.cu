@@ -63,12 +63,17 @@ bool isSorted(const float *arr, int length)
 void mix(float *arr, int length, float perturbation_factor)
 {
     srand(static_cast<unsigned int>(time(NULL)));
-    for (int i = 0; i < length; ++i)
-    {
-        arr[i] += (rand() % length * 2 - 1) * perturbation_factor;
-    }
-}
+    int num_elements_to_randomize = length / 100; // 1% of the array size
 
+    for (int i = 0; i < num_elements_to_randomize; ++i)
+    {
+        int index = rand() % length;  // Generate a random index
+        arr[index] = rand() % length; // Randomize the value at the index
+    }
+
+    // Sort the array after randomizing elements (optional)
+    std::sort(arr, arr + length);
+}
 void print_array(const float *arr, int length)
 {
     for (int i = 0; i < length; ++i)
@@ -78,7 +83,7 @@ void print_array(const float *arr, int length)
     std::cout << std::endl;
 }
 
-__global__ void merge_sort_step(float *dev_values, float *temp, int n, unsigned int width)
+__global__ void merge_sort_step(float *device_vals, float *temp, int n, unsigned int width)
 {
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int start = 2 * width * idx;
@@ -93,38 +98,38 @@ __global__ void merge_sort_step(float *dev_values, float *temp, int n, unsigned 
 
         while (i < middle && j < end)
         {
-            if (dev_values[i] < dev_values[j])
+            if (device_vals[i] < device_vals[j])
             {
-                temp[k++] = dev_values[i++];
+                temp[k++] = device_vals[i++];
             }
             else
             {
-                temp[k++] = dev_values[j++];
+                temp[k++] = device_vals[j++];
             }
         }
         while (i < middle)
-            temp[k++] = dev_values[i++];
+            temp[k++] = device_vals[i++];
         while (j < end)
-            temp[k++] = dev_values[j++];
+            temp[k++] = device_vals[j++];
 
         for (i = start; i < end; i++)
         {
-            dev_values[i] = temp[i];
+            device_vals[i] = temp[i];
         }
     }
 }
 
 void merge_sort(float *initial_arr, int length)
 {
-    float *dev_values, *temp;
+    float *device_vals, *temp;
     size_t bytes = length * sizeof(float);
-    cudaMalloc((void **)&dev_values, bytes);
+    cudaMalloc((void **)&device_vals, bytes);
     cudaMalloc((void **)&temp, bytes);
 
     CALI_MARK_BEGIN(comm);
     CALI_MARK_BEGIN(comm_large);
     CALI_MARK_BEGIN("cudaMemcpy");
-    cudaMemcpy(dev_values, initial_arr, bytes, cudaMemcpyHostToDevice);
+    cudaMemcpy(device_vals, initial_arr, bytes, cudaMemcpyHostToDevice);
     CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END(comm_large);
     CALI_MARK_END(comm);
@@ -139,7 +144,7 @@ void merge_sort(float *initial_arr, int length)
         long long totalThreads = (long long)length / (2 * width);
         int numBlocks = (totalThreads + threadsPerBlock.x - 1) / threadsPerBlock.x;
 
-        merge_sort_step<<<numBlocks, threadsPerBlock>>>(dev_values, temp, length, width);
+        merge_sort_step<<<numBlocks, threadsPerBlock>>>(device_vals, temp, length, width);
         cudaDeviceSynchronize();
 
         cudaError_t error = cudaGetLastError();
@@ -155,12 +160,12 @@ void merge_sort(float *initial_arr, int length)
     CALI_MARK_BEGIN(comm);
     CALI_MARK_BEGIN(comm_large);
     CALI_MARK_BEGIN("cudaMemcpy");
-    cudaMemcpy(initial_arr, dev_values, bytes, cudaMemcpyDeviceToHost);
+    cudaMemcpy(initial_arr, device_vals, bytes, cudaMemcpyDeviceToHost);
     CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END(comm_large);
     CALI_MARK_END(comm);
 
-    cudaFree(dev_values);
+    cudaFree(device_vals);
     cudaFree(temp);
 }
 
