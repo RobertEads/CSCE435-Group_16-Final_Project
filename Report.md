@@ -277,7 +277,7 @@ Transfer data from GPU to CPU
 - https://www.geeksforgeeks.org/quick-sort/
 - https://cse.buffalo.edu/faculty/miller/Courses/CSE702/Nicolas-Barrios-Fall-2021.pdf
 - https://en.wikipedia.org/wiki/Samplesort
-- https://www.geeksforgeeks.org/cpp-program-for-quicksort/#
+- https://www.geeksforgeeks.org/selection-sort/
 - https://pushkar2196.wordpress.com/2017/04/19/mergesort-cuda-implementation/
 
 ## 2e. Evaluation plan - what and how will you measure and compare
