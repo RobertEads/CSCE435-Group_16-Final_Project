@@ -394,7 +394,8 @@ Weaking scaling for reverse sorted inputs appears to fall somewhere in between r
 
 #### Weak Scaling
 ##### MPI
-One thing to note when I did my weak scaling is that I chose to measure the average time per rank over number of processors. The reason I chose average time over total time is that disussing with the TA about how these sorts work, total time is always going to grow as you increase processors because its an aggregate of all times over all processors. 
+One thing to note when I did my weak scaling is that I chose to measure the average time per rank over number of processors. The reason I chose average time over total time is that disussing with the TA about how these sorts work, total time is always going to grow as you increase processors because its an aggregate of all times over all processors. Additionally, I wanted to begin by focusing on the main function times for everything because I thought a good introduction to the analysis is how the program as a whole ran on average.
+
 For the inital analysis, I wanted to view how the weak scaling was viewed for 2^16 elements across the four different types of input arrays. We can see that up to about 32 processors, everything is about equal. After that, we beging to see some divergence. We see that randomized and 1% perturbed tend to perform a little better. Once I get further into my analysis and greatly increase the number of processors, we shall see how these trends begin to change.
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/WS-MPI-16-main.png)
 
