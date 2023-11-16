@@ -388,3 +388,18 @@ Weaking scaling for reverse sorted inputs appears to fall somewhere in between r
 ![comm-Reverse-Weak_Scaling](./Report_Images/SS-CUDA_16.png)
 ![comp-Reverse-Weak_Scaling](./Report_Images/SS-CUDA_17.png)
 
+
+
+### Merge Sort
+
+#### Weak Scaling
+##### MPI
+One thing to note when I did my weak scaling is that I chose to measure the average time per rank over number of processors. The reason I chose average time over total time is that disussing with the TA about how these sorts work, total time is always going to grow as you increase processors because its an aggregate of all times over all processors. 
+For the inital analysis, I wanted to view how the weak scaling was viewed for 2^16 elements across the four different types of input arrays. We can see that up to about 32 processors, everything is about equal. After that, we beging to see some divergence. We see that randomized and 1% perturbed tend to perform a little better. Once I get further into my analysis and greatly increase the number of processors, we shall see how these trends begin to change.
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/WS-MPI-16-main.png)
+
+##### CUDA
+For the CUDA weak scaling of 2^16 elements, we had a lot more strange activity. There seemed to be a lot more fluctuations with this one, but most of the arrays seemed to be generally the same time. One thing to note however is that the time scale has decreased to less than a second, which means and slight changes in time are emphasized. This is also a good introduction to see how much more efficient CUDA is being programmed here. Overall, regardless of the shape of the graph, at this point, we see very minimal changes between the different sorting types, but a general trend in increasing time.
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/WS-CUDA-16-main.png)
+
+
