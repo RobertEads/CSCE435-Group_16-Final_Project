@@ -286,9 +286,55 @@ Each algorithm with be run with the input types of sorted, reverse sorted, and r
 Both weak and strong scaling will be analyzed and compared against the other algorithms being tested.
 The number of threads in a block on the GPU will be [64, 128, 512, 1024].
 
-
 ## 3. Project Implementation
 
 The listed algorithms were fully implemented using both MPI and CUDA.
 
 ## 4. Performance Evaluation
+
+
+
+### Sample Sort
+
+#### MPI
+##### Randomized
+<!-- Strong -->
+For randomized inputs, this sample sort implementation clearly displays a lack of strong scaling on all three input sizes tested, 2^16, 2^18, & 2^20. While there is a minor decrease in runtime for 64 processes, the rest of the graph does not share this trend. The pattern presented below can most likely be attributed to the computation portion of its runtime due to the increase in overhead and therefore required time when adding more processes.
+![Total time-main-Randomized-Strong_Scaling](./Report_Images/SS-MPI_0.png)
+![Total time-comm-Randomized-Strong_Scaling](./Report_Images/SS-MPI_1.png)
+![Total time-comp-Randomized-Strong_Scaling](./Report_Images/SS-MPI_2.png)
+
+<!-- Weak -->
+Weak scaling for this sample sort implementation presents an interesting graph shape for randomized input data. While the main and comm sections have decent weak scaling performace between 16 and 64 processes and then have poor weak scaling after that, the computation portion of the algorithm has no indication of anything but poor weak scaling performance. This is likely to hamper the algorithms performance when working with larger inputs.
+![main-Randomized-Weak_Scaling](./Report_Images/SS-MPI_3.png)
+![comm-Randomized-Weak_Scaling](./Report_Images/SS-MPI_4.png)
+![comp-Randomized-Weak_Scaling](./Report_Images/SS-MPI_5.png)
+
+##### Sorted
+<!-- Strong -->
+For sorted inputs, while not quite true strong scaling, the sample sort implementation does a much better job with lower numbers of processes. The computation time stays roughly same from 2 processes up to 32 processes before fluxuating and eventually rising. The communication time shows a similar pattern to that of randomized inputs, and the graph for overall time moves closer to the computation graph for the beginning portion. This flat lining of computation time near the beginning could be due to the few number of buckets and underlying quick sort algorithm enabling it to only need a small number of runs to verifiy the data is sorted.
+![Total time-main-Sorted-Strong_Scaling](./Report_Images/SS-MPI_6.png)
+![Total time-comm-Sorted-Strong_Scaling](./Report_Images/SS-MPI_7.png)
+![Total time-comp-Sorted-Strong_Scaling](./Report_Images/SS-MPI_8.png)
+
+<!-- Weak -->
+Weak scaling performance for a sorted input is very similar to that of the randomized input. Interesting to note however, the larger impact of the comp section can be seen as the main graph has less of a flatline between 16 and 64 processes.
+![main-Sorted-Weak_Scaling](./Report_Images/SS-MPI_9.png)
+![comm-Sorted-Weak_Scaling](./Report_Images/SS-MPI_10.png)
+![comp-Sorted-Weak_Scaling](./Report_Images/SS-MPI_11.png)
+
+##### Reverse Sorted
+<!-- Strong -->
+A very similar story is told by the reverse sorted graphs as by the sorted graph. Computation flatlines until about 32 processes and then increases wildly, communication displays poor strong scaling performance, and the overall graphs is good mix of the two. As this is the third comm graph to display a sharp decrease in runtime at the 64 process mark, it is likely this benifit is due to the CPUs on Grace being 24 cores each, 48 hardware threads, which means at 64 processes the second CPU is being used and the additional cache memory is now introduced into the equation during communication.
+![Total time-main-Reverse-Strong_Scaling](./Report_Images/SS-MPI_12.png)
+![Total time-comm-Reverse-Strong_Scaling](./Report_Images/SS-MPI_13.png)
+![Total time-comp-Reverse-Strong_Scaling](./Report_Images/SS-MPI_14.png)
+
+<!-- Weak -->
+The weak scaling for reverse sorted inputs looks very similar to the other two input types. Comm has moderate weak scaling in the beginning, but comp's poor weak scaling performance over shadows any positives when it comes to overall runtime.
+![main-Sorted-Weak_Scaling](./Report_Images/SS-MPI_15.png)
+![comm-Sorted-Weak_Scaling](./Report_Images/SS-MPI_16.png)
+![comp-Sorted-Weak_Scaling](./Report_Images/SS-MPI_17.png)
+
+#### CUDA
+
