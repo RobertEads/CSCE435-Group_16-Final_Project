@@ -60,6 +60,23 @@ __global__ void generateData(int *dataArray, int size, int inputType)
         }
         break;
     }
+    case 3:
+    { // 1% Perturbed Reverse sorted
+        if (idx < size)
+        {
+            dataArray[idx] = size - 1 - idx;
+
+            // Perturb 1% of the elements
+            if (idx % 100 == 0 && idx < size - 1)
+            {
+                // Swap adjacent elements to introduce perturbation
+                int temp = dataArray[idx];
+                dataArray[idx] = dataArray[idx + 1];
+                dataArray[idx + 1] = temp;
+            }
+        }
+        break;
+    }
     }
 }
 
@@ -200,6 +217,11 @@ int main(int argc, char *argv[])
     case 2:
     {
         inputType = "Reverse Sorted";
+        break;
+    }
+    case 3:
+    {
+        inputType = "1% Perturbed";
         break;
     }
     }
