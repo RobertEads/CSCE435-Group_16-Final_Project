@@ -415,7 +415,50 @@ Weaking scaling for reverse sorted inputs appears to fall somewhere in between r
 One thing to note when I did my weak scaling is that I chose to measure the average time per rank over number of processors. The reason I chose average time over total time is that disussing with the TA about how these sorts work, total time is always going to grow as you increase processors because its an aggregate of all times over all processors. Additionally, I wanted to begin by focusing on the main function times for everything because I thought a good introduction to the analysis is how the program as a whole ran on average.
 
 For the inital analysis, I wanted to view how the weak scaling was viewed for 2^16 elements across the four different types of input arrays. We can see that up to about 32 processors, everything is about equal. After that, we beging to see some divergence. We see that randomized and 1% perturbed tend to perform a little better. Once I get further into my analysis and greatly increase the number of processors, we shall see how these trends begin to change.
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/WS-MPI-16-main.png)
+
+### RANDOM INPUT ARRAY
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak1.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak2.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak3.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak4.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak5.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak6.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak7.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak8.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak9.png)
+
+### SORTED INPUT ARRAY
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak10.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak11.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak12.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak13.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak14.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak15.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak16.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak17.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak18.png)
+
+### REVERSE SORTED INPUT ARRAY
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak19.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak20.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak21.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak22.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak23.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak24.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak25.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak26.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak27.png)
+
+### 1% PERTURBED INPUT ARRAY
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak28.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak29.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak30.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak31.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak32.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak33.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak34.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak35.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak36.png)
 
 ##### CUDA
 
