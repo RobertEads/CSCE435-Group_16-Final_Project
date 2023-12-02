@@ -70,9 +70,6 @@ void mix(float *arr, int length, float perturbation_factor)
         int index = rand() % length;  // Generate a random index
         arr[index] = rand() % length; // Randomize the value at the index
     }
-
-    // Sort the array after randomizing elements (optional)
-    std::sort(arr, arr + length);
 }
 void print_array(const float *arr, int length)
 {
