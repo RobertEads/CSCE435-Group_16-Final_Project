@@ -463,7 +463,39 @@ For the inital analysis, I wanted to view how the weak scaling was viewed for 2^
 ##### CUDA
 
 For the CUDA weak scaling of 2^16 elements, we had a lot more strange activity. There seemed to be a lot more fluctuations with this one, but most of the arrays seemed to be generally the same time. One thing to note however is that the time scale has decreased to less than a second, which means and slight changes in time are emphasized. This is also a good introduction to see how much more efficient CUDA is being programmed here. Overall, regardless of the shape of the graph, at this point, we see very minimal changes between the different sorting types, but a general trend in increasing time.
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/WS-CUDA-16-main.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak1.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak2.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak3.png)
+![Average-Time-mainWeak Scaling](./Report_Images/MergeSort/cuda-weak4.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak5.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak6.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak7.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak8.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak9.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak10.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak11.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak12.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak13.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak14.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak15.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak16.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak17.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak18.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak19.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak20.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak21.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak22.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak23.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak24.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak25.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak26.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak27.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak28.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak29.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak30.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak31.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak32.png)
+
 
 ### Bubble Sort
 
