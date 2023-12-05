@@ -515,6 +515,195 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak32.png)
 
 
+## Strong Scaling
+### MPI
+### 2^16 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong1.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong2.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong3.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong4.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong5.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong6.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong7.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong8.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong9.png)
+### 2 ^18 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong10.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong11.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong12.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong13.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong14.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong15.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong16.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong17.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong18.png)
+### 2^20 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong19.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong20.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong21.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong22.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong23.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong24.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong25.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong26.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong27.png)
+### 2^22 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong28.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong29.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong30.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong31.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong32.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong33.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong34.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong35.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong36.png)
+### 2^24 Elements
+
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong37.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong38.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong39.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong40.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong41.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong42.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong43.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong44.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong45.png)
+### 2^26 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong46.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong47.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong48.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong49.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong50.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong51.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong52.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong53.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong54.png)
+### 2^28 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong55.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong56.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong57.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong58.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong59.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong60.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong61.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong62.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong63.png)
+
+### CUDA
+### 2^16 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong1.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong2.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong3.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong4.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong5.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong6.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong7.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong8.png)
+
+### 2 ^18 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong9.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong10.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong11.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong12.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong13.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong14.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong15.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong16.png)
+
+### 2^20 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong17.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong18.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong19.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong20.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong21.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong22.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong23.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong24.png)
+
+### 2^22 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong25.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong26.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong27.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong28.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong29.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong30.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong31.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong32.png)
+
+### 2^24 Elements
+
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong33.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong34.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong35.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong36.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong37.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong38.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong39.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong40.png)
+
+### 2^26 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong41.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong42.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong43.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong44.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong45.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong46.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong47.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong48.png)
+
+### 2^28 Elements
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong49.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong50.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong51.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong52.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong53.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong54.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong55.png)
+![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong56.png)
+
+
+## Speedup
+
+### MPI
+### Random Array
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi1.png)
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi2.png)
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi3.png)
+### Sorted Array
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi4.png)
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi5.png)
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi6.png)
+### Reverse Sorted Array
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi7.png)
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi8.png)
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi9.png)
+# 1% Perturbed Array
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi10.png)
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi11.png)
+![speedup-mpi](./Report_Images/MergeSort/scale-mpi12.png)
+
+
+### Cuda
+### Random Array
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda1.png)
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda2.png)
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda3.png)
+### Sorted Array
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda4.png)
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda5.png)
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda6.png)
+### Reverse Sorted Array
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda7.png)
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda8.png)
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda9.png)
+### 1% Perturbed Array
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda10.png)
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda11.png)
+![speedup-cuda](./Report_Images/MergeSort/scale-cuda12.png)
+
+
+# CUDA
+
 ### Bubble Sort
 
 #### Weak Scaling
