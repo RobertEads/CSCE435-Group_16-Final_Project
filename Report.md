@@ -411,12 +411,11 @@ Weaking scaling for reverse sorted inputs appears to fall somewhere in between r
 ## Weak Scaling
 
 ### MPI
-
 One thing to note when I did my weak scaling is that I chose to measure the average time per rank over number of processors. The reason I chose average time over total time is that disussing with the TA about how these sorts work, total time is always going to grow as you increase processors because its an aggregate of all times over all processors. Additionally, I wanted to begin by focusing on the main function times for everything because I thought a good introduction to the analysis is how the program as a whole ran on average.
-
 
 #### RANDOM INPUT ARRAY
 The analysis begins with weak scaling, specifically with MPI. For weak scaling, I began with the input type of a random array, where each element is a randomly generated number from 0 to n, where n is the size of the array. The most obvious trend between all of the graphs in this section is that the as you increase the number of elements, the algorithm performs more slowly. This is shown best with the largest input size of 2^28 having the largest graph, as signified by the pink line. It is interesting to note that the computation time for all the times looks relatively the same as we parallelize, and that most of the variation in times comes from the communication. I meausred both the MPI_Scatter and MPI_Gather functions, and the MPI_Gather function takes much longer than the scatter.
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak1.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak2.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak3.png)
@@ -427,10 +426,7 @@ The analysis begins with weak scaling, specifically with MPI. For weak scaling, 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak8.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak9.png)
 
-
-
 #### SORTED INPUT ARRAY
-
 In the sorted array input type, we see very similar behavior, where larger input sizes seemed to have a much longer time to complete.
 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak10.png)
@@ -443,10 +439,7 @@ In the sorted array input type, we see very similar behavior, where larger input
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak17.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak18.png)
 
-
-
 #### REVERSE SORTED INPUT ARRAY
-
 The same behavior is present in the reverse sorted array as well.
 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak19.png)
@@ -460,7 +453,6 @@ The same behavior is present in the reverse sorted array as well.
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak27.png)
 
 #### 1% PERTURBED INPUT ARRAY
-
  Finally, in the data initialized with 1% of the data perturbed, we see the similar data. We can assume this dude to merge sort typically always breaking the arrays down into a single element subarray and merging them back together, so we should expect relatively consistent behavior.
 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak28.png)
@@ -474,7 +466,6 @@ The same behavior is present in the reverse sorted array as well.
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak36.png)
 
 ### CUDA
-
 For the CUDA weak scaling of the different input types, we had a lot of the same activity as the MPI implementation. As we increased the number of elements in the input array, there was more time needed for the merge sort algorithm to complete. It also seems thats the CUDA implementation takes a bit longer to complete than the MPI implementation. We can see this most notably with the 2^28th line (the pink), where it takes over 120 seconds to complete the main_function, whereas the MPI implementation had a maximum of 40 seconds to complete. We also sea a lot steadier increase in time for the CUDA implementation. It is interesting to see that all of the different performance regions increase quite steadily. Another big difference with CUDA is how it handles communication. Rather than speaking to multiple processors like in MPI, CUDA handles only cudamemcpy, so we see rather constant communciation times between all of the different input sizes.
 
 #### Random Array
@@ -486,6 +477,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak6.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak7.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak8.png)
+
 #### Sorted Array
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak9.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak10.png)
@@ -495,6 +487,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak14.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak15.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak16.png)
+
 #### Reverse Sorted Array
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak17.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak18.png)
@@ -504,6 +497,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak22.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak23.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak24.png)
+
 ### 1% Perturbed Array
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak25.png) 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak26.png)
@@ -514,9 +508,9 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak31.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak32.png)
 
-
 ## Strong Scaling
 ### MPI
+
 ### 2^16 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong1.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong2.png)
@@ -527,6 +521,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong7.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong8.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong9.png)
+
 ### 2 ^18 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong10.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong11.png)
@@ -537,6 +532,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong16.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong17.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong18.png)
+
 ### 2^20 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong19.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong20.png)
@@ -547,6 +543,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong25.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong26.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong27.png)
+
 ### 2^22 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong28.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong29.png)
@@ -557,8 +554,8 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong34.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong35.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong36.png)
-### 2^24 Elements
 
+### 2^24 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong37.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong38.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong39.png)
@@ -568,6 +565,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong43.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong44.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong45.png)
+
 ### 2^26 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong46.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong47.png)
@@ -578,6 +576,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong52.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong53.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong54.png)
+
 ### 2^28 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong55.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong56.png)
@@ -661,48 +660,50 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong55.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong56.png)
 
-
 ## Speedup
-
 ### MPI
+
 ### Random Array
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi1.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi2.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi3.png)
+
 ### Sorted Array
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi4.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi5.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi6.png)
+
 ### Reverse Sorted Array
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi7.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi8.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi9.png)
+
 # 1% Perturbed Array
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi10.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi11.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi12.png)
 
-
-### Cuda
+### CUDA
 ### Random Array
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda1.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda2.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda3.png)
+
 ### Sorted Array
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda4.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda5.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda6.png)
+
 ### Reverse Sorted Array
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda7.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda8.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda9.png)
+
 ### 1% Perturbed Array
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda10.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda11.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda12.png)
 
-
-# CUDA
 
 ### Bubble Sort
 
