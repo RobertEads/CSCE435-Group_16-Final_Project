@@ -414,7 +414,7 @@ Weaking scaling for reverse sorted inputs appears to fall somewhere in between r
 One thing to note when I did my weak scaling is that I chose to measure the average time per rank over number of processors. The reason I chose average time over total time is that disussing with the TA about how these sorts work, total time is always going to grow as you increase processors because its an aggregate of all times over all processors. Additionally, I wanted to begin by focusing on the main function times for everything because I thought a good introduction to the analysis is how the program as a whole ran on average.
 
 #### RANDOM INPUT ARRAY
-The analysis begins with weak scaling, specifically with MPI. For weak scaling, I began with the input type of a random array, where each element is a randomly generated number from 0 to n, where n is the size of the array. The most obvious trend between all of the graphs in this section is that the as you increase the number of elements, the algorithm performs more slowly. This is shown best with the largest input size of 2^28 having the largest graph, as signified by the pink line. It is interesting to note that the computation time for all the times looks relatively the same as we parallelize, and that most of the variation in times comes from the communication. I meausred both the MPI_Scatter and MPI_Gather functions, and the MPI_Gather function takes much longer than the scatter.
+The analysis begins with weak scaling, specifically with MPI. For weak scaling, I began with the input type of a random array, where each element is a randomly generated number from 0 to n, where n is the size of the array. The most obvious trend between all of the graphs in this section is that the as you increase the number of elements, the algorithm performs more slowly. This is shown best with the largest input size of 2^28 having the largest graph, as signified by the pink line. It is interesting to note that the computation time for all the times looks relatively the same as we parallelize, and that most of the variation in times comes from the communication. I meausred both the MPI_Scatter and MPI_Gather functions, and the MPI_Gather function takes much longer than the scatter. In the sorted array input type, we see very similar behavior, where larger input sizes seemed to have a much longer time to complete. The same behavior is present in the reverse sorted array as well. Finally, in the data initialized with 1% of the data perturbed, we see the similar data. We can assume this dude to merge sort typically always breaking the arrays down into a single element subarray and merging them back together, so we should expect relatively consistent behavior.
 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak1.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak2.png)
@@ -427,8 +427,6 @@ The analysis begins with weak scaling, specifically with MPI. For weak scaling, 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak9.png)
 
 #### SORTED INPUT ARRAY
-In the sorted array input type, we see very similar behavior, where larger input sizes seemed to have a much longer time to complete.
-
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak10.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak11.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak12.png)
@@ -440,8 +438,6 @@ In the sorted array input type, we see very similar behavior, where larger input
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak18.png)
 
 #### REVERSE SORTED INPUT ARRAY
-The same behavior is present in the reverse sorted array as well.
-
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak19.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak20.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak21.png)
@@ -453,8 +449,6 @@ The same behavior is present in the reverse sorted array as well.
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak27.png)
 
 #### 1% PERTURBED INPUT ARRAY
- Finally, in the data initialized with 1% of the data perturbed, we see the similar data. We can assume this dude to merge sort typically always breaking the arrays down into a single element subarray and merging them back together, so we should expect relatively consistent behavior.
-
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak28.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak29.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak30.png)
@@ -510,7 +504,6 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 
 ## Strong Scaling
 ### MPI
-
 We see some similar behavior as the weak scaling here in terms of shape of the graph. The most notable one here is the comp and comp_large regions, which have the same exponentially decreasing graph, where each input type has relatively the same behavior. This is more or less expected given the nature of merge sort, where each input is eventually recursively broken down into single input subarrays. Especially considering that each graph has the same number of elements, we can understand why the computation is so much closer between the lines for this strong scaling. It is interesting because this strong scaling shows that MPI_Scatter is much slower than MPI_Gather, which is the opposite than from the weak scaling. We also see that as we increase the number of elements, our behavior becomes more erratic, which is most easily seen in the main_function graph of each input size. We're also seeing that the time peaks around 128 processors before decreasing and then further increasing again. For communication, we are seeing some steady increase in time as well, but overall pretty fast across the ranks. 
 ### 2^16 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong1.png)
