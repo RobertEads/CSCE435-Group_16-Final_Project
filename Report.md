@@ -590,6 +590,7 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong63.png)
 
 ### CUDA
+Looking at the graphs for CUDA strong scaling before, the data seems to be much more erratic. Rather than steady increases, we have many fluctuations as we increase the number of threads at a certain size, regardless of the input type. There doesn't seem to be an input type that outperforms the others. This is rather expected because merge sort will continue to break down the elements, regardless of the input type. It does look like the random array input does take a little more time than the other inputs, as it generally sits above the rest of the input types. This is followed by the 1% perturbed array. However, it is important to note that the scale of these graphs tend to be very close together, which can signify that there is no real tradeoff here based on input type. We definietly see that the comm region of the code, which again is around the CUDAMemcpys, fluctuates quite a bit, regardless of input type. There is no definite winner here. We get the main differences in computation, but again due to scale, isn't very significant. It is interesting to see though what could potentially cause this. Random taking the longest makes sense because there are a lot of comparisons, but it may be concerning that the reverse sorted array is one of the quicker ones, since this should theoretically have the maximum number of comparisons to make. One thing to note is that these two slowest, the random and perturbed array, have the slowest data initialization timees as well, so this could be a cause.
 ### 2^16 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong1.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong2.png)
@@ -663,7 +664,7 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 
 ## Speedup
 ### MPI
-
+When looking at the computation speedups, we see a linear trend between the input sizes. This shows the importance of parallelism. For all sizes, as we increase the number of processors, the pure computation time gets better and better, this showing the higher speedup. We do see that speedup for the 2^16 elements begins to taper off for the comp regions, indiating that the parallelism is good for very large sizes, but smaller sizes aren't as impacts by increasing processors. This makes sense because you would spend more percentage of your time increasing your processors and have more communication and face more overhead for the smaller values. If we look at the entire main region as a whole, we can see that the larger the input the size, the more speedup there is. This further reinforces that there is a need for parallelism, and a definite benefit. For all of the input sizes, there seems to be a peak speedup at 256 processors before decreasing again. After 256 processors, there may be so much overhead that we lose overall performance. It is a little difficult to look at it easily for the smaller sizes, but the speedup graphs tend to all show that a bigger input size benefits from this parallelism. We also see that for communication, speedup decreases for more processsors, again reiterating that we are likely facing some signifcant overhead.
 ### Random Array
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi1.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi2.png)
@@ -685,6 +686,7 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi12.png)
 
 ### CUDA
+In the CUDA speedup graphs, there doesn't seem to be any inherent benefit to paralleism. When we look at the main_function as a whole, we see that the speedup values tend to hover around 1.0. In fact, most of the lines tend to be below a value of 1, indicating that it is performing worse by being parallel. There also seems to be no pattern with the varying input size. We see that at the highest number of processors, the worst speedups are 2^16 elements and 2^28 elements, which are both the smallest and largest values respectively. It seems like as we increase processors, speedup for the communication is worst for the 2^16 element, but the computation is worst for 2^28 elements. Communication is hard to guage completely becuase there is quite a bit of fluctuation here, where computation speedup hovers around 1.0 and steadily decreases for most of the input sizes.
 ### Random Array
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda1.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda2.png)
