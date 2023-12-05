@@ -511,6 +511,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ## Strong Scaling
 ### MPI
 
+We see some similar behavior as the weak scaling here in terms of shape of the graph. The most notable one here is the comp and comp_large regions, which have the same exponentially decreasing graph, where each input type has relatively the same behavior. This is more or less expected given the nature of merge sort, where each input is eventually recursively broken down into single input subarrays. Especially considering that each graph has the same number of elements, we can understand why the computation is so much closer between the lines for this strong scaling. It is interesting because this strong scaling shows that MPI_Scatter is much slower than MPI_Gather, which is the opposite than from the weak scaling. We also see that as we increase the number of elements, our behavior becomes more erratic, which is most easily seen in the main_function graph of each input size. We're also seeing that the time peaks around 128 processors before decreasing and then further increasing again. For communication, we are seeing some steady increase in time as well, but overall pretty fast across the ranks. 
 ### 2^16 Elements
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong1.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong2.png)
