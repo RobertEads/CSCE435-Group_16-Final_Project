@@ -406,17 +406,17 @@ Weaking scaling for reverse sorted inputs appears to fall somewhere in between r
 ![comm-Reverse-Weak_Scaling](./Report_Images/SS-CUDA_16.png)
 ![comp-Reverse-Weak_Scaling](./Report_Images/SS-CUDA_17.png)
 
-### Merge Sort
+# Merge Sort
 
-#### Weak Scaling
+## Weak Scaling
 
-##### MPI
+### MPI
 
 One thing to note when I did my weak scaling is that I chose to measure the average time per rank over number of processors. The reason I chose average time over total time is that disussing with the TA about how these sorts work, total time is always going to grow as you increase processors because its an aggregate of all times over all processors. Additionally, I wanted to begin by focusing on the main function times for everything because I thought a good introduction to the analysis is how the program as a whole ran on average.
 
-For the inital analysis, I wanted to view how the weak scaling was viewed for 2^16 elements across the four different types of input arrays. We can see that up to about 32 processors, everything is about equal. After that, we beging to see some divergence. We see that randomized and 1% perturbed tend to perform a little better. Once I get further into my analysis and greatly increase the number of processors, we shall see how these trends begin to change.
 
-### RANDOM INPUT ARRAY
+#### RANDOM INPUT ARRAY
+The analysis begins with weak scaling, specifically with MPI. For weak scaling, I began with the input type of a random array, where each element is a randomly generated number from 0 to n, where n is the size of the array. The most obvious trend between all of the graphs in this section is that the as you increase the number of elements, the algorithm performs more slowly. This is shown best with the largest input size of 2^28 having the largest graph, as signified by the pink line. It is interesting to note that the computation time for all the times looks relatively the same as we parallelize, and that most of the variation in times comes from the communication. I meausred both the MPI_Scatter and MPI_Gather functions, and the MPI_Gather function takes much longer than the scatter.
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak1.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak2.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak3.png)
@@ -427,7 +427,12 @@ For the inital analysis, I wanted to view how the weak scaling was viewed for 2^
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak8.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak9.png)
 
-### SORTED INPUT ARRAY
+
+
+#### SORTED INPUT ARRAY
+
+In the sorted array input type, we see very similar behavior, where larger input sizes seemed to have a much longer time to complete.
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak10.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak11.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak12.png)
@@ -438,7 +443,12 @@ For the inital analysis, I wanted to view how the weak scaling was viewed for 2^
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak17.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak18.png)
 
-### REVERSE SORTED INPUT ARRAY
+
+
+#### REVERSE SORTED INPUT ARRAY
+
+The same behavior is present in the reverse sorted array as well.
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak19.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak20.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak21.png)
@@ -449,7 +459,10 @@ For the inital analysis, I wanted to view how the weak scaling was viewed for 2^
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak26.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak27.png)
 
-### 1% PERTURBED INPUT ARRAY
+#### 1% PERTURBED INPUT ARRAY
+
+ Finally, in the data initialized with 1% of the data perturbed, we see the similar data. We can assume this dude to merge sort typically always breaking the arrays down into a single element subarray and merging them back together, so we should expect relatively consistent behavior.
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak28.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak29.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak30.png)
@@ -460,9 +473,11 @@ For the inital analysis, I wanted to view how the weak scaling was viewed for 2^
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak35.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak36.png)
 
-##### CUDA
+### CUDA
 
-For the CUDA weak scaling of 2^16 elements, we had a lot more strange activity. There seemed to be a lot more fluctuations with this one, but most of the arrays seemed to be generally the same time. One thing to note however is that the time scale has decreased to less than a second, which means and slight changes in time are emphasized. This is also a good introduction to see how much more efficient CUDA is being programmed here. Overall, regardless of the shape of the graph, at this point, we see very minimal changes between the different sorting types, but a general trend in increasing time.
+For the CUDA weak scaling of the different input types, we had a lot of the same activity as the MPI implementation. As we increased the number of elements in the input array, there was more time needed for the merge sort algorithm to complete. It also seems thats the CUDA implementation takes a bit longer to complete than the MPI implementation. We can see this most notably with the 2^28th line (the pink), where it takes over 120 seconds to complete the main_function, whereas the MPI implementation had a maximum of 40 seconds to complete. We also sea a lot steadier increase in time for the CUDA implementation. It is interesting to see that all of the different performance regions increase quite steadily. Another big difference with CUDA is how it handles communication. Rather than speaking to multiple processors like in MPI, CUDA handles only cudamemcpy, so we see rather constant communciation times between all of the different input sizes.
+
+#### Random Array
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak1.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak2.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak3.png)
@@ -471,6 +486,7 @@ For the CUDA weak scaling of 2^16 elements, we had a lot more strange activity. 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak6.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak7.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak8.png)
+#### Sorted Array
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak9.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak10.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak11.png)
@@ -479,6 +495,7 @@ For the CUDA weak scaling of 2^16 elements, we had a lot more strange activity. 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak14.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak15.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak16.png)
+#### Reverse Sorted Array
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak17.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak18.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak19.png)
@@ -487,7 +504,8 @@ For the CUDA weak scaling of 2^16 elements, we had a lot more strange activity. 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak22.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak23.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak24.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak25.png)
+### 1% Perturbed Array
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak25.png) 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak26.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak27.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak28.png)
