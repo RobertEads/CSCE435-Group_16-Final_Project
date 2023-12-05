@@ -466,7 +466,7 @@ For the CUDA weak scaling of 2^16 elements, we had a lot more strange activity. 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak1.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak2.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak3.png)
-![Average-Time-mainWeak Scaling](./Report_Images/MergeSort/cuda-weak4.png)
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak4.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak5.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak6.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak7.png)
