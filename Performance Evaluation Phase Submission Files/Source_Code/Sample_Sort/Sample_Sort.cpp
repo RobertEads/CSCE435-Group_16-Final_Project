@@ -11,7 +11,6 @@
 
 using std::vector;
 using std::string;
-using std::swap;
 
 int inputSize, numProcesses;
 
@@ -30,7 +29,6 @@ const char* comp_small = "comp_small";
 void generateData(vector<int> &localData, int startingSortChoice, int amountToGenerate, int startingPosition, int my_rank) {
     switch (startingSortChoice) {
         case 0: { //Random
-            srand((my_rank+5)*(my_rank+12)*1235);
             for(int i = 0; i < amountToGenerate; i++) {
                 localData.push_back(rand() % inputSize);
             }
@@ -52,67 +50,68 @@ void generateData(vector<int> &localData, int startingSortChoice, int amountToGe
             }
             break;
         }
+        case 3: { //1%
+            for(int i = 0; i < amountToGenerate; i++) {
+                localData.push_back(rand() % inputSize);
+            }
+
+            int random_percentage = amountToGenerate * 0.1;
+            for (int i = 0; i < random_percentage; i++)
+            {
+                int index = rand() % amountToGenerate;    // Generate a random index
+                localData.at(index) = rand() % inputSize; // Randomize the value at the index
+            }
+            break;
+        }
     }
 }
 
 /* Sequential Quick Sort & Helpers 
-*  quickSort and partition function from geeksforgeeks.org
+*  quickSort and generateRandomPivot function from geeksforgeeks.org
 */
-int partition(int arr[], int start, int end)
-{
-    int pivot = arr[start];
- 
-    int count = 0;
-    for (int i = start + 1; i <= end; i++) {
-        if (arr[i] <= pivot)
-            count++;
-    }
- 
-    // Giving pivot element its correct position
-    int pivotIndex = start + count;
-    swap(arr[pivotIndex], arr[start]);
- 
-    // Sorting left and right parts of the pivot element
-    int i = start, j = end;
- 
-    while (i < pivotIndex && j > pivotIndex) {
- 
-        while (arr[i] <= pivot) {
-            i++;
-        }
- 
-        while (arr[j] > pivot) {
-            j--;
-        }
- 
-        if (i < pivotIndex && j > pivotIndex) {
-            swap(arr[i++], arr[j--]);
-        }
-    }
- 
-    return pivotIndex;
+// Function to swap two elements
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
-
-void quickSort(int arr[], int start, int end)
-{
-    // base case
-    if (start >= end)
-        return;
  
-    // partitioning the array
-    int p = partition(arr, start, end);
+// Function to generate a random pivot index
+int generateRandomPivot(int low, int high) {
+    return low + rand() % (high - low + 1);
+}
  
-    // Sorting the left part
-    quickSort(arr, start, p - 1);
+// Function to perform QuickSort
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pivotIndex = generateRandomPivot(low, high);
+        int pivotValue = arr[pivotIndex];
  
-    // Sorting the right part
-    quickSort(arr, p + 1, end);
+        // Swap the pivot element with the last element
+        swap(&arr[pivotIndex], &arr[high]);
+ 
+        int i = low - 1;
+ 
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivotValue) {
+                i++;
+                swap(&arr[i], &arr[j]);
+            }
+        }
+ 
+        // Swap the pivot element back to its final position
+        swap(&arr[i+1], &arr[high]);
+ 
+        // Recursively sort the left and right subarrays
+        quickSort(arr, low, i);
+        quickSort(arr, i+2, high);
+    }
 }
 
 /* Main Alg */
 void sampleSort(vector<int> &localData, vector<int> &sortedData, int my_rank) {
     /* Sample splitters */
-    int numSplitters = 4; //# Sampled per node
+    int numSplitters = 4; //# Sampled per process
     vector<int> sampledSplitters;
     srand(84723840);
     
@@ -260,15 +259,18 @@ int main (int argc, char *argv[])
 
     string inputType;
     switch (sortingType) {
-    case 0: {
-        inputType = "Randomized";
-        break; }
-    case 1: {
-        inputType = "Sorted";
-        break; }
-    case 2: {
-        inputType = "Reverse Sorted";
-        break; }
+        case 0: {
+            inputType = "Random";
+            break; }
+        case 1: {
+            inputType = "Sorted";
+            break; }
+        case 2: {
+            inputType = "ReverseSorted";
+            break; }
+        case 3: {
+            inputType = "1%perturbed";
+            break; }
     }
 
     int my_rank,        /* rank id of my process */
@@ -279,11 +281,11 @@ int main (int argc, char *argv[])
     MPI_Init(&argc,&argv);
     MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
     MPI_Comm_size(MPI_COMM_WORLD,&num_ranks);
-    /*if (num_ranks < 2) {
+    if (num_ranks < 2) {
         printf("Need at least two MPI tasks. Quitting...\n");
         MPI_Abort(MPI_COMM_WORLD, rc);
         exit(1);
-    }*/
+    }
     if(num_ranks != numProcesses) {
         printf("Target number of processes and actual number of ranks do not match. Quitting...\n");
         MPI_Abort(MPI_COMM_WORLD, rc);
@@ -296,6 +298,7 @@ int main (int argc, char *argv[])
         printf("Input Size: %d\n", inputSize);  
     }
 
+    //printf("Start main - rank: %d\n", my_rank); //REMOVE
     CALI_MARK_BEGIN(mainFunction);
 
     // Create caliper ConfigManager object
@@ -303,26 +306,31 @@ int main (int argc, char *argv[])
     mgr.start();
 
     //Data generation
+    //printf("Start data gen - rank: %d\n", my_rank); //REMOVE
+    srand((my_rank+5)*(my_rank+12)*1235);
     vector<int> myLocalData;
     int amountToGenerateMyself = inputSize/numProcesses; //Should aways be based around powers of 2
     int startingPos = my_rank * (amountToGenerateMyself);
     CALI_MARK_BEGIN(data_init);
     generateData(myLocalData, sortingType, amountToGenerateMyself, startingPos, my_rank);
     CALI_MARK_END(data_init);
-
+    
+    //printf("Start sort - rank: %d\n", my_rank); //REMOVE
     //Main Alg
     vector<int> sortedData;
     sampleSort(myLocalData, sortedData, my_rank);
 
+    //printf("Start verify - rank: %d\n", my_rank); //REMOVE
     //Verification
     CALI_MARK_BEGIN(correctness_check);
     bool correct = verifyCorrect(sortedData, my_rank);
     CALI_MARK_END(correctness_check);
 
     CALI_MARK_END(mainFunction);
+    //printf("end main - rank: %d\n", my_rank); //REMOVE
     if(!correct){printf("There is a problem with the sorting. Quitting...\n");}
     else {if(my_rank == 0){printf("\nAll data sorted correctly!");}}
-  
+
     adiak::init(NULL);
     adiak::launchdate();    // launch date of the job
     adiak::libraries();     // Libraries used
