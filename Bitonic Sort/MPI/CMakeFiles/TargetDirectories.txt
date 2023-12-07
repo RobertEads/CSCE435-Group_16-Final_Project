@@ -1,0 +1,3 @@
+/scratch/user/anjalik02/Project-Bitonic/MPI/CMakeFiles/rebuild_cache.dir
+/scratch/user/anjalik02/Project-Bitonic/MPI/CMakeFiles/edit_cache.dir
+/scratch/user/anjalik02/Project-Bitonic/MPI/CMakeFiles/bitonic.dir
