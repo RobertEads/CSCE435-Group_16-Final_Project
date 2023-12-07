@@ -111,7 +111,7 @@ void quickSort(int arr[], int low, int high) {
 /* Main Alg */
 void sampleSort(vector<int> &localData, vector<int> &sortedData, int my_rank) {
     /* Sample splitters */
-    int numSplitters = 4; //# Sampled per node
+    int numSplitters = 4; //# Sampled per process
     vector<int> sampledSplitters;
     srand(84723840);
     
@@ -298,6 +298,7 @@ int main (int argc, char *argv[])
         printf("Input Size: %d\n", inputSize);  
     }
 
+    //printf("Start main - rank: %d\n", my_rank); //REMOVE
     CALI_MARK_BEGIN(mainFunction);
 
     // Create caliper ConfigManager object
@@ -305,6 +306,7 @@ int main (int argc, char *argv[])
     mgr.start();
 
     //Data generation
+    //printf("Start data gen - rank: %d\n", my_rank); //REMOVE
     srand((my_rank+5)*(my_rank+12)*1235);
     vector<int> myLocalData;
     int amountToGenerateMyself = inputSize/numProcesses; //Should aways be based around powers of 2
@@ -312,17 +314,20 @@ int main (int argc, char *argv[])
     CALI_MARK_BEGIN(data_init);
     generateData(myLocalData, sortingType, amountToGenerateMyself, startingPos, my_rank);
     CALI_MARK_END(data_init);
-
+    
+    //printf("Start sort - rank: %d\n", my_rank); //REMOVE
     //Main Alg
     vector<int> sortedData;
     sampleSort(myLocalData, sortedData, my_rank);
 
+    //printf("Start verify - rank: %d\n", my_rank); //REMOVE
     //Verification
     CALI_MARK_BEGIN(correctness_check);
     bool correct = verifyCorrect(sortedData, my_rank);
     CALI_MARK_END(correctness_check);
 
     CALI_MARK_END(mainFunction);
+    //printf("end main - rank: %d\n", my_rank); //REMOVE
     if(!correct){printf("There is a problem with the sorting. Quitting...\n");}
     else {if(my_rank == 0){printf("\nAll data sorted correctly!");}}
 
