@@ -26,7 +26,7 @@ __rec=node,id=107,attr=15,data=regionprofile
 __rec=ctx,ref=107,attr=74=77=80=84=82=87=90,data=0.003768=0.003768=0.003768=0.003768=1=0.003768=0
 __rec=node,id=37,attr=10,data=276,parent=3
 __rec=node,id=38,attr=8,data=region,parent=37
-__rec=node,id=39,attr=38,data=main_function
+__rec=node,id=39,attr=38,data=main
 __rec=node,id=93,attr=13,data=Avg GPU time/rank,parent=71
 __rec=node,id=94,attr=10,data=65,parent=93
 __rec=node,id=95,attr=8,data=avg#iscale#cupti.activity.duration,parent=94
