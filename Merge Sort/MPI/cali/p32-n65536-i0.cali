@@ -32,7 +32,7 @@ __rec=node,id=78,attr=15,data=regionprofile
 __rec=ctx,ref=78,attr=55=58=61=65=63=68=71=73=74=72=77,data=0.000348=0.126458=0.037080=1.186553=32=1.186553=0.002599=1.186553=0.127171=32=0
 __rec=node,id=32,attr=10,data=276,parent=3
 __rec=node,id=33,attr=8,data=region,parent=32
-__rec=node,id=34,attr=33,data=main_function
+__rec=node,id=34,attr=33,data=main
 __rec=ctx,ref=34=78,attr=55=58=61=65=63=68=71=73=74=72=77,data=5.621949=6.137183=5.868566=187.794114=32=187.794114=0.013084=187.794114=1102.500872=32=1
 __rec=node,id=35,attr=33,data=data_init,parent=34
 __rec=ctx,ref=35=78,attr=55=58=61=65=63=68=71=73=74=72=77,data=0.000876=0.126930=0.050962=1.630781=32=1.630781=0.003041=1.630781=0.180435=32=2
