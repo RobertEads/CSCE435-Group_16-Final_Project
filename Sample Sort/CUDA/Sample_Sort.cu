@@ -8,6 +8,7 @@
 #include <adiak.hpp>
 #include <cuda_runtime.h>
 #include <cuda.h>
+#include <curand_kernel.h>
 
 using namespace std;
 
@@ -18,7 +19,7 @@ int NUM_VALS;
 /* Define Caliper region names */
 const char* mainFunction = "main";
 const char* data_init = "data_init";
-const char* correctness_check = "correctness_check ";
+const char* correctness_check = "correctness_check";
 const char* comm = "comm";
 const char* comm_large = "comm_large";
 const char* comm_small = "comm_small";
@@ -27,118 +28,172 @@ const char* comp_large = "comp_large";
 const char* comp_small = "comp_small";
 
 /* Data generation */
-__global__ void generateData(int* dataArray, int size, int inputType) {
-        int idx = threadIdx.x + blockDim.x * blockIdx.x;
-
+__global__ void generateData(int* dataArray, int numValues, int inputType, int numThreads) {
+    int idx = threadIdx.x + blockDim.x * blockIdx.x;
+    
+    if(idx < numThreads) {
+        int valuesPerThread = numValues/numThreads;
+        int start = idx*valuesPerThread;
         switch (inputType) {
-        case 0: {//Random    
-            if(idx < size) {
-                unsigned int x = 12345687 + idx;
-                x ^= (x << 16);
-                x ^= (x << 25);
-                x ^= (x << 4);
-                dataArray[idx] = abs(static_cast<int>(x) % size);
+            case 0: { //Random    
+                curandState state;
+                curand_init(44738791+idx, idx, 0, &state);
+
+                for(int i = start; i < (start+valuesPerThread) ; i++) {dataArray[i] = curand(&state) % numValues;}
+                break;
             }
-            break;
+            case 1: { //Sorted
+                for(int i = start; i < (start+valuesPerThread) ; i++) {dataArray[i] = i;}
+                break;
+            }
+            case 2: { //Reverse sorted
+                for(int i = start; i < (start+valuesPerThread) ; i++) {dataArray[i] = numValues - 1 - i;}
+                break;
+            }
+            case 3: { //1% - but just the sorted part
+                for(int i = start; i < (start+valuesPerThread) ; i++) {dataArray[i] = i;}
+                break;
+            }
         }
-        case 1: {//Sorted
-            if (idx < size) {dataArray[idx] = idx;}
-            break;
-        }
-        case 2: { //Reverse sorted
-             if (idx < size) {dataArray[idx] = size - 1 - idx;}
-            break;
-        }
+    }   
+}
+
+//CUDA kernal function to make the data 1% perturbed
+__global__ void perturbData(int* dataArray, int numValues) {
+    int idx = threadIdx.x + blockDim.x * blockIdx.x;
+
+    curandState state;
+    curand_init(82408367+idx, idx, 0, &state);
+
+    int num_elements_to_randomize = numValues / 100; // 1% of the array size
+    for (int i = 0; i < num_elements_to_randomize; ++i)
+    {
+        int index = curand(&state) % numValues;  // Generate a random index
+        dataArray[index] = curand(&state) % numValues; // Randomize the value at the index
     }
 }
 
 
 /* Main Alg Stuff */
 // CUDA kernel to select and gather samples from the array
-__global__ void selectSamples(int* array, int* samples, int size, int sampleSize) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (tid < (sampleSize-1)) {
-        int step = size / sampleSize;
-        samples[tid] = array[((tid+1) * step)];
-    }
-}
-
-// Compare function for sorting the samples
-__device__ bool compareSamples(const int& a, const int& b) {
-    return a > b;
-}
-
-// CUDA kernel to sort the samples
-__global__ void sortSamples(int* samples, int sampleSize) {
-    if (threadIdx.x < sampleSize - 1) {
-        for (int i = threadIdx.x; i < sampleSize; i++) {
-            for (int j = i + 1; j < sampleSize; j++) {
-                if (compareSamples(samples[i], samples[j])) {
-                    int temp = samples[i];
-                    samples[i] = samples[j];
-                    samples[j] = temp;
-                }
-            }
+__global__ void selectSamples(int* dataArray, int numValues, int numberOfThreads, int* samples, int numSamplesPerThread) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < numberOfThreads) {
+        curandState state;
+        curand_init(18602669+idx, idx, 0, &state);
+        
+        for(int i = 0; i < numSamplesPerThread; i++) {
+            int index = curand(&state) % numValues;
+            samples[(idx*numSamplesPerThread)+i] = dataArray[index];
         }
     }
 }
 
+__device__ void swap(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+__device__ int partition(int* array, int low, int high) {
+    curandState state;
+    curand_init(73071834+0, 0, 0, &state);
+
+    int pivotIndex = low + curand(&state) % (high - low + 1);
+    int pivot = array[pivotIndex];
+
+    swap(array[pivotIndex], array[high]);
+
+    int i = (low - 1);
+
+    for (int j = low; j <= high - 1; j++) {
+        if (array[j] < pivot) {
+            i++;
+            swap(array[i], array[j]);
+        }
+    }
+
+    swap(array[i + 1], array[high]);
+    return (i + 1);
+}
+
+__device__ void quicksort_recursive(int* array, int low, int high) {
+    if (low < high) {
+        int pivotIndex = partition(array, low, high);
+
+        quicksort_recursive(array, low, pivotIndex - 1);
+        quicksort_recursive(array, pivotIndex + 1, high);
+    }
+}
+
+// CUDA kernel to sort the samples
+__global__ void quicksort(int* array, int size) {
+    quicksort_recursive(array, 0, size - 1);
+}
+
+//CUDA kernel to select pivots/splitters - SKIP FOR NOW
+__global__ void selectedSplitters(int numberOfThreads, int* samples, int* selectedSplitters, int numSamplesPerThreads) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (0 < idx && idx < numberOfThreads) {
+        selectedSplitters[idx-1] = samples[idx*numSamplesPerThreads];
+        //selectedSplitters[idx] = samples[idx];
+    }
+}
+
 // CUDA kernel to calculate the data offsets for grouping
-__global__ void partitionDataCalculation(int* array, int* samples, int* bucketOffsets, int size, int sampleSize) {
-    
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (tid < sampleSize) {
-        int my_bucket = tid;
-        for(int i = 0; i < size; i++) {
-            if(array[i] < samples[my_bucket]) {
-                atomicAdd(&bucketOffsets[my_bucket], 1);
+__global__ void partitionDataCalculation(int* dataArray, int numValues, int numberOfThreads, int* splitters, int* bucketOffsets) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < (numberOfThreads-1)) {
+        for(int i = 0; i < numValues; i++) {
+            if(dataArray[i] < splitters[idx]) {
+                bucketOffsets[idx] += 1;
             }
         }   
     }
 }
 
+__global__ void updateArrays(int numberOfThreads, int numValues, int* expandedPivots, int* expandedStarts, int* startPosition, int* pivots) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx == 0) {
+        for(int i = 0; i < numberOfThreads-1; i++) {expandedPivots[i] = pivots[i];}
+        expandedPivots[numberOfThreads-1] = numValues;  //Try abstracting again I think zero is done before the last few are done, so it resets
+    }
+    if(idx == 1) {
+        for(int i = 1; i < numberOfThreads; i++) {expandedStarts[i] = startPosition[i-1];}
+        expandedStarts[0] = 0; //Try abstracting again I think zero is done before the last few are done, so it resets
+    }
+}
+
 // CUDA kernel to partition the data into buckets based on the samples
-__global__ void partitionData(int* unsortedData, int* groupedData, int* startPosition, int* pivots, int numThreads, int NUM_VALS, int* expandedPivots, int* expandedStarts) {
-    
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (tid < numThreads) {
-        for(int i = 0; i < numThreads-1; i++) {
-            expandedPivots[i] = pivots[i];
-        }
-        expandedPivots[numThreads-1] = NUM_VALS; 
+__global__ void partitionData(int* unsortedData, int* groupedData, int numberOfThreads, int numValues, int* expandedPivots, int* expandedStarts) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < numberOfThreads) {    
+        int previousCutoff = (idx == 0) ? 0 : expandedPivots[idx-1];
 
-        for(int i = 1; i < numThreads; i++) {
-            expandedStarts[i] = startPosition[i-1];
-        }
-        expandedStarts[0] = 0; 
-        
-        int previousCutoff = (tid == 0) ? 0 : expandedPivots[tid-1];
-
-        for(int i = 0; i < NUM_VALS; i++) {
-            if(unsortedData[i] < expandedPivots[tid] && unsortedData[i] >= previousCutoff){
-                groupedData[expandedStarts[tid]] = unsortedData[i];
-                expandedStarts[tid]++;
+        for(int i = 0; i < numValues; i++) {
+            if(previousCutoff <= unsortedData[i] && unsortedData[i] < expandedPivots[idx]) {
+                groupedData[expandedStarts[idx]] = unsortedData[i];
+                atomicAdd(&expandedStarts[idx], 1);
             }
         }
     }
-    
 }
 
 // CUDA kernel to sort each bucket using insertion sort
-__global__ void sortBuckets(int* array, int* bucketOffsets, int size, int NUM_VALS) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (tid < size) {
-        int bucket = tid;
+__global__ void sortBuckets(int* groupedData, int numValues, int numberOfThreads, int* bucketOffsets) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < numberOfThreads) {
+        int bucket = idx;
         int start = (bucket == 0) ? 0 : bucketOffsets[bucket - 1];
-        int end = (bucket == (size-1)) ? (NUM_VALS) : bucketOffsets[bucket];
+        int end = (bucket == (numberOfThreads-1)) ? (numValues) : bucketOffsets[bucket];
         for (int i = start + 1; i < end; i++) {
-            int key = array[i];
+            int key = groupedData[i];
             int j = i - 1;
-            while (j >= start && array[j] > key) {
-                array[j + 1] = array[j];
+            while (j >= start && groupedData[j] > key) {
+                groupedData[j + 1] = groupedData[j];
                 j--;
             }
-            array[j + 1] = key;
+            groupedData[j + 1] = key;
         }
     }
 }
@@ -146,10 +201,12 @@ __global__ void sortBuckets(int* array, int* bucketOffsets, int size, int NUM_VA
 
 /* Verification */
 // CUDA kernel to check if the array is sorted
-__global__ void checkArraySorted(int* array, bool* isSorted, int size) {
+__global__ void checkArraySorted(int* dataArrays, int numValues, int* isSorted) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < size - 1) {
-        isSorted[idx] = (array[idx] <= array[idx + 1]);
+    if (idx < numValues - 1) {
+        if(!(dataArrays[idx] <= dataArrays[idx + 1])) {
+            atomicAdd(isSorted, 1);
+        }
     }
 }
 
@@ -166,7 +223,15 @@ int main(int argc, char *argv[]) {
     printf("Input sorting type: %d\n", sortingType);
     printf("Number of threads: %d\n", THREADS);
     printf("Number of values: %d\n", NUM_VALS);
-    printf("Number of blocks: %d\n", BLOCKS);
+    printf("Max Number of blocks: %d\n", BLOCKS);
+
+    int numUsableBlocks = NUM_VALS / (64 * THREADS);
+    int numBuckets = numUsableBlocks * THREADS;
+    int numTotalThreads = numBuckets;
+    printf("Usable Number of blocks: %d\n", numUsableBlocks);
+    printf("Number of buckets: %d\n\n", numBuckets);
+    fflush(stdout);
+    
 
     CALI_MARK_BEGIN(mainFunction);
 
@@ -174,117 +239,119 @@ int main(int argc, char *argv[]) {
     cali::ConfigManager mgr;
     mgr.start();
 
+    dim3 usableBlocks(numUsableBlocks,1);    /* Usable Number of blocks   */
+    dim3 maxBlocks(BLOCKS,1);    /* Max number of blocks   */
+    dim3 threads(THREADS,1);  /* Number of threads  */
+
     CALI_MARK_BEGIN(data_init);
     /* Data generation */
     int* d_unsortedArray;
 
     // Allocate memory on the GPU and fill
     cudaMalloc((void**)&d_unsortedArray, NUM_VALS * sizeof(int));
-    generateData<<<BLOCKS, THREADS>>>(d_unsortedArray, NUM_VALS, sortingType);
+    generateData<<<usableBlocks, threads>>>(d_unsortedArray, NUM_VALS, sortingType, numTotalThreads);
+    cudaDeviceSynchronize();
+
+    if(sortingType == 3) {perturbData<<<1,1>>>(d_unsortedArray, NUM_VALS);}
     cudaDeviceSynchronize();
     CALI_MARK_END(data_init);
-
-
+    
+    
     /* Main Alg */
-    //arraySize = NUM_VALS; 
-    //blockSize = THREADS;     // CUDA block size
-    int sampleSize = THREADS;     // Number of samples
-    int* d_samples;
-    int* d_bucketOffsets;
-    int* d_groupedData;
-    int* d_expandedPivots;
-    int* d_expandedStarts;
-   
-    // Allocate memory on the GPU
-    cudaMalloc((void**)&d_samples, (sampleSize-1) * sizeof(int));
-    cudaMalloc((void**)&d_bucketOffsets, sampleSize * sizeof(int));
-    cudaMalloc((void**)&d_groupedData, NUM_VALS * sizeof(int));
-    cudaMalloc((void**)&d_expandedPivots, THREADS * sizeof(int));
-    cudaMalloc((void**)&d_expandedStarts, THREADS * sizeof(int));
-
-    // Launch the kernel to select and gather samples
     CALI_MARK_BEGIN(comp);
     CALI_MARK_BEGIN(comp_small);
-    selectSamples<<<BLOCKS, THREADS>>>(d_unsortedArray, d_samples, NUM_VALS, sampleSize);
+    int *d_samples, *d_selectedSplitters, *d_bucketOffsets, *d_groupedData, *d_expandedPivots, *d_expandedStarts;
+   
+    int numSamplesPerThreads = 2;
+    int numSamples = numSamplesPerThreads * numBuckets;
+    
+    // Launch the kernel to select and gather samples
+    cudaMalloc((void**)&d_samples, numSamples * sizeof(int));
+    selectSamples<<<usableBlocks, threads>>>(d_unsortedArray, NUM_VALS, numTotalThreads, d_samples, numSamplesPerThreads);
+    cudaDeviceSynchronize();
 
     // Launch the kernel to sort the samples
-    sortSamples<<<1, 1>>>(d_samples, (sampleSize-1));
+    quicksort<<<1, 1>>>(d_samples, numSamples);
+    cudaDeviceSynchronize();
+
+    //Launch the kernel to select that pivots/splitters
+    cudaMalloc((void**)&d_selectedSplitters, (numBuckets-1) * sizeof(int));
+    selectedSplitters<<<usableBlocks, threads>>>(numTotalThreads, d_samples, d_selectedSplitters, numSamplesPerThreads);
+    cudaDeviceSynchronize();
 
     // Launch the kernel to count the data in each bucket
-    partitionDataCalculation<<<BLOCKS, THREADS>>>(d_unsortedArray, d_samples, d_bucketOffsets, NUM_VALS, (sampleSize-1));
-    CALI_MARK_END(comp_small);
+    cudaMalloc((void**)&d_bucketOffsets, numBuckets * sizeof(int));
+    partitionDataCalculation<<<usableBlocks, threads>>>(d_unsortedArray, NUM_VALS, numTotalThreads, d_selectedSplitters, d_bucketOffsets);
+    cudaDeviceSynchronize();
 
+    //Update pivots as needed
+    cudaMalloc((void**)&d_expandedPivots, numBuckets * sizeof(int));
+    cudaMalloc((void**)&d_expandedStarts, numBuckets * sizeof(int));
+    updateArrays<<<1,2>>>(numTotalThreads, NUM_VALS, d_expandedPivots, d_expandedStarts, d_bucketOffsets, d_selectedSplitters);
+    cudaDeviceSynchronize();
+    CALI_MARK_END(comp_small);
+    
     CALI_MARK_BEGIN(comp_large);
-    // Launch the kernel to partition the data into buckets
-    partitionData<<<BLOCKS, THREADS>>>(d_unsortedArray, d_groupedData, d_bucketOffsets, d_samples, THREADS, NUM_VALS, d_expandedPivots, d_expandedStarts);
+    //Launch the kernel to partition the data into buckets
+    cudaMalloc((void**)&d_groupedData, NUM_VALS * sizeof(int));
+    partitionData<<<usableBlocks, threads>>>(d_unsortedArray, d_groupedData, numTotalThreads, NUM_VALS, d_expandedPivots, d_expandedStarts);
+    cudaDeviceSynchronize();
 
     // Launch the kernel to sort each bucket using insertion sort
-    sortBuckets<<<BLOCKS, THREADS>>>(d_groupedData, d_bucketOffsets, THREADS, NUM_VALS);
+    sortBuckets<<<usableBlocks, threads>>>(d_groupedData, NUM_VALS, numTotalThreads, d_bucketOffsets);
     cudaDeviceSynchronize();
     CALI_MARK_END(comp_large);
     CALI_MARK_END(comp);
 
-    // Copy data back to the host
-    int sortedArray[NUM_VALS];
-    CALI_MARK_BEGIN(comm);
-    CALI_MARK_BEGIN(comm_large);
-    CALI_MARK_BEGIN("cudaMemcpy");
-    cudaMemcpy(sortedArray, d_groupedData, NUM_VALS * sizeof(int), cudaMemcpyDeviceToHost);
-    CALI_MARK_END("cudaMemcpy");
-    CALI_MARK_END(comm_large);
-    CALI_MARK_END(comm);
 
-
-    CALI_MARK_BEGIN(correctness_check);
     /* Verify Correctness */ 
-    bool isSorted[NUM_VALS - 1];
-    bool* d_isSorted;
-    cudaMalloc((void**)&d_isSorted, (NUM_VALS - 1) * sizeof(bool));
-    checkArraySorted<<<BLOCKS, THREADS>>>(d_groupedData, d_isSorted, NUM_VALS);
+    CALI_MARK_BEGIN(correctness_check);
+    int isSorted = 0;
+    int* d_isSorted;
+    cudaMalloc((void**)&d_isSorted, sizeof(int));
+    cudaMemcpy(d_isSorted, &isSorted, sizeof(int), cudaMemcpyHostToDevice);
+    
+    checkArraySorted<<<maxBlocks, threads>>>(d_groupedData, NUM_VALS, d_isSorted);
     cudaDeviceSynchronize();
 
-    cudaMemcpy(isSorted, d_isSorted, (NUM_VALS - 1) * sizeof(bool), cudaMemcpyDeviceToHost);
-
-   // Verify if the array is sorted
-    bool sorted = true;
-    for (int i = 0; i < NUM_VALS - 1; i++) {
-        if (!isSorted[i]) {
-            sorted = false;
-            break;
-        }
-    }
+    int isSortedCheck = -1;
+    cudaMemcpy(&isSortedCheck, d_isSorted, sizeof(int), cudaMemcpyDeviceToHost);
     CALI_MARK_END(correctness_check);
 
-    CALI_MARK_BEGIN(comm);
-    CALI_MARK_BEGIN(comm_small);
-    CALI_MARK_END(comm_small);
-    CALI_MARK_END(comm);
 
+    /* Clean up */
     // Free GPU memory
-    cudaFree(d_samples);
-    cudaFree(d_bucketOffsets);
     cudaFree(d_unsortedArray);
+    cudaFree(d_samples);
+    cudaFree(d_selectedSplitters);
+    cudaFree(d_bucketOffsets);
     cudaFree(d_groupedData);
     cudaFree(d_expandedPivots);
     cudaFree(d_expandedStarts);
     cudaFree(d_isSorted);
-
+    
     CALI_MARK_END(mainFunction);
 
-    if (sorted) {printf("The array is sorted!\n" );} 
-    else {printf("The array is not sorted!\n");}
+
+    if(isSortedCheck == -1) {printf("copy error - unable to tell");}
+    else if(isSortedCheck == 0) {printf("Sorted!!!");}
+    else if(isSortedCheck > 0) {printf("Not sorted :(");}
+    else {printf("This should never happen");}
 
     string inputType;
     switch (sortingType) {
-    case 0: {
-        inputType = "Randomized";
-        break; }
-    case 1: {
-        inputType = "Sorted";
-        break; }
-    case 2: {
-        inputType = "Reverse Sorted";
-        break; }
+        case 0: {
+            inputType = "Random";
+            break; }
+        case 1: {
+            inputType = "Sorted";
+            break; }
+        case 2: {
+            inputType = "ReverseSorted";
+            break; }
+        case 3: {
+            inputType = "1%perturbed";
+            break; }
     }
 
     adiak::init(NULL);
