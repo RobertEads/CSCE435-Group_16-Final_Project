@@ -466,51 +466,52 @@ One thing to note when I did my weak scaling is that I chose to measure the aver
 
 The analysis begins with weak scaling, specifically with MPI. For weak scaling, I began with the input type of a random array, where each element is a randomly generated number from 0 to n, where n is the size of the array. The most obvious trend between all of the graphs in this section is that the as you increase the number of elements, the algorithm performs more slowly. This is shown best with the largest input size of 2^28 having the largest graph, as signified by the pink line. It is interesting to note that the computation time for all the times looks relatively the same as we parallelize, and that most of the variation in times comes from the communication. I meausred both the MPI_Scatter and MPI_Gather functions, and the MPI_Gather function takes much longer than the scatter. In the sorted array input type, we see very similar behavior, where larger input sizes seemed to have a much longer time to complete. The same behavior is present in the reverse sorted array as well. Finally, in the data initialized with 1% of the data perturbed, we see the similar data. We can assume this dude to merge sort typically always breaking the arrays down into a single element subarray and merging them back together, so we should expect relatively consistent behavior.
 
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak1.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak2.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak3.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak4.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak5.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak6.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak7.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak8.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak9.png)
+<img src="./Report_Images/MergeSort/mpi-weak1.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak2.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak3.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak4.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak5.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak6.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak7.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak8.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak9.png" alt="Average-Time-main-Weak Scaling" width="400">
+
 
 #### SORTED INPUT ARRAY
+<img src="./Report_Images/MergeSort/mpi-weak10.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak11.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak12.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak13.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak14.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak15.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak16.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak17.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak18.png" alt="Average-Time-main-Weak Scaling" width="400">
 
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak10.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak11.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak12.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak13.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak14.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak15.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak16.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak17.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak18.png)
 
 #### REVERSE SORTED INPUT ARRAY
+<img src="./Report_Images/MergeSort/mpi-weak19.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak20.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak21.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak22.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak23.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak24.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak25.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak26.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak27.png" alt="Average-Time-main-Weak Scaling" width="400">
 
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak19.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak20.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak21.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak22.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak23.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak24.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak25.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak26.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak27.png)
 
 #### 1% PERTURBED INPUT ARRAY
+<img src="./Report_Images/MergeSort/mpi-weak28.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak29.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak30.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak31.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak32.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak33.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak34.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak35.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak36.png" alt="Average-Time-main-Weak Scaling" width="400">
 
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak28.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak29.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak30.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak31.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak32.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak33.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak34.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak35.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak36.png)
 
 ### CUDA
 
@@ -518,47 +519,50 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 
 #### Random Array
 
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak1.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak2.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak3.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak4.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak5.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak6.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak7.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak8.png)
+<img src="./Report_Images/MergeSort/cuda-weak1.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak2.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak3.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak4.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak5.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak6.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak7.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak8.png" alt="Average-Time-main-Weak Scaling" width="400">
+
 
 #### Sorted Array
 
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak9.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak10.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak11.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak12.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak13.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak14.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak15.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak16.png)
+<img src="./Report_Images/MergeSort/cuda-weak9.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak10.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak11.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak12.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak13.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak14.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak15.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak16.png" alt="Average-Time-main-Weak Scaling" width="400">
+
 
 #### Reverse Sorted Array
 
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak17.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak18.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak19.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak20.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak21.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak22.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak23.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak24.png)
+<img src="./Report_Images/MergeSort/cuda-weak17.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak18.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak19.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak20.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak21.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak22.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak23.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak24.png" alt="Average-Time-main-Weak Scaling" width="400">
+
 
 ### 1% Perturbed Array
 
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak25.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak26.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak27.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak28.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak29.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak30.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak31.png)
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak32.png)
+<img src="./Report_Images/MergeSort/cuda-weak25.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak26.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak27.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak28.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak29.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak30.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak31.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak32.png" alt="Average-Time-main-Weak Scaling" width="400">
 
 ## Strong Scaling
 
@@ -568,87 +572,94 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 
 ### 2^16 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong1.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong2.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong3.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong4.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong5.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong6.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong7.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong8.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong9.png)
+<img src="./Report_Images/MergeSort/mpi-strong1.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong2.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong3.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong4.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong5.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong6.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong7.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong8.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong9.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2 ^18 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong10.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong11.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong12.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong13.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong14.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong15.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong16.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong17.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong18.png)
+<img src="./Report_Images/MergeSort/mpi-strong10.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong11.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong12.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong13.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong14.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong15.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong16.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong17.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong18.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2^20 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong19.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong20.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong21.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong22.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong23.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong24.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong25.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong26.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong27.png)
+<img src="./Report_Images/MergeSort/mpi-strong19.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong20.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong21.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong22.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong23.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong24.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong25.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong26.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong27.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2^22 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong28.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong29.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong30.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong31.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong32.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong33.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong34.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong35.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong36.png)
+<img src="./Report_Images/MergeSort/mpi-strong28.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong29.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong30.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong31.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong32.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong33.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong34.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong35.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong36.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2^24 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong37.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong38.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong39.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong40.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong41.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong42.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong43.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong44.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong45.png)
+<img src="./Report_Images/MergeSort/mpi-strong37.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong38.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong39.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong40.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong41.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong42.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong43.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong44.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong45.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2^26 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong46.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong47.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong48.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong49.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong50.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong51.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong52.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong53.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong54.png)
+<img src="./Report_Images/MergeSort/mpi-strong46.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong47.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong48.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong49.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong50.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong51.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong52.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong53.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong54.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2^28 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong55.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong56.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong57.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong58.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong59.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong60.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong61.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong62.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong63.png)
+<img src="./Report_Images/MergeSort/mpi-strong55.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong56.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong57.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong58.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong59.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong60.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong61.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong62.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong63.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### CUDA
 
@@ -658,80 +669,86 @@ Looking at the graphs for CUDA strong scaling before, the data seems to be much 
 
 ### 2^16 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong1.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong2.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong3.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong4.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong5.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong6.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong7.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong8.png)
+<img src="./Report_Images/MergeSort/cuda-strong1.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong2.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong3.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong4.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong5.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong6.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong7.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong8.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2 ^18 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong9.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong10.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong11.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong12.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong13.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong14.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong15.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong16.png)
+<img src="./Report_Images/MergeSort/cuda-strong9.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong10.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong11.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong12.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong13.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong14.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong15.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong16.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2^20 Elements
+<img src="./Report_Images/MergeSort/cuda-strong17.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong18.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong19.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong20.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong21.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong22.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong23.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong24.png" alt="Average-Time-main-Strong Scaling" width="400">
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong17.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong18.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong19.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong20.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong21.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong22.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong23.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong24.png)
 
 ### 2^22 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong25.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong26.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong27.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong28.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong29.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong30.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong31.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong32.png)
+<img src="./Report_Images/MergeSort/cuda-strong25.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong26.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong27.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong28.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong29.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong30.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong31.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong32.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2^24 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong33.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong34.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong35.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong36.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong37.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong38.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong39.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong40.png)
+<img src="./Report_Images/MergeSort/cuda-strong33.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong34.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong35.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong36.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong37.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong38.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong39.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong40.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2^26 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong41.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong42.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong43.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong44.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong45.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong46.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong47.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong48.png)
+<img src="./Report_Images/MergeSort/cuda-strong41.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong42.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong43.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong44.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong45.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong46.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong47.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong48.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ### 2^28 Elements
 
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong49.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong50.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong51.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong52.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong53.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong54.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong55.png)
-![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong56.png)
+<img src="./Report_Images/MergeSort/cuda-strong49.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong50.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong51.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong52.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong53.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong54.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong55.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong56.png" alt="Average-Time-main-Strong Scaling" width="400">
+
 
 ## Speedup
 
@@ -741,27 +758,31 @@ When looking at the computation speedups, we see a linear trend between the inpu
 
 ### Random Array
 
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi1.png)
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi2.png)
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi3.png)
+<img src="./Report_Images/MergeSort/scale-mpi1.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi2.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi3.png" alt="speedup-mpi" width="400">
+
 
 ### Sorted Array
 
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi4.png)
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi5.png)
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi6.png)
+<img src="./Report_Images/MergeSort/scale-mpi4.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi5.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi6.png" alt="speedup-mpi" width="400">
+
 
 ### Reverse Sorted Array
 
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi7.png)
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi8.png)
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi9.png)
+<img src="./Report_Images/MergeSort/scale-mpi7.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi8.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi9.png" alt="speedup-mpi" width="400">
+
 
 # 1% Perturbed Array
 
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi10.png)
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi11.png)
-![speedup-mpi](./Report_Images/MergeSort/scale-mpi12.png)
+<img src="./Report_Images/MergeSort/scale-mpi10.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi11.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi12.png" alt="speedup-mpi" width="400">
+
 
 ### CUDA
 
@@ -769,27 +790,30 @@ In the CUDA speedup graphs, there doesn't seem to be any inherent benefit to par
 
 ### Random Array
 
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda1.png)
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda2.png)
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda3.png)
+<img src="./Report_Images/MergeSort/scale-cuda1.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda2.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda3.png" alt="speedup-cuda" width="400">
+
 
 ### Sorted Array
 
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda4.png)
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda5.png)
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda6.png)
+<img src="./Report_Images/MergeSort/scale-cuda4.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda5.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda6.png" alt="speedup-cuda" width="400">
 
 ### Reverse Sorted Array
 
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda7.png)
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda8.png)
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda9.png)
+<img src="./Report_Images/MergeSort/scale-cuda7.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda8.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda9.png" alt="speedup-cuda" width="400">
+
 
 ### 1% Perturbed Array
 
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda10.png)
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda11.png)
-![speedup-cuda](./Report_Images/MergeSort/scale-cuda12.png)
+<img src="./Report_Images/MergeSort/scale-cuda10.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda11.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda12.png" alt="speedup-cuda" width="400">
+
 
 ### Bubble Sort
 
