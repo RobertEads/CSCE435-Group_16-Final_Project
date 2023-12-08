@@ -19,91 +19,139 @@ Our team's primary method of communication will be GroupMe with Slack as a secon
 
 ## 2b. Brief project description (what algorithms will you be comparing and on what architectures)
 
-Each of the selected sort algorithms, Bubble, Merge, Selection, & Sample will be run in parallel using MPI and CUDA separately.
+Each of the selected sort algorithms, Bitonic, Merge, Selection, & Sample will be run in parallel using MPI and CUDA separately.
 
 ## 2c. Pseudocode for each parallel algorithm
 
-### Algorithm 1: Bubble Sort
+### Algorithm 1: Bitonic Sort
 
 #### MPI
 
 ```
-1. Distribute the data among processes using MPI_Scatter.
-2. Each process performs a local sequential Bubble Sort on its portion of the data.
-3. Exchange data with neighboring processes using MPI_Send and MPI_Recv for each iteration of the Bubble Sort.
-4. Perform multiple iterations of the Bubble Sort while exchanging and comparing adjacent elements to sort the entire dataset.
-5. Repeat the Bubble Sort and data exchange steps for the required number of iterations (in parallel) to ensure a fully sorted dataset.
-6. Verify the correctness of the sorted data.
+1. Distribute Data: Use MPI_Scatter to distribute the data among processes. Each process will receive a portion of the dataset.
+2. Local Bitonic Sort: Each process performs a local Bitonic Sort on its portion of the data. This involves performing Bitonic Sort on the local dataset using parallel threads or any parallel programming model within the process.
+3. Bitonic Merge: Implement the Bitonic Merge operation for pairs of processes. This involves exchanging data between neighboring processes to create a bitonic sequence.
+4. Global Bitonic Sort: Perform multiple iterations of the Bitonic Sort while exchanging and comparing adjacent elements between neighboring processes. In each iteration, processes exchange data and perform Bitonic Merge.
+5. Repeat for Required Iterations: Repeat the Bitonic Sort and data exchange steps for the required number of iterations to ensure a fully sorted dataset. The number of iterations depends on the size of the dataset and the number of processes.
+6. Verify Correctness: After the sorting is complete, use a verification step to ensure the correctness of the sorted data. You can implement a global verification step where each process checks the correctness of its portion, or you can gather data to the root process for a centralized verification.
 ```
 
 #### CUDA
 
 ```
-1. Each CUDA thread loads a portion of the data into shared memory.
-2. Perform a local sequential Bubble Sort within each thread's shared memory.
-3. Synchronize threads to ensure all shared memory sorting is complete.
-4. No need for pivot or reduction steps, as Bubble Sort doesn't require pivot-based partitioning.
-5. Each thread can individually compare and swap adjacent elements in its partition as part of the Bubble Sort.
-6. No offset calculations are needed in Bubble Sort.
-7. There is no need for a scatter operation, as Bubble Sort is an in-place sorting algorithm.
-8. Continue the Bubble Sort for the required number of iterations, ensuring all elements are correctly sorted.
-9. There's no merging step in Bubble Sort, as it's an exchange-based sorting algorithm that works directly on the data in place.
+1. Allocate Device Memory: Use cudaMalloc to allocate memory on the GPU for the dataset. Allocate memory for temporary buffers if needed.
+2. Copy Data to GPU: Use cudaMemcpy to copy the data from the host to the GPU. Launch Kernel for Local Bitonic Sort:
+3. Write a CUDA kernel to perform local Bitonic Sort on the GPU. Each thread will work on a portion of the dataset. Threads in the same block can cooperate to perform the sort using shared memory.
+4. Synchronize Threads: Use __syncthreads() to synchronize threads within a block after the local sort.
+5. Launch Bitonic Merge Kernel: Write a CUDA kernel to perform Bitonic Merge operation for pairs of blocks. This may involve exchanging data between neighboring blocks and creating bitonic sequences.
+6. Synchronize Threads Again: Use __syncthreads() to synchronize threads after the merge operation.
+7. Repeat for Multiple Iterations: Repeat steps 3-6 for the required number of iterations. The number of iterations depends on the size of the dataset and the structure of the bitonic sequence.
+8. Copy Data Back to CPU: Use cudaMemcpy to copy the sorted data from the GPU back to the host.
+9. Free Device Memory: Use cudaFree to release the allocated memory on the GPU.
+10. Verify Correctness: After the sorting is complete, use a verification step to ensure the correctness of the sorted data. You can use a similar verification function as before.
 ```
 
 #### General Pseudocode
 
 ```
-begin BubbleSort(list)
+void bitonicMerge(int a[], int low, int cnt, int dir)
+{
+    if (cnt>1)
+    {
+        int k = cnt/2;
+        for (int i=low; i<low+k; i++)
+            compAndSwap(a, i, i+k, dir);
+        bitonicMerge(a, low, k, dir);
+        bitonicMerge(a, low+k, k, dir);
+    }
+}
 
-   for all elements of list
-      if list[i] > list[i+1]
-         swap(list[i], list[i+1])
-      end if
-   end for
+void bitonicSort(int a[],int low, int cnt, int dir)
+{
+    if (cnt>1)
+    {
+        int k = cnt/2;
 
-   return list
+        // sort in ascending order since dir here is 1
+        bitonicSort(a, low, k, 1);
 
-end BubbleSort
+        // sort in descending order since dir here is 0
+        bitonicSort(a, low+k, k, 0);
+
+        // Will merge whole sequence in ascending order
+        // since dir=1.
+        bitonicMerge(a,low, cnt, dir);
+    }
+}
 ```
 
 #### MPI Pseudocode
 
 ```
-void parallelBubbleSort(vector<int> &localData) {
-    int myRank, numProcesses;
-    MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
-    MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
+int main(int argc, char **argv) {
+    // MPI Initialization
 
-    int localN = localData.size();
+    // Scatter data among processes
+    MPI_Scatter(/* ... */);
 
-    for (int i = 0; i < localN - 1; i++) {
-        for (int j = 0; j < localN - i - 1; j++) {
-            if (localData[j] > localData[j + 1]) {
-                swap(localData[j], localData[j + 1]);
-            }
+    // Local Bitonic Sort on each process
+    localBitonicSort(/* ... */);
+
+    // Global Bitonic Sort
+    for (int k = 2; k <= numProcesses; k *= 2) {
+        for (int j = k / 2; j > 0; j /= 2) {
+            // Bitonic Merge for pairs of processes
+            bitonicMerge(/* ... */);
         }
     }
+
+    // Gather sorted data to root process
+    MPI_Gather(/* ... */);
+
+    // MPI Finalization
+
+    return 0;
 }
 ```
 
 #### CUDA Pseudocode
 
 ```
-__global__ void bubbleSort(int *array, int size) {
-    int tid = threadIdx.x + blockIdx.x * blockDim.x;
+__global__ void bitonicSortKernel(int *data, int dataSize) {
+    // Calculate thread index
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if (tid < size) {
-        for (int i = 0; i < size - 1; i++) {
-            for (int j = 0; j < size - i - 1; j++) {
-                if (array[j] > array[j + 1]) {
-                    int temp = array[j];
-                    array[j] = array[j + 1];
-                    array[j + 1] = temp;
+    // Bitonic Sort
+    for (int k = 2; k <= dataSize; k *= 2) {
+        for (int j = k / 2; j > 0; j /= 2) {
+            int ixj = tid ^ j;
+
+            if ((ixj) > tid) {
+                if ((tid & k) == 0) {
+                    // Sort ascending
+                    if (data[tid] > data[ixj]) {
+                        // Swap elements
+                        int temp = data[tid];
+                        data[tid] = data[ixj];
+                        data[ixj] = temp;
+                    }
+                }
+                if ((tid & k) != 0) {
+                    // Sort descending
+                    if (data[tid] < data[ixj]) {
+                        // Swap elements
+                        int temp = data[tid];
+                        data[tid] = data[ixj];
+                        data[ixj] = temp;
+                    }
                 }
             }
+
+            __syncthreads(); // Synchronize threads after each iteration
         }
     }
 }
+
 ```
 
 ### Algorithm 2: Merge Sort
@@ -271,7 +319,7 @@ Transfer data from GPU to CPU
 
 ## 2d. Citations
 
-- https://www.tutorialspoint.com/data_structures_algorithms/bubble_sort_algorithm.htm
+- https://www.geeksforgeeks.org/bitonic-sort/
 - https://compucademy.net/algorithmic-thinking-with-python-part-3-divide-and-conquer-strategy/#:~:text=There%20is%20a%20really%20clever%20trick%20that,the%20same%20type%20as%20the%20original%20problem.
 - https://teivah.medium.com/parallel-merge-sort-in-java-e3213ae9fa2c
 - https://www.geeksforgeeks.org/quick-sort/
@@ -411,9 +459,11 @@ Weaking scaling for reverse sorted inputs appears to fall somewhere in between r
 ## Weak Scaling
 
 ### MPI
+
 One thing to note when I did my weak scaling is that I chose to measure the average time per rank over number of processors. The reason I chose average time over total time is that disussing with the TA about how these sorts work, total time is always going to grow as you increase processors because its an aggregate of all times over all processors. Additionally, I wanted to begin by focusing on the main function times for everything because I thought a good introduction to the analysis is how the program as a whole ran on average.
 
 #### RANDOM INPUT ARRAY
+
 The analysis begins with weak scaling, specifically with MPI. For weak scaling, I began with the input type of a random array, where each element is a randomly generated number from 0 to n, where n is the size of the array. The most obvious trend between all of the graphs in this section is that the as you increase the number of elements, the algorithm performs more slowly. This is shown best with the largest input size of 2^28 having the largest graph, as signified by the pink line. It is interesting to note that the computation time for all the times looks relatively the same as we parallelize, and that most of the variation in times comes from the communication. I meausred both the MPI_Scatter and MPI_Gather functions, and the MPI_Gather function takes much longer than the scatter. In the sorted array input type, we see very similar behavior, where larger input sizes seemed to have a much longer time to complete. The same behavior is present in the reverse sorted array as well. Finally, in the data initialized with 1% of the data perturbed, we see the similar data. We can assume this dude to merge sort typically always breaking the arrays down into a single element subarray and merging them back together, so we should expect relatively consistent behavior.
 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak1.png)
@@ -427,6 +477,7 @@ The analysis begins with weak scaling, specifically with MPI. For weak scaling, 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak9.png)
 
 #### SORTED INPUT ARRAY
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak10.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak11.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak12.png)
@@ -438,6 +489,7 @@ The analysis begins with weak scaling, specifically with MPI. For weak scaling, 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak18.png)
 
 #### REVERSE SORTED INPUT ARRAY
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak19.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak20.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak21.png)
@@ -449,6 +501,7 @@ The analysis begins with weak scaling, specifically with MPI. For weak scaling, 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak27.png)
 
 #### 1% PERTURBED INPUT ARRAY
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak28.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak29.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak30.png)
@@ -460,9 +513,11 @@ The analysis begins with weak scaling, specifically with MPI. For weak scaling, 
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/mpi-weak36.png)
 
 ### CUDA
+
 For the CUDA weak scaling of the different input types, we had a lot of the same activity as the MPI implementation. As we increased the number of elements in the input array, there was more time needed for the merge sort algorithm to complete. It also seems thats the CUDA implementation takes a bit longer to complete than the MPI implementation. We can see this most notably with the 2^28th line (the pink), where it takes over 120 seconds to complete the main_function, whereas the MPI implementation had a maximum of 40 seconds to complete. We also sea a lot steadier increase in time for the CUDA implementation. It is interesting to see that all of the different performance regions increase quite steadily. Another big difference with CUDA is how it handles communication. Rather than speaking to multiple processors like in MPI, CUDA handles only cudamemcpy, so we see rather constant communciation times between all of the different input sizes.
 
 #### Random Array
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak1.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak2.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak3.png)
@@ -473,6 +528,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak8.png)
 
 #### Sorted Array
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak9.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak10.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak11.png)
@@ -483,6 +539,7 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak16.png)
 
 #### Reverse Sorted Array
+
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak17.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak18.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak19.png)
@@ -493,7 +550,8 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak24.png)
 
 ### 1% Perturbed Array
-![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak25.png) 
+
+![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak25.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak26.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak27.png)
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak28.png)
@@ -503,9 +561,13 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 ![Average-Time-main-Weak Scaling](./Report_Images/MergeSort/cuda-weak32.png)
 
 ## Strong Scaling
+
 ### MPI
-We see some similar behavior as the weak scaling here in terms of shape of the graph. The most notable one here is the comp and comp_large regions, which have the same exponentially decreasing graph, where each input type has relatively the same behavior. This is more or less expected given the nature of merge sort, where each input is eventually recursively broken down into single input subarrays. Especially considering that each graph has the same number of elements, we can understand why the computation is so much closer between the lines for this strong scaling. It is interesting because this strong scaling shows that MPI_Scatter is much slower than MPI_Gather, which is the opposite than from the weak scaling. We also see that as we increase the number of elements, our behavior becomes more erratic, which is most easily seen in the main_function graph of each input size. We're also seeing that the time peaks around 128 processors before decreasing and then further increasing again. For communication, we are seeing some steady increase in time as well, but overall pretty fast across the ranks. 
+
+We see some similar behavior as the weak scaling here in terms of shape of the graph. The most notable one here is the comp and comp_large regions, which have the same exponentially decreasing graph, where each input type has relatively the same behavior. This is more or less expected given the nature of merge sort, where each input is eventually recursively broken down into single input subarrays. Especially considering that each graph has the same number of elements, we can understand why the computation is so much closer between the lines for this strong scaling. It is interesting because this strong scaling shows that MPI_Scatter is much slower than MPI_Gather, which is the opposite than from the weak scaling. We also see that as we increase the number of elements, our behavior becomes more erratic, which is most easily seen in the main_function graph of each input size. We're also seeing that the time peaks around 128 processors before decreasing and then further increasing again. For communication, we are seeing some steady increase in time as well, but overall pretty fast across the ranks.
+
 ### 2^16 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong1.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong2.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong3.png)
@@ -517,6 +579,7 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong9.png)
 
 ### 2 ^18 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong10.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong11.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong12.png)
@@ -528,6 +591,7 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong18.png)
 
 ### 2^20 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong19.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong20.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong21.png)
@@ -539,6 +603,7 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong27.png)
 
 ### 2^22 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong28.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong29.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong30.png)
@@ -550,6 +615,7 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong36.png)
 
 ### 2^24 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong37.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong38.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong39.png)
@@ -561,6 +627,7 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong45.png)
 
 ### 2^26 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong46.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong47.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong48.png)
@@ -572,6 +639,7 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong54.png)
 
 ### 2^28 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong55.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong56.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong57.png)
@@ -583,8 +651,13 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/mpi-strong63.png)
 
 ### CUDA
+
+Looking at the graphs for CUDA strong scaling before, the data seems to be much more erratic. Rather than steady increases, we have many fluctuations as we increase the number of threads at a certain size, regardless of the input type. There doesn't seem to be an input type that outperforms the others. This is rather expected because merge sort will continue to break down the elements, regardless of the input type. It does look like the random array input does take a little more time than the other inputs, as it generally sits above the rest of the input types. This is followed by the 1% perturbed array. However, it is important to note that the scale of these graphs tend to be very close together, which can signify that there is no real tradeoff here based on input type. We definietly see that the comm region of the code, which again is around the CUDAMemcpys, fluctuates quite a bit, regardless of input type. There is no definite winner here. We get the main differences in computation, but again due to scale, isn't very significant. It is interesting to see though what could potentially cause this. Random taking the longest makes sense because there are a lot of comparisons, but it may be concerning that the reverse sorted array is one of the quicker ones, since this should theoretically have the maximum number of comparisons to make. One thing to note is that these two slowest, the random and perturbed array, have the slowest data initialization timees as well, so this could be a cause.
+
 Looking at the graphs for CUDA strong scaling before, the data seems to be much more erratic. Rather than steady increases, we have many fluctuations as we increase the number of threads at a certain size, regardless of the input type. There doesn't seem to be an input type that outperforms the others. This is rather expected because merge sort will continue to break down the elements, regardless of the input type. It does look like the random array input does take a little more time than the other inputs, as it generally sits above the rest of the input types. This is followed by the 1% perturbed array. However, it is important to note that the scale of these graphs tend to be very close together, which can signify that there is no real tradeoff here based on input type. We definietly see that the comm region of the code, which again is around the CUDAMemcpys, fluctuates quite a bit, regardless of input type. There is no definite winner here. We get the main differences in computation, but again due to scale, isn't very significant. It is interesting to see though what could potentially cause this. Random taking the longest makes sense because there are a lot of comparisons, but it may be concerning that the reverse sorted array is one of the quicker ones, since this should theoretically have the maximum number of comparisons to make. One thing to note is that these two slowest, the random and perturbed array, have the slowest data initialization timees as well, so this could be a cause. We also see that the merge step was done on the CPU, which introduces a bit of a bottleneck as we increase the problem size and number of threads.
+
 ### 2^16 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong1.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong2.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong3.png)
@@ -595,6 +668,7 @@ Looking at the graphs for CUDA strong scaling before, the data seems to be much 
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong8.png)
 
 ### 2 ^18 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong9.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong10.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong11.png)
@@ -605,6 +679,7 @@ Looking at the graphs for CUDA strong scaling before, the data seems to be much 
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong16.png)
 
 ### 2^20 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong17.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong18.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong19.png)
@@ -615,6 +690,7 @@ Looking at the graphs for CUDA strong scaling before, the data seems to be much 
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong24.png)
 
 ### 2^22 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong25.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong26.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong27.png)
@@ -636,6 +712,7 @@ Looking at the graphs for CUDA strong scaling before, the data seems to be much 
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong40.png)
 
 ### 2^26 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong41.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong42.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong43.png)
@@ -646,6 +723,7 @@ Looking at the graphs for CUDA strong scaling before, the data seems to be much 
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong48.png)
 
 ### 2^28 Elements
+
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong49.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong50.png)
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong51.png)
@@ -656,50 +734,62 @@ Looking at the graphs for CUDA strong scaling before, the data seems to be much 
 ![Average-Time-main-Strong Scaling](./Report_Images/MergeSort/cuda-strong56.png)
 
 ## Speedup
+
 ### MPI
+
 When looking at the computation speedups, we see a linear trend between the input sizes. This shows the importance of parallelism. For all sizes, as we increase the number of processors, the pure computation time gets better and better, this showing the higher speedup. We do see that speedup for the 2^16 elements begins to taper off for the comp regions, indiating that the parallelism is good for very large sizes, but smaller sizes aren't as impacts by increasing processors. This makes sense because you would spend more percentage of your time increasing your processors and have more communication and face more overhead for the smaller values. If we look at the entire main region as a whole, we can see that the larger the input the size, the more speedup there is. This further reinforces that there is a need for parallelism, and a definite benefit. For all of the input sizes, there seems to be a peak speedup at 256 processors before decreasing again. After 256 processors, there may be so much overhead that we lose overall performance. It is a little difficult to look at it easily for the smaller sizes, but the speedup graphs tend to all show that a bigger input size benefits from this parallelism. We also see that for communication, speedup decreases for more processsors, again reiterating that we are likely facing some signifcant overhead.
+
 ### Random Array
+
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi1.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi2.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi3.png)
 
 ### Sorted Array
+
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi4.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi5.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi6.png)
 
 ### Reverse Sorted Array
+
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi7.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi8.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi9.png)
 
 # 1% Perturbed Array
+
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi10.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi11.png)
 ![speedup-mpi](./Report_Images/MergeSort/scale-mpi12.png)
 
 ### CUDA
+
 In the CUDA speedup graphs, there doesn't seem to be any inherent benefit to paralleism. When we look at the main_function as a whole, we see that the speedup values tend to hover around 1.0. In fact, most of the lines tend to be below a value of 1, indicating that it is performing worse by being parallel. There also seems to be no pattern with the varying input size. We see that at the highest number of processors, the worst speedups are 2^16 elements and 2^28 elements, which are both the smallest and largest values respectively. It seems like as we increase processors, speedup for the communication is worst for the 2^16 element, but the computation is worst for 2^28 elements. Communication is hard to guage completely becuase there is quite a bit of fluctuation here, where computation speedup hovers around 1.0 and steadily decreases for most of the input sizes. This could also be because theres no real inter-process communication for CUDA like there is for MPI.
+
 ### Random Array
+
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda1.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda2.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda3.png)
 
 ### Sorted Array
+
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda4.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda5.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda6.png)
 
 ### Reverse Sorted Array
+
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda7.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda8.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda9.png)
 
 ### 1% Perturbed Array
+
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda10.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda11.png)
 ![speedup-cuda](./Report_Images/MergeSort/scale-cuda12.png)
-
 
 ### Bubble Sort
 
@@ -717,16 +807,17 @@ For this analysis, I examined weak scaling using 2^16 elements across all four i
 For this analysis, I examined weak scaling using 2^16 elements across three input types (sorted, reverse sorted, and randomized). The results are unexpected, as all average times increase with the number of threads used. One would anticipate a decrease for some time, given that parallelization should enhance efficiency. Furthermore, similar to MPI, we observe that "Sorted" consistently ranks as the fastest, as expected, since no swaps are required. "Reverse sorted" and "randomized" exhibit variations in their next fastest rankings, which aligns with expectations as they entail more swaps. The graph suggests that for this input size (65536), parallelization is not beneficial. With additional graphs featuring different input sizes, we can discern the general trend.
 ![Bubble-main-Weak-CUDA](./Report_Images/BubbleSort/BubbleSort-CUDA-Weak-Main-65536.jpg)
 
-
 ### Bubble Sort
 
 #### Weak Scaling
 
 ##### MPI
-For the analysis, weak scaling was examined across the sorted input type. 2, 4, and 8 processors were run and it showed that there was an increase in average time. However, this was interesting as usually as the number of processors increases, the time should decrease due to parallelization and efficiency. However, since smaller numbers were run it might not be as easy to tell. Therefore, as more trials with more data is run, then the graph will show parallelization. The rest of the input types with the number of processors and threads will be run as the next time in order to gather more accurate data creating the various graphs. 
+
+For the analysis, weak scaling was examined across the sorted input type. 2, 4, and 8 processors were run and it showed that there was an increase in average time. However, this was interesting as usually as the number of processors increases, the time should decrease due to parallelization and efficiency. However, since smaller numbers were run it might not be as easy to tell. Therefore, as more trials with more data is run, then the graph will show parallelization. The rest of the input types with the number of processors and threads will be run as the next time in order to gather more accurate data creating the various graphs.
 ![selection-main-Weak-MPI](./Report_Images/SelectionSort/weakscale.png)
 
 ##### CUDA
-For the analysis, for CUDA only two cali files with 16 were run so only two points are showing. It does seem that one of the points has a higher average time. Due to the small number of trials, not much can be observed from the graph. The jobs were queued on grace portal so the data was not fully able to be collected for this implementation. However, as the number of processors increases, the average time should decrease as the the paralleization of the tasks has been implemented. Therefore, the rest of the input types will be run 
+
+For the analysis, for CUDA only two cali files with 16 were run so only two points are showing. It does seem that one of the points has a higher average time. Due to the small number of trials, not much can be observed from the graph. The jobs were queued on grace portal so the data was not fully able to be collected for this implementation. However, as the number of processors increases, the average time should decrease as the the paralleization of the tasks has been implemented. Therefore, the rest of the input types will be run
 
 ![selection-main-Weak-CUDA](./Report_Images/SelectionSort/weakscaleCUDA.jpeg)
