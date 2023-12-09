@@ -338,7 +338,7 @@ Have each threads sort the data within the bounds of its respective bucket
 ## 2e. Evaluation plan - what and how will you measure and compare
 
 Each algorithm with be run with the input types of randomized, sorted, reverse sorted, and 1% perturbed. The input sizes are planned to be 2^16, 2^18, 2^20, 2^22, 2^24, 2^26 and 2^28.
-Graphs for strong and weak scaling, as well as strong speed up, will be created and used in the analysis and drawing of conclusions for each algorithm across the different input types and input sizes. A strong scaling compairson will also be run for the algorithms against each other to see if and where one will stand out from the rest.
+Graphs for strong and weak scaling, as well as strong speedup, will be created and used in the analysis and drawing of conclusions for each algorithm across the different input types and input sizes. A strong scaling comparison  will also be run for the algorithms against each other to see if and where one will stand out from the rest.
 The number of threads in a block on the GPU to be tested will be [64, 128, 256, 512, 1024].
 
 ## 3. Project Implementation
@@ -348,12 +348,12 @@ The listed algorithms were fully implemented using both MPI and CUDA separately.
 ## 4. Performance Evaluation
 
 # Sample Sort
-**Note:** The CUDA implementation of sample sort did not require any comm regions (cudaMemcpy) so the following section will have no comm graphs for the CUDA subsections.
+**Note:** The CUDA implementation of sample sort did not require any comm regions (cudaMemcpy), so the following section will have no comm graphs for the CUDA subsections.
 
 ## Strong Scaling
 ### MPI
 #### main
-The strong scaling graphs for main tell conflicting stories. Looking at the lower input sizes, up to 2^22, the algorithm looks to have poor strong scaling performance as it is relatively flat for the beginning before spiking up as it gets closer to the end. However, looking at the larger input sizes, from 2^24 and up, the graphs start to display good strong scaling performance as they slope downwards and flatten off once a point of diminishing returns is reached, around the 2^6 or 2^7 number of processes mark. This behavior is caused by the algorithim shifting from being communication bound in the smaller input sizes to being computation bound for the larger input sizes.
+The strong scaling graphs for main tell conflicting stories. Looking at the lower input sizes, up to 2^22, the algorithm looks to have poor strong scaling performance as it is relatively flat for the beginning before spiking up as it gets closer to the end. However, looking at the larger input sizes, from 2^24 and up, the graphs start to display good strong scaling performance as they slope downwards and flatten off once a point of diminishing returns is reached, around the 2^6 or 2^7 number of processes mark. This behavior is caused by the algorithm shifting from being communication-bound in the smaller input sizes to being computation-bound for the larger ones.
 
 <img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^16_main_Strong.png" alt="MPI_Strong_Scaling_main_2^16" width="325"/>
 <img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^18_main_Strong.png" alt="MPI_Strong_Scaling_main_2^18" width="325"/>
@@ -364,7 +364,7 @@ The strong scaling graphs for main tell conflicting stories. Looking at the lowe
 <img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^28_main_Strong.png" alt="MPI_Strong_Scaling_main_2^28" width="325"/>
 
 #### comm
-The communcation part of this algorithm has poor strong scaling, but does not make huge jumps in time like the computation does. Comm starts at less than 0.1 seconds for the smaller inputs sizes and takes up to a little over 5 seconds for the largest input size. This means comm will dominate the overall runtime in the beginning, but then become less important as input sizes get larger. This matches what is seen the graphs for main.
+The communication part of this algorithm has poor strong scaling but does not make huge jumps in time as the computation does. Comm starts at less than 0.1 seconds for the smaller input sizes and takes up to a little over 5 seconds for the largest input size. This means comm will dominate the overall runtime in the beginning, but then become less important as input sizes get larger. This matches what is seen in the graphs for main.
 
 <img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^16_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^16" width="325"/>
 <img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^18_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^18" width="325"/>
@@ -375,7 +375,7 @@ The communcation part of this algorithm has poor strong scaling, but does not ma
 <img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^28_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^28" width="325"/>
 
 #### comp_large
-Comp_large has good strong scaling for all input sizes and hits a point of diminishing returns somewhere in the 2^6 to 2^7 processes range. As expected, the runtime grows from less than a second to around 50 seconds as larger input sizes are tested. This further explains why computation dominates the graphs of main only for the larger input sizes, as 2^24 is where computation begins to consistantly take more time than communication.
+Comp_large has good strong scaling for all input sizes and hits a point of diminishing returns somewhere in the 2^6 to 2^7 processes range. As expected, the runtime grows from less than a second to around 50 seconds as larger input sizes are tested. This further explains why computation dominates the graphs of main only for the larger input sizes, as 2^24 is where computation begins to consistently take more time than communication.
 
 <img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^16_comp_large_Strong.png" alt="MPI_Strong_Scaling_comp_large_2^16" width="325"/>
 <img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^18_comp_large_Strong.png" alt="MPI_Strong_Scaling_comp_large_2^18" width="325"/>
@@ -387,7 +387,7 @@ Comp_large has good strong scaling for all input sizes and hits a point of dimin
 
 ### CUDA
 #### main
-The strong scaling graphs for CUDA do not paint a very clear picture in either direction. The graphs are very all over the place, but most tend to generally trend upwards overall, leading to a conclusion of poor strong scaling. This behavior is most likely due to the implementation not taking advantage of the GPU as much as it could. An interesting point to note when looking at these graphs, while the lines are very up and down, relative to the overall time taken, the range on the Y-axis is not that big.
+The strong scaling graphs for CUDA do not paint a very clear picture in either direction. The graphs are all over the place, but most tend to generally trend upwards overall, leading to a conclusion of poor strong scaling. This behavior is most likely due to the implementation not taking advantage of the GPU as much as it could. An interesting point to note when looking at these graphs, while the lines are very up and down, relative to the overall time taken, the range on the Y-axis is not that big.
 
 <img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^16_main.png" alt="CUDA_Strong_Scaling_main_2^16" width="325"/>
 <img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^18_main.png" alt="CUDA_Strong_Scaling_main_2^18" width="325"/>
@@ -398,7 +398,7 @@ The strong scaling graphs for CUDA do not paint a very clear picture in either d
 <img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^28_main.png" alt="CUDA_Strong_Scaling_main_2^28" width="325"/>
 
 #### comp_large
-As CUDA did not have communication for the algorithm, comp_large looks fairly similar to main. While the 2^28 graph shape seems to be an outlier with the lines trending downwards, the rest generally trend upwards implying poor strong scaling performance. The up and down nature of these graphs is again most likely due to the algorithm not taking proper advantage of the GPU.
+As CUDA did not have communication for the algorithm, comp_large looks fairly similar to main. While the 2^28 graph shape seems to be an outlier with the lines trending downwards, the rest generally trend upwards implying poor strong scaling performance. The up-and-down nature of these graphs is again most likely due to the algorithm not taking proper advantage of the GPU.
 
 <img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^16_comp_large.png" alt="CUDA_Strong_Scaling_comp_large_2^16" width="325"/>
 <img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^18_comp_large.png" alt="CUDA_Strong_Scaling_comp_large_2^18" width="325"/>
@@ -411,7 +411,7 @@ As CUDA did not have communication for the algorithm, comp_large looks fairly si
 ## Speed up
 ### MPI
 #### main
-The MPI Speedup graphs for main have a similar pattern of switching what they are bounded by as seen in the strong scaling graphs, but reversed. Each one each starts off with a fairly good speedup shape as it is dominated by the speedup of computation in the early process counts, then starts to fall off as the communication overhead becomes greater and greater. As expected, the larger the input size, generally the better the speedup the algorithm sees.
+The MPI Speedup graphs for main have a similar pattern of switching what they are bounded by as seen in the strong scaling graphs, but reversed. Each one starts with a fairly good speedup shape as it is dominated by the speedup of computation in the early process counts, then starts to fall off as the communication overhead becomes greater and greater. As expected, the larger the input size, generally the better the speedup the algorithm sees.
 
 <img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Random_Speedup_main.png" alt="MPI_Random_Speedup_main" width="325"/>
 <img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Sorted_Speedup_main.png" alt="MPI_Sorted_Speedup_main" width="325"/>
@@ -419,7 +419,7 @@ The MPI Speedup graphs for main have a similar pattern of switching what they ar
 <img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Perturbed_Speedup_main.png" alt="MPI_Perturbed_Speedup_main" width="325"/>
 
 #### comm
-Communication speedup graphs tell an expected story when considering the region has poor strong scaling performance. It starts off around 1.0 for the smaller input sizes, but always ends up nearing 0 by the time the largest input size is reached.
+Communication speedup graphs tell an expected story when considering the region has poor strong scaling performance. It starts off around 1.0 for the smaller input sizes but always ends up nearing 0 by the time the largest input size is reached.
 
 <img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Random_Speedup_comm.png" alt="MPI_Random_Speedup_comm" width="325"/>
 <img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Sorted_Speedup_comm.png" alt="MPI_Sorted_Speedup_comm" width="325"/>
@@ -427,7 +427,7 @@ Communication speedup graphs tell an expected story when considering the region 
 <img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Perturbed_Speedup_comm.png" alt="MPI_Perturbed_Speedup_comm" width="325"/>
 
 #### comp_large
-The comp_large speedup graphs are almost picture perfect when talking about speedups found in the real world. All input types see large speedups in the beginning as more processes are added for small numbers, but then plateau to various degrees once it reaches the point of diminishing returns at around 2^7 processes. As expected, the larger input sizes tend to achive better speedups as they allow the algorithm to better utilize the maximum allowed resources.
+The comp_large speedup graphs are almost picture-perfect when talking about speedups found in the real world. All input types see large speedups in the beginning as more processes are added for small numbers, but then plateau to various degrees once it reaches the point of diminishing returns at around 2^7 processes. As expected, the larger input sizes tend to achieve better speedups as they allow the algorithm to better utilize the maximum allowed resources.
 
 <img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Random_Speedup_comp_large.png" alt="MPI_Random_Speedup_comp_large" width="325"/>
 <img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Sorted_Speedup_comp_large.png" alt="MPI_Sorted_Speedup_comp_large" width="325"/>
@@ -436,7 +436,7 @@ The comp_large speedup graphs are almost picture perfect when talking about spee
 
 ### CUDA
 #### main
-The CUDA speedup graphs for main show an interesting pattern of the larger input sizes hugging the 1.0 line and the smaller inputs bouncing arond to a greater degree. This is most likely means there is some small variations in the runtime no matter the input size and it is just more noticeable on the smaller sizes because of their overall shorter times make them more susceptible to change.
+The CUDA speedup graphs for main show an interesting pattern of the larger input sizes hugging the 1.0 line and the smaller inputs bouncing around to a greater degree. This most likely means there are some small variations in the runtime no matter the input size and it is just more noticeable on the smaller sizes because their overall shorter times make them more susceptible to change.
 
 <img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Random_Speedup_main.png" alt="CUDA_Random_Speedup_main" width="325"/>
 <img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Sorted_Speedup_main.png" alt="CUDA_Sorted_Speedup_main" width="325"/>
@@ -444,7 +444,7 @@ The CUDA speedup graphs for main show an interesting pattern of the larger input
 <img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Perturbed_Speedup_main.png" alt="CUDA_Perturbed_Speedup_main" width="325"/>
 
 #### comp_large
-The comp_large graphs are similar to the main graphs, but there seems to be a little bit more randomness. This most likely means the data initalization and correctness check sections of the program also have unclear runtime trends, therefore stablizing the overall times a little bit, leading to the calmer graphs for main shown above.
+The comp_large graphs are similar to the main graphs, but there seems to be a little bit more randomness. This most likely means the data initialization and correctness check sections of the program also have unclear runtime trends, therefore stabilizing the overall times a little bit, leading to the calmer graphs for main shown above.
 
 <img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Random_Speedup_comp_large.png" alt="CUDA_Random_Speedup_comp_large" width="325"/>
 <img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Sorted_Speedup_comp_large.png" alt="CUDA_Sorted_Speedup_comp_large" width="325"/>
@@ -453,10 +453,10 @@ The comp_large graphs are similar to the main graphs, but there seems to be a li
 
 
 ## Weak Scaling
-**Note:** Due to the longer runtimes of larger input sizes, graph shape for the smaller inputs gets lost. To combat this, the left column of graphs has all input sizes and the right column has the same graph, but with the larger input sizes removed to enable analysis of smaller input sizes.
+**Note:** Due to the longer runtimes of larger input sizes, the graph shape for the smaller inputs gets lost. To combat this, the left column of graphs has all input sizes and the right column has the same graph, but with the larger input sizes removed to enable analysis of smaller input sizes.
 ### MPI
 #### main
-Weak scaling in main for the MPI implementation seems pretty good when looking at all input sizes. It is not until just the smaller input sizes are graphed that the upward spike near the largest number of processes can be seem. This is due to the communication overhead for larger number of processes that can be seen the comm graphs below. Prior to that, the runtime is dominated by the good weak scaling of the comp_large region.
+Weak scaling in main for the MPI implementation seems pretty good when looking at all input sizes. It is not until just the smaller input sizes are graphed that the upward spike near the largest number of processes can be seen. This is due to the communication overhead for larger number of processes that can be seen the comm graphs below. Prior to that, the runtime is dominated by the good weak scaling of the comp_large region.
 
 <img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Random_Weak_main.png" alt="MPI_Random_Weak_main" width="325"/>
 <img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Random_small_Weak_main.png" alt="MPI_Random_small_Weak_main" width="325"/>
@@ -468,7 +468,7 @@ Weak scaling in main for the MPI implementation seems pretty good when looking a
 <img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Perturbed_small_Weak_main.png" alt="MPI_Perturbed_small_Weak_main" width="325"/>
 
 #### comm
-Graphs for the comm region, with the expection of the largest input size, seem to show decent weak scaling for lower numbers of processes. It is not until 2^6 or 2^7, when more than one node and therefore network communication is added, do the comm graphs start to show poor weak scaling and bleed into the main graphs.
+Graphs for the comm region, with the exception of the largest input size, seem to show decent weak scaling for lower numbers of processes. It is not until 2^6 or 2^7, when more than one node and therefore network communication is added, do the comm graphs start to show poor weak scaling and bleed into the main graphs.
 
 <img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Random_Weak_comm.png" alt="MPI_Random_Weak_comm" width="325"/>
 <img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Random_small_Weak_comm.png" alt="MPI_Random_small_Weak_comm" width="325"/>
@@ -480,7 +480,7 @@ Graphs for the comm region, with the expection of the largest input size, seem t
 <img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Perturbed_small_Weak_comm.png" alt="MPI_Perturbed_small_Weak_comm" width="325"/>
 
 #### comp_large
-The graphs for comp_large show good weak scaling across the board for all input sizes as they have a steep drop at the beginning and then flatten out at the end. An interesting observation that can be seen on the graph of smaller input sizes is that sizes of 2^22 and under do not see as steep of an inital dropoff as the larger sizes do.
+The graphs for comp_large show good weak scaling across the board for all input sizes as they have a steep drop at the beginning and then flatten out at the end. An interesting observation that can be seen on the graph of smaller input sizes is that sizes of 2^22 and under do not see as steep of an initial dropoff as the larger sizes do.
 
 <img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Random_Weak_comp_large.png" alt="MPI_Random_Weak_comp_large" width="325"/>
 <img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Random_small_Weak_comp_large.png" alt="MPI_Random_small_Weak_comp_large" width="325"/>
@@ -494,7 +494,7 @@ The graphs for comp_large show good weak scaling across the board for all input 
 
 ### CUDA
 #### main
-The CUDA weak scaling graphs for main show fairly flat lines overall on the graphs with larger input sizes implying good weak scaling performance. When looking at just the smaller input sizes, while a bit more variation can be seen, the Y-axis scale is much more narrow so small ups and downs are not suprising.
+The CUDA weak scaling graphs for main show fairly flat lines overall on the graphs with larger input sizes implying good weak scaling performance. When looking at just the smaller input sizes, while a bit more variation can be seen, the Y-axis scale is much more narrow so small ups and downs are not surprising.
 
 <img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Random_Weak_main.png" alt="CUDA_Random_Weak_main" width="325"/>
 <img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Random_small_Weak_main.png" alt="CUDA_Random_small_Weak_main" width="325"/>
@@ -506,7 +506,7 @@ The CUDA weak scaling graphs for main show fairly flat lines overall on the grap
 <img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Perturbed_small_Weak_main.png" alt="CUDA_Perturbed_small_Weak_main" width="325"/>
 
 #### comp_large
-Weak scaling comp_large graphs echo the story told by the main graphs with the exception of the graphs with just smaller input sizes. These maintain much more of a flat line which means the variation found in the graphs above is due to either data intitialization or correctness checking runtimes fluxuating, not the actual sorting computation time.
+Weak scaling comp_large graphs echo the story told by the main graphs with the exception of the smaller input sizes. These maintain much more of a flat line which means the variation found in the graphs above is due to either data initialization or correctness checking runtimes fluctuating, not the actual sorting computation time.
 
 <img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Random_Weak_comp_large.png" alt="CUDA_Random_Weak_comp_large" width="325"/>
 <img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Random_small_Weak_comp_large.png" alt="CUDA_Random_small_Weak_comp_large" width="325"/>
