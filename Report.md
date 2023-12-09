@@ -883,36 +883,346 @@ In the CUDA speedup graphs, there doesn't seem to be any inherent benefit to par
 <img src="./Report_Images/MergeSort/scale-cuda11.png" alt="speedup-cuda" width="400">
 <img src="./Report_Images/MergeSort/scale-cuda12.png" alt="speedup-cuda" width="400">
 
-### Bubble Sort
+# Bitonic Sort
 
-#### Weak Scaling
+## Weak Scaling
 
-##### MPI
+### MPI
 
 Like Shawn for merge sort, I also opted to assess the average time per rank in relation to the number of processors instead of total time since total time invariably increases with the addition of processors, as it represents an aggregate of all times across all processors.
 
 For this analysis, I examined weak scaling using 2^16 elements across all four input types (sorted, reverse sorted, randomized, and 1% perturbed). It is evident that as the number of processors increases, the sorted array consistently exhibits the fastest runtime. This scenario represents the optimal condition for bubble sort, as it involves zero swaps for elements. The efficiency of this input type remains largely unaffected by the increase in processors, given its inherently efficient nature. The next fastest is the 1% perturbed input, which demonstrates a noticeable increase in runtime as the number of processors grows. The subsequent rankings alternate between reverse sorted and randomized inputs, as expected, considering they require a greater number of swaps. Reverse sorted input is relatively insensitive to the number of processors, as it consistently involves the maximum number of swaps.
-![Bubble-main-Weak-MPI](./Report_Images/BubbleSort/BubbleSort-MPI-Weak-Main-65536.jpg)
+FIX ME!
 
-##### CUDA
+#### RANDOM INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/mpi-weak-1.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-2.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-3.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-4.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-5.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-6.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-7.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-8.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-9.png" alt="Average-Time-main-Weak Scaling" width="400">
+
+#### SORTED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/mpi-weak-10.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-11.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-12.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-13.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-14.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-15.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-16.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-17.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-18.png" alt="Average-Time-main-Weak Scaling" width="400">
+
+#### REVERSE SORTED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/mpi-weak-19.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-20.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-21.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-22.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-23.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-24.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-25.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-26.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-27.png" alt="Average-Time-main-Weak Scaling" width="400">
+
+#### 1% PERTURBED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/mpi-weak-28.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-29.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-30.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-31.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-32.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-33.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-34.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-35.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-36.png" alt="Average-Time-main-Weak Scaling" width="400">
+
+### CUDA
 
 For this analysis, I examined weak scaling using 2^16 elements across three input types (sorted, reverse sorted, and randomized). The results are unexpected, as all average times increase with the number of threads used. One would anticipate a decrease for some time, given that parallelization should enhance efficiency. Furthermore, similar to MPI, we observe that "Sorted" consistently ranks as the fastest, as expected, since no swaps are required. "Reverse sorted" and "randomized" exhibit variations in their next fastest rankings, which aligns with expectations as they entail more swaps. The graph suggests that for this input size (65536), parallelization is not beneficial. With additional graphs featuring different input sizes, we can discern the general trend.
-![Bubble-main-Weak-CUDA](./Report_Images/BubbleSort/BubbleSort-CUDA-Weak-Main-65536.jpg)
+FIX ME!
 
-### Bubble Sort
+#### RANDOM INPUT ARRAY
 
-#### Weak Scaling
+<img src="./Report_Images/BitonicSort/cuda-weak-1.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-2.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-3.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-4.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-5.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-6.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-7.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-8.png" alt="Average-Time-main-Weak Scaling" width="400">
 
-##### MPI
+#### SORTED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/cuda-weak-9.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-10.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-11.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-12.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-13.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-14.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-15.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak1-6.png" alt="Average-Time-main-Weak Scaling" width="400">
+
+#### REVERSE SORTED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/cuda-weak-17.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-18.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-19.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-20.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-21.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-22.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-23.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-24.png" alt="Average-Time-main-Weak Scaling" width="400">
+
+#### 1% PERTURBED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/cuda-weak-25.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-26.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-27.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-28.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-29.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-30.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-31.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-32.png" alt="Average-Time-main-Weak Scaling" width="400">
+
+## Weak Scaling
+
+### MPI
 
 For the analysis, weak scaling was examined across the sorted input type. 2, 4, and 8 processors were run and it showed that there was an increase in average time. However, this was interesting as usually as the number of processors increases, the time should decrease due to parallelization and efficiency. However, since smaller numbers were run it might not be as easy to tell. Therefore, as more trials with more data is run, then the graph will show parallelization. The rest of the input types with the number of processors and threads will be run as the next time in order to gather more accurate data creating the various graphs.
-![selection-main-Weak-MPI](./Report_Images/SelectionSort/weakscale.png)
+FIX ME!
 
-##### CUDA
+### 2^16 Elements
+
+<img src="./Report_Images/BitonicSort/mpi-strong-1.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-2.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-3.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-4.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-5.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-6.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-7.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-8.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-9.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2 ^18 Elements
+
+<img src="./Report_Images/BitonicSort/mpi-strong-10.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-11.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-12.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-13.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-14.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-15.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-16.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-17.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-18.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^20 Elements
+
+<img src="./Report_Images/BitonicSort/mpi-strong-19.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-20.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-21.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-22.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-23.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-24.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-25.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-26.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-27.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^22 Elements
+
+<img src="./Report_Images/BitonicSort/mpi-strong-28.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-29.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-30.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-31.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-32.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-33.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-34.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-35.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-36.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^24 Elements
+
+<img src="./Report_Images/BitonicSort/mpi-strong-37.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-38.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-39.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-40.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-41.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-42.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-43.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-44.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-45.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^26 Elements
+
+<img src="./Report_Images/BitonicSort/mpi-strong-46.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-47.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-48.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-49.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-50.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-51.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-52.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-53.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-54.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^28 Elements
+
+<img src="./Report_Images/BitonicSort/mpi-strong-55.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-56.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-57.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-58.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-59.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-60.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-61.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-62.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-63.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### CUDA
 
 For the analysis, for CUDA only two cali files with 16 were run so only two points are showing. It does seem that one of the points has a higher average time. Due to the small number of trials, not much can be observed from the graph. The jobs were queued on grace portal so the data was not fully able to be collected for this implementation. However, as the number of processors increases, the average time should decrease as the the paralleization of the tasks has been implemented. Therefore, the rest of the input types will be run
+FIX ME!
 
-![selection-main-Weak-CUDA](./Report_Images/SelectionSort/weakscaleCUDA.jpeg)
+### 2^16 Elements
+
+<img src="./Report_Images/BitonicSort/cuda-strong-1.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-2.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-3.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-4.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-5.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-6.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-7.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-8.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2 ^18 Elements
+
+<img src="./Report_Images/BitonicSort/cuda-strong-9.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-10.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-11.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-12.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-13.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-14.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-15.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-16.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^20 Elements
+
+<img src="./Report_Images/BitonicSort/cuda-strong-17.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-18.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-19.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-20.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-21.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-22.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-23.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-24.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^22 Elements
+
+<img src="./Report_Images/BitonicSort/cuda-strong-25.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-26.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-27.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-28.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-29.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-30.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-31.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-32.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^24 Elements
+
+<img src="./Report_Images/BitonicSort/cuda-strong-33.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-34.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-35.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-36.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-37.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-38.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-39.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-40.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^26 Elements
+
+<img src="./Report_Images/BitonicSort/cuda-strong-41.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-42.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-43.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-44.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-45.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-46.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-47.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-48.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+### 2^28 Elements
+
+<img src="./Report_Images/BitonicSort/cuda-strong-49.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-50.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-51.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-52.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-53.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-54.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-55.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-56.png" alt="Average-Time-main-Strong Scaling" width="400">
+
+## Speedup
+
+### MPI
+
+When looking at the computation speedups, we see a linear trend between the input sizes. This shows the importance of parallelism. For all sizes, as we increase the number of processors, the pure computation time gets better and better, this showing the higher speedup. We do see that speedup for the 2^16 elements begins to taper off for the comp regions, indiating that the parallelism is good for very large sizes, but smaller sizes aren't as impacts by increasing processors. This makes sense because you would spend more percentage of your time increasing your processors and have more communication and face more overhead for the smaller values. If we look at the entire main region as a whole, we can see that the larger the input the size, the more speedup there is. This further reinforces that there is a need for parallelism, and a definite benefit. For all of the input sizes, there seems to be a peak speedup at 256 processors before decreasing again. After 256 processors, there may be so much overhead that we lose overall performance. It is a little difficult to look at it easily for the smaller sizes, but the speedup graphs tend to all show that a bigger input size benefits from this parallelism. We also see that for communication, speedup decreases for more processsors, again reiterating that we are likely facing some signifcant overhead.
+FIX ME!
+
+### RANDOM INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/mpi-speed-1.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-2.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-3.png" alt="speedup-mpi" width="400">
+
+#### SORTED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/mpi-speed-4.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-5.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-6.png" alt="speedup-mpi" width="400">
+
+#### REVERSE SORTED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/mpi-speed-7.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-8.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-9.png" alt="speedup-mpi" width="400">
+
+#### 1% PERTURBED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/mpi-speed-10.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-11.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-12.png" alt="speedup-mpi" width="400">
+
+### CUDA
+
+In the CUDA speedup graphs, there doesn't seem to be any inherent benefit to paralleism. When we look at the main_function as a whole, we see that the speedup values tend to hover around 1.0. In fact, most of the lines tend to be below a value of 1, indicating that it is performing worse by being parallel. There also seems to be no pattern with the varying input size. We see that at the highest number of processors, the worst speedups are 2^16 elements and 2^28 elements, which are both the smallest and largest values respectively. It seems like as we increase processors, speedup for the communication is worst for the 2^16 element, but the computation is worst for 2^28 elements. Communication is hard to guage completely becuase there is quite a bit of fluctuation here, where computation speedup hovers around 1.0 and steadily decreases for most of the input sizes. This could also be because theres no real inter-process communication for CUDA like there is for MPI.
+FIX ME!
+
+#### RANDOM INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/cuda-speed-1.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-2.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-3.png" alt="speedup-cuda" width="400">
+
+#### SORTED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/cuda-speed-4.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-5.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-6.png" alt="speedup-cuda" width="400">
+
+#### REVERSE SORTED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/cuda-speed-7.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-8.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-9.png" alt="speedup-cuda" width="400">
+
+#### 1% PERTURBED INPUT ARRAY
+
+<img src="./Report_Images/BitonicSort/cuda-speed-10.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-11.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-12.png" alt="speedup-cuda" width="400">
 
 # Comparison Analysis
 
