@@ -967,7 +967,7 @@ The sorted array follows the same trend. The reverse sorted array sees a spike a
 <img src="./Report_Images/BitonicSort/cuda-weak-13.png" alt="Average-Time-main-Weak Scaling" width="400">
 <img src="./Report_Images/BitonicSort/cuda-weak-14.png" alt="Average-Time-main-Weak Scaling" width="400">
 <img src="./Report_Images/BitonicSort/cuda-weak-15.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak1-6.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-16.png" alt="Average-Time-main-Weak Scaling" width="400">
 
 #### REVERSE SORTED INPUT ARRAY
 
