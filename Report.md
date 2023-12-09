@@ -910,3 +910,19 @@ For the analysis, weak scaling was examined across the sorted input type. 2, 4, 
 For the analysis, for CUDA only two cali files with 16 were run so only two points are showing. It does seem that one of the points has a higher average time. Due to the small number of trials, not much can be observed from the graph. The jobs were queued on grace portal so the data was not fully able to be collected for this implementation. However, as the number of processors increases, the average time should decrease as the the paralleization of the tasks has been implemented. Therefore, the rest of the input types will be run
 
 ![selection-main-Weak-CUDA](./Report_Images/SelectionSort/weakscaleCUDA.jpeg)
+
+
+
+# Comparison Analysis
+For the comparison analysis, we compared the 2^16 elements since selection sort was having issues at larger values.
+When starting with CUDA, we noticed that selection sort was much, much slower in all aspects of total, communication, and computation time. To complete the analysis, we loooked at both the graphs with all of the sorting algorithms, as well as graphs that excluded selection sort. This was needed because selection sort worked on such a large scale that it would wash out the lines for the other three sorts and it was difficult to tell which ones performed better. It is easiest to see in the communication step, since in most of the sorting algorithms, this was simply a Cudamemcpy which is a relatively quick step. Sample sort did not include a comm region, which is why it is not present on that graph. However, we can see that the main and comp regions are completely overtaken by the selection sort graph. Since selection sort is not inherently a parallel algorithm, it performs the worst by far. 
+## CUDA - All
+<img src="./Report_Images/Comparisons/comp3.png" alt="comp-cuda" width="400">
+<img src="./Report_Images/Comparisons/comp2.png" alt="comp-cuda" width="400">
+<img src="./Report_Images/Comparisons/comp1.png" alt="comp-cuda" width="400">
+
+## CUDA - Bitonic, Merge, and Sample Sort
+When looking at the main and computation regions without the selection sort line, we see that they are relatively constant, especially considering the fact they are at the scale of tenths of a second. We see a spike for bitonic sort at 512 threads in the main region, which could likely be an outlier looking at its other data points. When looking at just computation, we see that it is mostly constant for all three graphs. We can conclude here that for CUDA, the order from best to worst scaling sorting algorithms for us is bitonic, sample, merge, and then selection sort.
+<img src="./Report_Images/Comparisons/comp6.png" alt="comp-cuda" width="400">
+<img src="./Report_Images/Comparisons/comp5.png" alt="comp-cuda" width="400">
+
