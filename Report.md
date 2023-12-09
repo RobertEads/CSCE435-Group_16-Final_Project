@@ -927,3 +927,10 @@ When looking at the main and computation regions without the selection sort line
 <img src="./Report_Images/Comparisons/comp6.png" alt="comp-cuda" width="400">
 <img src="./Report_Images/Comparisons/comp5.png" alt="comp-cuda" width="400">
 
+
+## MPI
+The main region shows mostly similar behavior outside of merge sort, with the other three sorts hovering around zero for most processors. Sample sort has a comm spike in time at higher processors, which explains the peak at the end. Merge sorts main function isn't explain by comp or comm, so other areas such as data init likely played a role. Looking at the computation region, we see that selection sort is by far the worst at lower processors, which indiates its a poor performing algorithm. However, it quickly converges towards 0 around 32 processors. It is difficult to see on the comp graph, but merge sort is the best perfoming sorting algorithm here. When looking at the comm graph, we see that most of the sorting algorithms are very slightly increasing, except for sample sort which shoots up at 1024 processors. In terms of communication time.
+
+<img src="./Report_Images/Comparisons/mpi1.png" alt="comp-mpi" width="400">
+<img src="./Report_Images/Comparisons/mpi2.png" alt="comp-mpi" width="400">
+<img src="./Report_Images/Comparisons/mpi3.png" alt="comp-mpi" width="400">
