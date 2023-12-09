@@ -891,8 +891,8 @@ In the CUDA speedup graphs, there doesn't seem to be any inherent benefit to par
 
 Like Shawn for merge sort, I also opted to assess the average time per rank in relation to the number of processors instead of total time since total time invariably increases with the addition of processors, as it represents an aggregate of all times across all processors.
 
-For this analysis, I examined weak scaling using 2^16 elements across all four input types (sorted, reverse sorted, randomized, and 1% perturbed). It is evident that as the number of processors increases, the sorted array consistently exhibits the fastest runtime. This scenario represents the optimal condition for bubble sort, as it involves zero swaps for elements. The efficiency of this input type remains largely unaffected by the increase in processors, given its inherently efficient nature. The next fastest is the 1% perturbed input, which demonstrates a noticeable increase in runtime as the number of processors grows. The subsequent rankings alternate between reverse sorted and randomized inputs, as expected, considering they require a greater number of swaps. Reverse sorted input is relatively insensitive to the number of processors, as it consistently involves the maximum number of swaps.
-FIX ME!
+For this analysis, I begin with the weak scaling graphs for MPI across input types. First, we look at the randomly sorted arrays. The general trend is that most lines remain constant over the increase in the number of processors. Looking at the comp function, the largest input size (2^28) takes much longer by a much larger margin than the other differences which is likely because of other overhead in the large input size. The second largest input size (2^26) also takes much longer than the other input sizes. When examining the comm graph, you can see that the increase in time overall is mostly because of the communication involved with a much larger input size. Data initialization seems to parallelize well given that it decreases over the increased number of processors for all input sizes.
+For the sorted array, there is a similar trend except there seems to be an outlier for 2^26 input size at 2^9 processors. There is a similar trend for the reverse sorted arrays with a spike at 2^10 processors for 2^28 input size. The 1% perturbed graphs follow very closely to the reverse sorted graphs except that they are slightly more variant throughout.
 
 #### RANDOM INPUT ARRAY
 
@@ -944,8 +944,8 @@ FIX ME!
 
 ### CUDA
 
-For this analysis, I examined weak scaling using 2^16 elements across three input types (sorted, reverse sorted, and randomized). The results are unexpected, as all average times increase with the number of threads used. One would anticipate a decrease for some time, given that parallelization should enhance efficiency. Furthermore, similar to MPI, we observe that "Sorted" consistently ranks as the fastest, as expected, since no swaps are required. "Reverse sorted" and "randomized" exhibit variations in their next fastest rankings, which aligns with expectations as they entail more swaps. The graph suggests that for this input size (65536), parallelization is not beneficial. With additional graphs featuring different input sizes, we can discern the general trend.
-FIX ME!
+Next, we look at weak scaling for CUDA across input types. The order is the same in that we look at the randomly sorted arrays first. Similar to MPI, the general trend is pretty linear flat for the main and comm graphs. There is not a large change in time with the increased number of threads. The two larger input sizes are significantly slower than the other input sizes likely due to the overhead of many more numbers to sort. When looking at the comp graphs, it looks like there is much more variance but the y-axis scale is much smaller so there is very little variance in times in reality for all input sizes.
+The sorted array follows the same trend. The reverse sorted array sees a spike after 2^9 threads likely due to overhead. The 1& perturbed graphs see slightly more variance throughout since they are randomly perturbed.
 
 #### RANDOM INPUT ARRAY
 
@@ -991,12 +991,11 @@ FIX ME!
 <img src="./Report_Images/BitonicSort/cuda-weak-31.png" alt="Average-Time-main-Weak Scaling" width="400">
 <img src="./Report_Images/BitonicSort/cuda-weak-32.png" alt="Average-Time-main-Weak Scaling" width="400">
 
-## Weak Scaling
+## Strong Scaling
 
 ### MPI
 
-For the analysis, weak scaling was examined across the sorted input type. 2, 4, and 8 processors were run and it showed that there was an increase in average time. However, this was interesting as usually as the number of processors increases, the time should decrease due to parallelization and efficiency. However, since smaller numbers were run it might not be as easy to tell. Therefore, as more trials with more data is run, then the graph will show parallelization. The rest of the input types with the number of processors and threads will be run as the next time in order to gather more accurate data creating the various graphs.
-FIX ME!
+For the next analysis, we look at strong scaling MPI across different input sizes. For the smallest input size (2^16), time seems to increase with the number of processors but the margin is very small and negligible. As we increase input size, time generally decreases with the number of processors which is the best scenario showing that parallelization is effective. The comm graphs show an increase in time likely since increase the input size generally takes longer to communicate. For the larger input sizes, there is likely an outlier at 2^7 processors. But this is an interesting point to note since it seems like it is the same outlier for these graphs. Additionally, for the larger input sizes, we can see a clear winner in input type for fastest time. The sorted array consistently exhibits the fastest runtime. This scenario represents the optimal condition for bitonic sort, as it involves zero switches for elements. The efficiency of this input type remains largely unaffected by the increase in processors, given its inherently efficient nature. The next fastest is the 1% perturbed input, which demonstrates a noticeable increase in runtime as the number of processors grows. The subsequent rankings alternate between reverse sorted and randomized inputs, as expected, considering they require a greater number of sorts.
 
 ### 2^16 Elements
 
@@ -1084,8 +1083,7 @@ FIX ME!
 
 ### CUDA
 
-For the analysis, for CUDA only two cali files with 16 were run so only two points are showing. It does seem that one of the points has a higher average time. Due to the small number of trials, not much can be observed from the graph. The jobs were queued on grace portal so the data was not fully able to be collected for this implementation. However, as the number of processors increases, the average time should decrease as the the paralleization of the tasks has been implemented. Therefore, the rest of the input types will be run
-FIX ME!
+For this analysis, we are looking at CUDA strong scaling across different input sizes. The trends are not as general for these graphs as there is a lot of variance throughout. This may mean that CUDA and the parallelization is not as effective for this sort. It is also very interesting to note that even for the graphs for the main functions in all input sizes, there is not a clear winner in time for any input type until 2^26 elements, while the expected winner would be a presorted input array. However, it is important to also note that for all graphs, the y-axis scale is smaller than that of MPI's, meaning that the variance is large but within a smaller scale. At 2^26 elements and 2^26 elements we see that randomized does perform the worst as expected and sorted performs the best as expected.
 
 ### 2^16 Elements
 
@@ -1168,8 +1166,7 @@ FIX ME!
 
 ### MPI
 
-When looking at the computation speedups, we see a linear trend between the input sizes. This shows the importance of parallelism. For all sizes, as we increase the number of processors, the pure computation time gets better and better, this showing the higher speedup. We do see that speedup for the 2^16 elements begins to taper off for the comp regions, indiating that the parallelism is good for very large sizes, but smaller sizes aren't as impacts by increasing processors. This makes sense because you would spend more percentage of your time increasing your processors and have more communication and face more overhead for the smaller values. If we look at the entire main region as a whole, we can see that the larger the input the size, the more speedup there is. This further reinforces that there is a need for parallelism, and a definite benefit. For all of the input sizes, there seems to be a peak speedup at 256 processors before decreasing again. After 256 processors, there may be so much overhead that we lose overall performance. It is a little difficult to look at it easily for the smaller sizes, but the speedup graphs tend to all show that a bigger input size benefits from this parallelism. We also see that for communication, speedup decreases for more processsors, again reiterating that we are likely facing some signifcant overhead.
-FIX ME!
+First we analyze speedup of MPI graphs across different input sizes. When looking at the computation speedups, we see a straight line for most graphs which is expected from out analysis of the MPI graphs earlier. Since the MPI graph times were generally stable throghout, there is an average speed up of 1 throughout. The outlier that we saw earlier shows up again in the speedup at 2& processors having a speed up of 0.5, meaning that it gets slower there. The comm graphs also generally show a decreasing trend since communication generally takes longer with increasing input size. None of the graphs have a general increasing trend which would indicate the benefits and importance of parallelism.
 
 ### RANDOM INPUT ARRAY
 
@@ -1197,8 +1194,7 @@ FIX ME!
 
 ### CUDA
 
-In the CUDA speedup graphs, there doesn't seem to be any inherent benefit to paralleism. When we look at the main_function as a whole, we see that the speedup values tend to hover around 1.0. In fact, most of the lines tend to be below a value of 1, indicating that it is performing worse by being parallel. There also seems to be no pattern with the varying input size. We see that at the highest number of processors, the worst speedups are 2^16 elements and 2^28 elements, which are both the smallest and largest values respectively. It seems like as we increase processors, speedup for the communication is worst for the 2^16 element, but the computation is worst for 2^28 elements. Communication is hard to guage completely becuase there is quite a bit of fluctuation here, where computation speedup hovers around 1.0 and steadily decreases for most of the input sizes. This could also be because theres no real inter-process communication for CUDA like there is for MPI.
-FIX ME!
+Lastly, we analyze the speedup in CUDA graphs across input types. None of the CUDA speedup graphs show much benefit to parallelism. When we look at the main_function as a whole, the graphs vary up and down around 1.0 meaning that at times it speeds up whereas other times it slows down. This fits with our earlier analysis of CUDA graphs as we said they vary a lot more. However, for the largest input size (2^28) for the main_function, the line is entirely above 1.0 meaning that it does have parallelism benefit. The comm graphs tend to have the least variance across all input types likely due less communication for CUDA than MPI.
 
 #### RANDOM INPUT ARRAY
 
@@ -1226,8 +1222,7 @@ FIX ME!
 
 # Comparison Analysis
 
-For the comparison analysis, we analyzed an input size of 2^16 elements since selection sort was having issues at larger sizes.
-Starting with CUDA, we noticed that selection sort was much slower for all aspects of total (main), communication, and computation time. To conduct a more thorough analysis, we looked at both the graphs with all of the sorting algorithms, as well as graphs that excluded selection sort. This was needed as selection sort's time was on such a large scale that it would wash out any discernable graph shape for the other three sorts making it impossible to tell which ones performed better. We can see the main and comp graphs are completely overtaken by the selection sort because it is not inherently a parallel algorithm and therefore performs the worst by far. A good comparison with selection sort is easiest to see in the communication graph since this was mainly cudaMemcpy and is relatively quick. Sample sort did not include a comm region, and therefore is not present on the graph.  
+For the comparison analysis, we analyzed an input size of 2^16 elements since selection sort was having issues at larger sizes. Starting with CUDA, we noticed that selection sort was much slower for all aspects of total (main), communication, and computation time. To conduct a more thorough analysis, we looked at both the graphs with all of the sorting algorithms, as well as graphs that excluded selection sort. This was needed as selection sort's time was on such a large scale that it would wash out any discernable graph shape for the other three sorts making it impossible to tell which ones performed better. We can see the main and comp graphs are completely overtaken by the selection sort because it is not inherently a parallel algorithm and therefore performs the worst by far. A good comparison with selection sort is easiest to see in the communication graph since this was mainly cudaMemcpy and is relatively quick. Sample sort did not include a comm region, and therefore is not present on the graph.
 
 ## CUDA - All
 
