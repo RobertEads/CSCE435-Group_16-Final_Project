@@ -340,119 +340,150 @@ The listed algorithms were fully implemented using both MPI and CUDA.
 
 ## 4. Performance Evaluation
 
-### Sample Sort
+# Sample Sort
+FIXME: LEAVE NOTE HERE ABOUT CUDA NOT HAVING COMM SO NO GRAPHS
 
-#### MPI
+## Strong Scaling
 
-##### Randomized
+### MPI
+#### main
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^16_main_Strong.png" alt="MPI_Strong_Scaling_main_2^16" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^18_main_Strong.png" alt="MPI_Strong_Scaling_main_2^18" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^20_main_Strong.png" alt="MPI_Strong_Scaling_main_2^20" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^22_main_Strong.png" alt="MPI_Strong_Scaling_main_2^22" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^24_main_Strong.png" alt="MPI_Strong_Scaling_main_2^24" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^26_main_Strong.png" alt="MPI_Strong_Scaling_main_2^26" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^28_main_Strong.png" alt="MPI_Strong_Scaling_main_2^28" width="325"/>
 
-<!-- Strong -->
+#### comm
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^16_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^16" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^18_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^18" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^20_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^20" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^22_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^22" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^24_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^24" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^26_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^26" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^28_comm_Strong.png" alt="MPI_Strong_Scaling_comm_2^28" width="325"/>
 
-For randomized inputs, this sample sort implementation clearly displays a lack of strong scaling on all three input sizes tested, 2^16, 2^18, & 2^20. While there is a minor decrease in runtime for 64 processes, the rest of the graph does not share this trend. The pattern presented below can most likely be attributed to the computation portion of its runtime due to the increase in overhead and therefore required time when adding more processes.
+#### comp_large
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^16_comp_large_Strong.png" alt="MPI_Strong_Scaling_comp_large_2^16" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^18_comp_large_Strong.png" alt="MPI_Strong_Scaling_comp_large_2^18" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^20_comp_large_Strong.png" alt="MPI_Strong_Scaling_comp_large_2^20" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^22_comp_large_Strong.png" alt="MPI_Strong_Scaling_comp_large_2^22" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^24_comp_large_Strong.png" alt="MPI_Strong_Scaling_comp_large_2^24" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^26_comp_large_Strong.png" alt="MPI_Strong_Scaling_comp_large_2^26" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Strong/SS_MPI_2^28_comp_large_Strong.png" alt="MPI_Strong_Scaling_comp_large_2^28" width="325"/>
 
-![Total time-main-Randomized-Strong_Scaling](./Report_Images/SampleSort/SS-MPI_0.png)
-![Total time-comm-Randomized-Strong_Scaling](./Report_Images/SampleSort/SS-MPI_1.png)
-![Total time-comp-Randomized-Strong_Scaling](./Report_Images/SampleSort/SS-MPI_2.png)
+### CUDA
+#### main
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^16_main.png" alt="CUDA_Strong_Scaling_main_2^16" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^18_main.png" alt="CUDA_Strong_Scaling_main_2^18" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^20_main.png" alt="CUDA_Strong_Scaling_main_2^20" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^22_main.png" alt="CUDA_Strong_Scaling_main_2^22" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^24_main.png" alt="CUDA_Strong_Scaling_main_2^24" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^26_main.png" alt="CUDA_Strong_Scaling_main_2^26" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^28_main.png" alt="CUDA_Strong_Scaling_main_2^28" width="325"/>
 
-<!-- Weak -->
+#### comp_large
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^16_comp_large.png" alt="CUDA_Strong_Scaling_comp_large_2^16" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^18_comp_large.png" alt="CUDA_Strong_Scaling_comp_large_2^18" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^20_comp_large.png" alt="CUDA_Strong_Scaling_comp_large_2^20" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^22_comp_large.png" alt="CUDA_Strong_Scaling_comp_large_2^22" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^24_comp_large.png" alt="CUDA_Strong_Scaling_comp_large_2^24" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^26_comp_large.png" alt="CUDA_Strong_Scaling_comp_large_2^26" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Strong/SS_CUDA_Strong_2^28_comp_large.png" alt="CUDA_Strong_Scaling_comp_large_2^28" width="325"/>
 
-Weak scaling for this sample sort implementation presents an interesting graph shape for randomized input data. While the main and comm sections have decent weak scaling performace between 16 and 64 processes and then have poor weak scaling after that, the computation portion of the algorithm has no indication of anything but poor weak scaling performance. This is likely to hamper the algorithms performance when working with larger inputs.
+## Speed up
 
-![main-Randomized-Weak_Scaling](./Report_Images/SampleSort/SS-MPI_3.png)
-![comm-Randomized-Weak_Scaling](./Report_Images/SampleSort/SS-MPI_4.png)
-![comp-Randomized-Weak_Scaling](./Report_Images/SampleSort/SS-MPI_5.png)
+### MPI
 
-##### Sorted
+#### main
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Random_Speedup_main.png" alt="MPI_Random_Speedup_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Sorted_Speedup_main.png" alt="MPI_Sorted_Speedup_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Reverse_Speedup_main.png" alt="MPI_Reverse_Speedup_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Perturbed_Speedup_main.png" alt="MPI_Perturbed_Speedup_main" width="325"/>
 
-<!-- Strong -->
+#### comm
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Random_Speedup_comm.png" alt="MPI_Random_Speedup_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Sorted_Speedup_comm.png" alt="MPI_Sorted_Speedup_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Reverse_Speedup_comm.png" alt="MPI_Reverse_Speedup_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Perturbed_Speedup_comm.png" alt="MPI_Perturbed_Speedup_comm" width="325"/>
 
-For sorted inputs, while not quite true strong scaling, the sample sort implementation does a much better job with lower numbers of processes. The computation time stays roughly same from 2 processes up to 32 processes before fluxuating and eventually rising. The communication time shows a similar pattern to that of randomized inputs, and the graph for overall time moves closer to the computation graph for the beginning portion. This flat lining of computation time near the beginning could be due to the few number of buckets and underlying quick sort algorithm enabling it to only need a small number of runs to verifiy the data is sorted.
+#### comp_large
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Random_Speedup_comp_large.png" alt="MPI_Random_Speedup_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Sorted_Speedup_comp_large.png" alt="MPI_Sorted_Speedup_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Reverse_Speedup_comp_large.png" alt="MPI_Reverse_Speedup_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Speedup/SS_MPI_Perturbed_Speedup_comp_large.png" alt="MPI_Perturbed_Speedup_comp_large" width="325"/>
 
-![Total time-main-Sorted-Strong_Scaling](./Report_Images/SampleSort/SS-MPI_6.png)
-![Total time-comm-Sorted-Strong_Scaling](./Report_Images/SampleSort/SS-MPI_7.png)
-![Total time-comp-Sorted-Strong_Scaling](./Report_Images/SampleSort/SS-MPI_8.png)
+### CUDA
+#### main
+<img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Random_Speedup_main.png" alt="CUDA_Random_Speedup_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Sorted_Speedup_main.png" alt="CUDA_Sorted_Speedup_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Reverse_Speedup_main.png" alt="CUDA_Reverse_Speedup_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Perturbed_Speedup_main.png" alt="CUDA_Perturbed_Speedup_main" width="325"/>
 
-<!-- Weak -->
+#### comp_large
+<img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Random_Speedup_comp_large.png" alt="CUDA_Random_Speedup_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Sorted_Speedup_comp_large.png" alt="CUDA_Sorted_Speedup_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Reverse_Speedup_comp_large.png" alt="CUDA_Reverse_Speedup_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Speedup/SS_CUDA_Perturbed_Speedup_comp_large.png" alt="CUDA_Perturbed_Speedup_comp_large" width="325"/>
 
-Weak scaling performance for a sorted input is very similar to that of the randomized input. Interesting to note however, the larger impact of the comp section can be seen as the main graph has less of a flatline between 16 and 64 processes.
 
-![main-Sorted-Weak_Scaling](./Report_Images/SampleSort/SS-MPI_9.png)
-![comm-Sorted-Weak_Scaling](./Report_Images/SampleSort/SS-MPI_10.png)
-![comp-Sorted-Weak_Scaling](./Report_Images/SampleSort/SS-MPI_11.png)
+## Weak Scaling
 
-##### Reverse Sorted
+### MPI
+#### main
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Random_Weak_main.png" alt="MPI_Random_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Random_small_Weak_main.png" alt="MPI_Random_small_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Sorted_Weak_main.png" alt="MPI_Sorted_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Sorted_small_Weak_main.png" alt="MPI_Sorted_small_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Reverse_Weak_main.png" alt="MPI_Reverse_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Reverse_small_Weak_main.png" alt="MPI_Reverse_small_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Perturbed_Weak_main.png" alt="MPI_Perturbed_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Perturbed_small_Weak_main.png" alt="MPI_Perturbed_small_Weak_main" width="325"/>
 
-<!-- Strong -->
+#### comm
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Random_Weak_comm.png" alt="MPI_Random_Weak_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Random_small_Weak_comm.png" alt="MPI_Random_small_Weak_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Sorted_Weak_comm.png" alt="MPI_Sorted_Weak_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Sorted_small_Weak_comm.png" alt="MPI_Sorted_small_Weak_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Reverse_Weak_comm.png" alt="MPI_Reverse_Weak_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Reverse_small_Weak_comm.png" alt="MPI_Reverse_small_Weak_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Perturbed_Weak_comm.png" alt="MPI_Perturbed_Weak_comm" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Perturbed_small_Weak_comm.png" alt="MPI_Perturbed_small_Weak_comm" width="325"/>
 
-A very similar story is told by the reverse sorted graphs as by the sorted graph. Computation flatlines until about 32 processes and then increases wildly, communication displays poor strong scaling performance, and the overall graphs is good mix of the two. As this is the third comm graph to display a sharp decrease in runtime at the 64 process mark, it is likely this benifit is due to the CPUs on Grace being 24 cores each, 48 hardware threads, which means at 64 processes the second CPU is being used and the additional cache memory is now introduced into the equation during communication.
+#### comp_large
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Random_Weak_comp_large.png" alt="MPI_Random_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Random_small_Weak_comp_large.png" alt="MPI_Random_small_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Sorted_Weak_comp_large.png" alt="MPI_Sorted_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Sorted_small_Weak_comp_large.png" alt="MPI_Sorted_small_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Reverse_Weak_comp_large.png" alt="MPI_Reverse_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Reverse_small_Weak_comp_large.png" alt="MPI_Reverse_small_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Weak/SS_MPI_Perturbed_Weak_comp_large.png" alt="MPI_Perturbed_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/MPI_Small_Weak/SS_MPI_Perturbed_small_Weak_comp_large.png" alt="MPI_Perturbed_small_Weak_comp_large" width="325"/>
 
-![Total time-main-Reverse-Strong_Scaling](./Report_Images/SampleSort/SS-MPI_12.png)
-![Total time-comm-Reverse-Strong_Scaling](./Report_Images/SampleSort/SS-MPI_13.png)
-![Total time-comp-Reverse-Strong_Scaling](./Report_Images/SampleSort/SS-MPI_14.png)
 
-<!-- Weak -->
+### CUDA
+#### main
+<img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Random_Weak_main.png" alt="CUDA_Random_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Random_small_Weak_main.png" alt="CUDA_Random_small_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Sorted_Weak_main.png" alt="CUDA_Sorted_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Sorted_small_Weak_main.png" alt="CUDA_Sorted_small_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Reverse_Weak_main.png" alt="CUDA_Reverse_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Reverse_small_Weak_main.png" alt="CUDA_Reverse_small_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Perturbed_Weak_main.png" alt="CUDA_Perturbed_Weak_main" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Perturbed_small_Weak_main.png" alt="CUDA_Perturbed_small_Weak_main" width="325"/>
 
-The weak scaling for reverse sorted inputs looks very similar to the other two input types. Comm has moderate weak scaling in the beginning, but comp's poor weak scaling performance over shadows any positives when it comes to overall runtime.
+#### comp_large
+<img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Random_Weak_comp_large.png" alt="CUDA_Random_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Random_small_Weak_comp_large.png" alt="CUDA_Random_small_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Sorted_Weak_comp_large.png" alt="CUDA_Sorted_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Sorted_small_Weak_comp_large.png" alt="CUDA_Sorted_small_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Reverse_Weak_comp_large.png" alt="CUDA_Reverse_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Reverse_small_Weak_comp_large.png" alt="CUDA_Reverse_small_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Weak/SS_CUDA_Perturbed_Weak_comp_large.png" alt="CUDA_Perturbed_Weak_comp_large" width="325"/>
+<img src="./Report_Images/SampleSort/CUDA_Small_Weak/SS_CUDA_Perturbed_small_Weak_comp_large.png" alt="CUDA_Perturbed_small_Weak_comp_large" width="325"/>
 
-![main-Sorted-Weak_Scaling](./Report_Images/SampleSort/SS-MPI_15.png)
-![comm-Sorted-Weak_Scaling](./Report_Images/SampleSort/SS-MPI_16.png)
-![comp-Sorted-Weak_Scaling](./Report_Images/SampleSort/SS-MPI_17.png)
 
-#### CUDA
-
-##### Randomized
-
-<!-- Strong -->
-
-The CUDA implementation of sample sort does seem to display decent strong scaling performance for the larger input sizes. This is mainly due to the computation time as the comm graph is mostly flat and seems to have little overall impact if any. The sharp drop seen at 1024 threads for 2^16 input size seems to be an outlier as that data point does not make sense given the rest of the graph.
-
-![Total time-main-Randomized-Strong_Scaling](./Report_Images/SampleSort/SS-CUDA_0.png)
-![Total time-comm-Randomized-Strong_Scaling](./Report_Images/SampleSort/SS-CUDA_1.png)
-![Total time-comp-Randomized-Strong_Scaling](./Report_Images/SampleSort/SS-CUDA_2.png)
-
-<!-- Weak -->
-
-There is not much to be said about the weak scaling performance of this sample sort implementation. It has very poor performance overall due to the similarly poor graphs in both the comm and comp regions.
-
-![main-Randomized-Weak_Scaling](./Report_Images/SampleSort/SS-CUDA_3.png)
-![comm-Randomized-Weak_Scaling](./Report_Images/SampleSort/SS-CUDA_4.png)
-![comp-Randomized-Weak_Scaling](./Report_Images/SampleSort/SS-CUDA_5.png)
-
-##### Sorted
-
-<!-- Strong -->
-
-When looking at strong scaling performance with sorted input, no clear picture emerges one way or the other. When compared to randomized input, sorted input seems to have worse overall strong scaling performance, but it's can be hard to tell due to the inconsistent shape of the graph. The comm regions are roughly the same between the two inputs, but computation for sorted is much less strongly scaled than randomized, leading to the main graph looking a bit wild.
-
-![Total time-main-Sorted-Strong_Scaling](./Report_Images/SampleSort/SS-CUDA_6.png)
-![Total time-comm-Sorted-Strong_Scaling](./Report_Images/SampleSort/SS-CUDA_7.png)
-![Total time-comp-Sorted-Strong_Scaling](./Report_Images/SampleSort/SS-CUDA_8.png)
-
-<!-- Weak -->
-
-While the strong scaling got worse with sorted input, the weak scaling seems to be a little bit better. While comm did not change much, the comp regions' scaling improved and so the main graphs looks a little bit better between 64 an 256 threads.
-
-![main-Sorted-Weak_Scaling](./Report_Images/SampleSort/SS-CUDA_9.png)
-![comm-Sorted-Weak_Scaling](./Report_Images/SampleSort/SS-CUDA_10.png)
-![comp-Sorted-Weak_Scaling](./Report_Images/SampleSort/SS-CUDA_11.png)
-
-##### Reverse Sorted
-
-<!-- Strong -->
-
-Reverse sorted inputs for this sample sort implementation seems have decent strong scaling performance and get better as the size of the input increases. While the communication portion is still relatively flat, computation has fairly good strong scaling performance and that translates to the main graph as well. The trend being seen with this input type is most likely due to the underlying sorting algorithm being insertion sort. Because reverse sorted input is typically the worst case for insertion sort, being able to break it into smaller chunks likely helps to combact that usual disadvtanges that come with the algorithm.
-
-![Total time-main-Reverse-Strong_Scaling](./Report_Images/SampleSort/SS-CUDA_12.png)
-![Total time-comm-Reverse-Strong_Scaling](./Report_Images/SampleSort/SS-CUDA_13.png)
-![Total time-comp-Reverse-Strong_Scaling](./Report_Images/SampleSort/SS-CUDA_14.png)
-
-<!-- Weak -->
-
-Weaking scaling for reverse sorted inputs appears to fall somewhere in between randomized and sorted. Comm is pretty much the same as before and comp is only slightly better than with randomized input, so the main graphs has fairly poor weak scaling performance overall.
-
-![main-Reverse-Weak_Scaling](./Report_Images/SampleSort/SS-CUDA_15.png)
-![comm-Reverse-Weak_Scaling](./Report_Images/SampleSort/SS-CUDA_16.png)
-![comp-Reverse-Weak_Scaling](./Report_Images/SampleSort/SS-CUDA_17.png)
 
 # Merge Sort
 
