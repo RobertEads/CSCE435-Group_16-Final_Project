@@ -923,6 +923,7 @@ When starting with CUDA, we noticed that selection sort was much, much slower in
 
 ## CUDA - Bitonic, Merge, and Sample Sort
 When looking at the main and computation regions without the selection sort line, we see that they are relatively constant, especially considering the fact they are at the scale of tenths of a second. We see a spike for bitonic sort at 512 threads in the main region, which could likely be an outlier looking at its other data points. When looking at just computation, we see that it is mostly constant for all three graphs. We can conclude here that for CUDA, the order from best to worst scaling sorting algorithms for us is bitonic, sample, merge, and then selection sort.
+
 <img src="./Report_Images/Comparisons/comp6.png" alt="comp-cuda" width="400">
 <img src="./Report_Images/Comparisons/comp5.png" alt="comp-cuda" width="400">
 
