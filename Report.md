@@ -558,51 +558,51 @@ One thing to note when I did my weak scaling is that I chose to measure the aver
 
 The analysis begins with weak scaling, specifically with MPI. For weak scaling, I began with the input type of a random array, where each element is a randomly generated number from 0 to n, where n is the size of the array. The most obvious trend between all of the graphs in this section is that the as you increase the number of elements, the algorithm performs more slowly. This is shown best with the largest input size of 2^28 having the largest graph, as signified by the pink line. It is interesting to note that the computation time for all the times looks relatively the same as we parallelize, and that most of the variation in times comes from the communication. I meausred both the MPI_Scatter and MPI_Gather functions, and the MPI_Gather function takes much longer than the scatter. In the sorted array input type, we see very similar behavior, where larger input sizes seemed to have a much longer time to complete. The same behavior is present in the reverse sorted array as well. Finally, in the data initialized with 1% of the data perturbed, we see the similar data. We can assume this due to merge sort typically always breaking the arrays down into a single element subarray and merging them back together, so we should expect relatively consistent behavior.
 
-<img src="./Report_Images/MergeSort/mpi-weak1.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak2.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak3.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak4.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak5.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak6.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak7.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak8.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak9.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak1.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak2.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak3.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak4.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak5.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak6.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak7.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak8.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak9.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### SORTED INPUT ARRAY
 
-<img src="./Report_Images/MergeSort/mpi-weak10.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak11.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak12.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak13.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak14.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak15.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak16.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak17.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak18.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak10.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak11.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak12.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak13.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak14.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak15.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak16.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak17.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak18.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### REVERSE SORTED INPUT ARRAY
 
-<img src="./Report_Images/MergeSort/mpi-weak19.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak20.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak21.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak22.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak23.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak24.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak25.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak26.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak27.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak19.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak20.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak21.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak22.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak23.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak24.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak25.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak26.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak27.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### 1% PERTURBED INPUT ARRAY
 
-<img src="./Report_Images/MergeSort/mpi-weak28.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak29.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak30.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak31.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak32.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak33.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak34.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak35.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-weak36.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-weak28.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak29.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak30.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak31.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak32.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak33.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak34.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak35.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-weak36.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 ### CUDA
 
@@ -610,47 +610,47 @@ For the CUDA weak scaling of the different input types, we had a lot of the same
 
 #### Random Array
 
-<img src="./Report_Images/MergeSort/cuda-weak1.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak2.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak3.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak4.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak5.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak6.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak7.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak8.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak1.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak2.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak3.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak4.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak5.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak6.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak7.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak8.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### Sorted Array
 
-<img src="./Report_Images/MergeSort/cuda-weak9.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak10.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak11.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak12.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak13.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak14.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak15.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak16.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak9.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak10.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak11.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak12.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak13.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak14.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak15.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak16.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### Reverse Sorted Array
 
-<img src="./Report_Images/MergeSort/cuda-weak17.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak18.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak19.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak20.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak21.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak22.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak23.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak24.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak17.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak18.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak19.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak20.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak21.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak22.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak23.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak24.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 ### 1% Perturbed Array
 
-<img src="./Report_Images/MergeSort/cuda-weak25.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak26.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak27.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak28.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak29.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak30.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak31.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-weak32.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-weak25.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak26.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak27.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak28.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak29.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak30.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak31.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-weak32.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 ## Strong Scaling
 
@@ -660,87 +660,87 @@ We see some similar behavior as the weak scaling here in terms of shape of the g
 
 ### 2^16 Elements
 
-<img src="./Report_Images/MergeSort/mpi-strong1.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong2.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong3.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong4.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong5.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong6.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong7.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong8.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong9.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong1.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong2.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong3.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong4.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong5.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong6.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong7.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong8.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong9.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2 ^18 Elements
 
-<img src="./Report_Images/MergeSort/mpi-strong10.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong11.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong12.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong13.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong14.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong15.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong16.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong17.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong18.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong10.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong11.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong12.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong13.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong14.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong15.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong16.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong17.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong18.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^20 Elements
 
-<img src="./Report_Images/MergeSort/mpi-strong19.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong20.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong21.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong22.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong23.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong24.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong25.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong26.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong27.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong19.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong20.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong21.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong22.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong23.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong24.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong25.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong26.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong27.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^22 Elements
 
-<img src="./Report_Images/MergeSort/mpi-strong28.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong29.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong30.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong31.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong32.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong33.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong34.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong35.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong36.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong28.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong29.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong30.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong31.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong32.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong33.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong34.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong35.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong36.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^24 Elements
 
-<img src="./Report_Images/MergeSort/mpi-strong37.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong38.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong39.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong40.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong41.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong42.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong43.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong44.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong45.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong37.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong38.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong39.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong40.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong41.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong42.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong43.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong44.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong45.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^26 Elements
 
-<img src="./Report_Images/MergeSort/mpi-strong46.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong47.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong48.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong49.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong50.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong51.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong52.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong53.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong54.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong46.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong47.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong48.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong49.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong50.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong51.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong52.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong53.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong54.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^28 Elements
 
-<img src="./Report_Images/MergeSort/mpi-strong55.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong56.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong57.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong58.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong59.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong60.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong61.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong62.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/mpi-strong63.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/mpi-strong55.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong56.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong57.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong58.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong59.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong60.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong61.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong62.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/mpi-strong63.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### CUDA
 
@@ -748,80 +748,80 @@ Looking at the graphs for CUDA strong scaling before, the data seems to be much 
 
 ### 2^16 Elements
 
-<img src="./Report_Images/MergeSort/cuda-strong1.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong2.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong3.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong4.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong5.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong6.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong7.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong8.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong1.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong2.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong3.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong4.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong5.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong6.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong7.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong8.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2 ^18 Elements
 
-<img src="./Report_Images/MergeSort/cuda-strong9.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong10.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong11.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong12.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong13.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong14.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong15.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong16.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong9.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong10.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong11.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong12.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong13.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong14.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong15.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong16.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^20 Elements
 
-<img src="./Report_Images/MergeSort/cuda-strong17.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong18.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong19.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong20.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong21.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong22.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong23.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong24.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong17.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong18.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong19.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong20.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong21.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong22.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong23.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong24.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^22 Elements
 
-<img src="./Report_Images/MergeSort/cuda-strong25.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong26.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong27.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong28.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong29.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong30.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong31.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong32.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong25.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong26.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong27.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong28.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong29.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong30.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong31.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong32.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^24 Elements
 
-<img src="./Report_Images/MergeSort/cuda-strong33.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong34.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong35.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong36.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong37.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong38.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong39.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong40.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong33.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong34.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong35.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong36.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong37.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong38.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong39.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong40.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^26 Elements
 
-<img src="./Report_Images/MergeSort/cuda-strong41.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong42.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong43.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong44.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong45.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong46.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong47.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong48.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong41.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong42.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong43.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong44.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong45.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong46.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong47.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong48.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^28 Elements
 
-<img src="./Report_Images/MergeSort/cuda-strong49.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong50.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong51.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong52.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong53.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong54.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong55.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/MergeSort/cuda-strong56.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/MergeSort/cuda-strong49.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong50.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong51.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong52.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong53.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong54.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong55.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/MergeSort/cuda-strong56.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ## Speedup
 
@@ -831,27 +831,27 @@ When looking at the computation speedups, we see a linear trend between the inpu
 
 ### Random Array
 
-<img src="./Report_Images/MergeSort/scale-mpi1.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/MergeSort/scale-mpi2.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/MergeSort/scale-mpi3.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi1.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/MergeSort/scale-mpi2.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/MergeSort/scale-mpi3.png" alt="speedup-mpi" width="325">
 
 ### Sorted Array
 
-<img src="./Report_Images/MergeSort/scale-mpi4.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/MergeSort/scale-mpi5.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/MergeSort/scale-mpi6.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi4.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/MergeSort/scale-mpi5.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/MergeSort/scale-mpi6.png" alt="speedup-mpi" width="325">
 
 ### Reverse Sorted Array
 
-<img src="./Report_Images/MergeSort/scale-mpi7.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/MergeSort/scale-mpi8.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/MergeSort/scale-mpi9.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi7.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/MergeSort/scale-mpi8.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/MergeSort/scale-mpi9.png" alt="speedup-mpi" width="325">
 
 ### 1% Perturbed Array
 
-<img src="./Report_Images/MergeSort/scale-mpi10.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/MergeSort/scale-mpi11.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/MergeSort/scale-mpi12.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/MergeSort/scale-mpi10.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/MergeSort/scale-mpi11.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/MergeSort/scale-mpi12.png" alt="speedup-mpi" width="325">
 
 ### CUDA
 
@@ -859,27 +859,27 @@ In the CUDA speedup graphs, there doesn't seem to be any inherent benefit to par
 
 ### Random Array
 
-<img src="./Report_Images/MergeSort/scale-cuda1.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/MergeSort/scale-cuda2.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/MergeSort/scale-cuda3.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda1.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/MergeSort/scale-cuda2.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/MergeSort/scale-cuda3.png" alt="speedup-cuda" width="325">
 
 ### Sorted Array
 
-<img src="./Report_Images/MergeSort/scale-cuda4.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/MergeSort/scale-cuda5.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/MergeSort/scale-cuda6.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda4.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/MergeSort/scale-cuda5.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/MergeSort/scale-cuda6.png" alt="speedup-cuda" width="325">
 
 ### Reverse Sorted Array
 
-<img src="./Report_Images/MergeSort/scale-cuda7.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/MergeSort/scale-cuda8.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/MergeSort/scale-cuda9.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda7.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/MergeSort/scale-cuda8.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/MergeSort/scale-cuda9.png" alt="speedup-cuda" width="325">
 
 ### 1% Perturbed Array
 
-<img src="./Report_Images/MergeSort/scale-cuda10.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/MergeSort/scale-cuda11.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/MergeSort/scale-cuda12.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/MergeSort/scale-cuda10.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/MergeSort/scale-cuda11.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/MergeSort/scale-cuda12.png" alt="speedup-cuda" width="325">
 
 # Bitonic Sort
 
@@ -894,51 +894,51 @@ For the sorted array, there is a similar trend except there seems to be an outli
 
 #### RANDOM INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/mpi-weak-1.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-2.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-3.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-4.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-5.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-6.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-7.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-8.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-9.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-1.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-2.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-3.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-4.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-5.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-6.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-7.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-8.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-9.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### SORTED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/mpi-weak-10.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-11.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-12.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-13.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-14.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-15.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-16.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-17.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-18.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-10.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-11.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-12.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-13.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-14.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-15.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-16.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-17.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-18.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### REVERSE SORTED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/mpi-weak-19.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-20.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-21.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-22.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-23.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-24.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-25.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-26.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-27.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-19.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-20.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-21.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-22.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-23.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-24.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-25.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-26.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-27.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### 1% PERTURBED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/mpi-weak-28.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-29.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-30.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-31.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-32.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-33.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-34.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-35.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-weak-36.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-weak-28.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-29.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-30.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-31.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-32.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-33.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-34.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-35.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-weak-36.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 ### CUDA
 
@@ -947,47 +947,47 @@ The sorted array follows the same trend. The reverse sorted array sees a spike a
 
 #### RANDOM INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/cuda-weak-1.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-2.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-3.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-4.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-5.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-6.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-7.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-8.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-1.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-2.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-3.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-4.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-5.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-6.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-7.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-8.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### SORTED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/cuda-weak-9.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-10.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-11.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-12.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-13.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-14.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-15.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-16.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-9.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-10.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-11.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-12.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-13.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-14.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-15.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-16.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### REVERSE SORTED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/cuda-weak-17.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-18.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-19.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-20.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-21.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-22.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-23.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-24.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-17.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-18.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-19.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-20.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-21.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-22.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-23.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-24.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### 1% PERTURBED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/cuda-weak-25.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-26.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-27.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-28.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-29.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-30.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-31.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-weak-32.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-weak-25.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-26.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-27.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-28.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-29.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-30.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-31.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-weak-32.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 ## Strong Scaling
 
@@ -997,87 +997,87 @@ For the next analysis, we look at strong scaling MPI across different input size
 
 ### 2^16 Elements
 
-<img src="./Report_Images/BitonicSort/mpi-strong-1.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-2.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-3.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-4.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-5.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-6.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-7.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-8.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-9.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-1.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-2.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-3.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-4.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-5.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-6.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-7.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-8.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-9.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2 ^18 Elements
 
-<img src="./Report_Images/BitonicSort/mpi-strong-10.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-11.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-12.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-13.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-14.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-15.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-16.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-17.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-18.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-10.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-11.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-12.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-13.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-14.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-15.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-16.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-17.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-18.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^20 Elements
 
-<img src="./Report_Images/BitonicSort/mpi-strong-19.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-20.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-21.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-22.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-23.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-24.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-25.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-26.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-27.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-19.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-20.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-21.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-22.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-23.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-24.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-25.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-26.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-27.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^22 Elements
 
-<img src="./Report_Images/BitonicSort/mpi-strong-28.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-29.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-30.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-31.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-32.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-33.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-34.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-35.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-36.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-28.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-29.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-30.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-31.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-32.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-33.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-34.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-35.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-36.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^24 Elements
 
-<img src="./Report_Images/BitonicSort/mpi-strong-37.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-38.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-39.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-40.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-41.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-42.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-43.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-44.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-45.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-37.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-38.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-39.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-40.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-41.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-42.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-43.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-44.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-45.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^26 Elements
 
-<img src="./Report_Images/BitonicSort/mpi-strong-46.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-47.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-48.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-49.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-50.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-51.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-52.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-53.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-54.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-46.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-47.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-48.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-49.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-50.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-51.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-52.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-53.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-54.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^28 Elements
 
-<img src="./Report_Images/BitonicSort/mpi-strong-55.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-56.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-57.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-58.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-59.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-60.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-61.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-62.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/mpi-strong-63.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/mpi-strong-55.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-56.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-57.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-58.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-59.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-60.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-61.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-62.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/mpi-strong-63.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### CUDA
 
@@ -1085,80 +1085,80 @@ For this analysis, we are looking at CUDA strong scaling across different input 
 
 ### 2^16 Elements
 
-<img src="./Report_Images/BitonicSort/cuda-strong-1.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-2.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-3.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-4.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-5.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-6.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-7.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-8.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-1.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-2.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-3.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-4.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-5.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-6.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-7.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-8.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2 ^18 Elements
 
-<img src="./Report_Images/BitonicSort/cuda-strong-9.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-10.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-11.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-12.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-13.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-14.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-15.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-16.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-9.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-10.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-11.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-12.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-13.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-14.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-15.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-16.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^20 Elements
 
-<img src="./Report_Images/BitonicSort/cuda-strong-17.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-18.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-19.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-20.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-21.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-22.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-23.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-24.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-17.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-18.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-19.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-20.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-21.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-22.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-23.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-24.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^22 Elements
 
-<img src="./Report_Images/BitonicSort/cuda-strong-25.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-26.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-27.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-28.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-29.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-30.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-31.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-32.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-25.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-26.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-27.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-28.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-29.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-30.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-31.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-32.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^24 Elements
 
-<img src="./Report_Images/BitonicSort/cuda-strong-33.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-34.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-35.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-36.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-37.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-38.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-39.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-40.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-33.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-34.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-35.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-36.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-37.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-38.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-39.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-40.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^26 Elements
 
-<img src="./Report_Images/BitonicSort/cuda-strong-41.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-42.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-43.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-44.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-45.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-46.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-47.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-48.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-41.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-42.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-43.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-44.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-45.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-46.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-47.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-48.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^28 Elements
 
-<img src="./Report_Images/BitonicSort/cuda-strong-49.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-50.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-51.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-52.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-53.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-54.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-55.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/BitonicSort/cuda-strong-56.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/BitonicSort/cuda-strong-49.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-50.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-51.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-52.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-53.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-54.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-55.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/BitonicSort/cuda-strong-56.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ## Speedup
 
@@ -1168,27 +1168,27 @@ First we analyze speedup of MPI graphs across different input sizes. When lookin
 
 ### RANDOM INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/mpi-speed-1.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/BitonicSort/mpi-speed-2.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/BitonicSort/mpi-speed-3.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-1.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/BitonicSort/mpi-speed-2.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/BitonicSort/mpi-speed-3.png" alt="speedup-mpi" width="325">
 
 #### SORTED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/mpi-speed-4.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/BitonicSort/mpi-speed-5.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/BitonicSort/mpi-speed-6.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-4.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/BitonicSort/mpi-speed-5.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/BitonicSort/mpi-speed-6.png" alt="speedup-mpi" width="325">
 
 #### REVERSE SORTED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/mpi-speed-7.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/BitonicSort/mpi-speed-8.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/BitonicSort/mpi-speed-9.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-7.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/BitonicSort/mpi-speed-8.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/BitonicSort/mpi-speed-9.png" alt="speedup-mpi" width="325">
 
 #### 1% PERTURBED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/mpi-speed-10.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/BitonicSort/mpi-speed-11.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/BitonicSort/mpi-speed-12.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/BitonicSort/mpi-speed-10.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/BitonicSort/mpi-speed-11.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/BitonicSort/mpi-speed-12.png" alt="speedup-mpi" width="325">
 
 ### CUDA
 
@@ -1196,27 +1196,27 @@ Lastly, we analyze the speedup in CUDA graphs across input types. None of the CU
 
 #### RANDOM INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/cuda-speed-1.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/BitonicSort/cuda-speed-2.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/BitonicSort/cuda-speed-3.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-1.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/BitonicSort/cuda-speed-2.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/BitonicSort/cuda-speed-3.png" alt="speedup-cuda" width="325">
 
 #### SORTED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/cuda-speed-4.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/BitonicSort/cuda-speed-5.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/BitonicSort/cuda-speed-6.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-4.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/BitonicSort/cuda-speed-5.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/BitonicSort/cuda-speed-6.png" alt="speedup-cuda" width="325">
 
 #### REVERSE SORTED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/cuda-speed-7.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/BitonicSort/cuda-speed-8.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/BitonicSort/cuda-speed-9.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-7.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/BitonicSort/cuda-speed-8.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/BitonicSort/cuda-speed-9.png" alt="speedup-cuda" width="325">
 
 #### 1% PERTURBED INPUT ARRAY
 
-<img src="./Report_Images/BitonicSort/cuda-speed-10.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/BitonicSort/cuda-speed-11.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/BitonicSort/cuda-speed-12.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/BitonicSort/cuda-speed-10.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/BitonicSort/cuda-speed-11.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/BitonicSort/cuda-speed-12.png" alt="speedup-cuda" width="325">
 
 # Selection Sort
 
@@ -1233,43 +1233,43 @@ For the general trends of the graphs, the communication graphs increase as the n
 
 #### RANDOM INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/mpi-weak-1.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-2.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-3.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-4.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-5.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-6.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-7.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-weak-1.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-2.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-3.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-4.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-5.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-6.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-7.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 ### SORTED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/mpi-weak-8.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-9.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-10.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-11.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-12.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-13.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-14.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-weak-8.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-9.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-10.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-11.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-12.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-13.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-14.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 ### REVERSE SORTED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/mpi-weak-15.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-16.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-17.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-18.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-19.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-20.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-21.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-weak-15.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-16.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-17.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-18.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-19.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-20.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-21.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### 1% PERTURBED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/mpi-weak-22.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-23.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-24.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-25.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-26.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-27.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-weak-28.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-weak-22.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-23.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-24.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-25.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-26.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-27.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-weak-28.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 ### CUDA
 
@@ -1282,51 +1282,51 @@ All of the array types had similar trends, however reverse sorted took less time
 
 #### RANDOM INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/cuda-weak-1.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-2.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-3.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-4.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-5.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-6.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-7.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-8.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-9.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-weak-1.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-2.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-3.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-4.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-5.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-6.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-7.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-8.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-9.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### SORTED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/cuda-weak-10.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-11.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-12.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-13.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-14.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-15.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-16.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-17.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-18.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-weak-10.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-11.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-12.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-13.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-14.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-15.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-16.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-17.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-18.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### REVERSE SORTED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/cuda-weak-19.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-20.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-21.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-22.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-23.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-24.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-25.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-26.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-27.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-weak-19.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-20.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-21.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-22.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-23.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-24.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-25.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-26.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-27.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 #### 1% PERTURBED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/cuda-weak-28.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-29.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-30.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-31.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-32.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-33.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-34.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-35.png" alt="Average-Time-main-Weak Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-weak-36.png" alt="Average-Time-main-Weak Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-weak-28.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-29.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-30.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-31.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-32.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-33.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-34.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-35.png" alt="Average-Time-main-Weak Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-weak-36.png" alt="Average-Time-main-Weak Scaling" width="325">
 
 ## Strong Scaling
 
@@ -1340,73 +1340,73 @@ As the input size increase, so does the average time for the computation. Since 
 
 ### 2^10 Elements
 
-<img src="./Report_Images/SelectionSort/mpi-strong-1.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-2.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-3.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-4.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-5.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-6.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-7.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-strong-1.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-2.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-3.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-4.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-5.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-6.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-7.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^11 Elements
 
-<img src="./Report_Images/SelectionSort/mpi-strong-8.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-9.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-10.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-11.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-12.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-13.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-14.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-strong-8.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-9.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-10.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-11.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-12.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-13.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-14.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^12 Elements
 
-<img src="./Report_Images/SelectionSort/mpi-strong-15.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-16.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-17.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-18.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-19.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-20.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-21.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-strong-15.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-16.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-17.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-18.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-19.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-20.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-21.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^13 Elements
 
-<img src="./Report_Images/SelectionSort/mpi-strong-22.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-23.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-24.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-25.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-26.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-27.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-28.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-strong-22.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-23.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-24.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-25.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-26.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-27.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-28.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^14 Elements
 
-<img src="./Report_Images/SelectionSort/mpi-strong-29.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-30.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-31.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-32.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-33.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-34.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-35.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-strong-29.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-30.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-31.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-32.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-33.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-34.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-35.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^15 Elements
 
-<img src="./Report_Images/SelectionSort/mpi-strong-36.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-37.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-38.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-39.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-40.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-41.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-42.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-strong-36.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-37.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-38.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-39.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-40.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-41.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-42.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^16 Elements
 
-<img src="./Report_Images/SelectionSort/mpi-strong-43.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-44.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-45.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-46.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-47.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-48.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/mpi-strong-49.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/mpi-strong-43.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-44.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-45.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-46.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-47.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-48.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/mpi-strong-49.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### CUDA
 
@@ -1416,73 +1416,73 @@ For main, a general decrease in time is shown, however around 512 threads the ar
 
 ### 2^10 Elements
 
-<img src="./Report_Images/SelectionSort/cuda-strong-1.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-2.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-3.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-4.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-5.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-6.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-7.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-strong-1.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-2.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-3.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-4.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-5.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-6.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-7.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^11 Elements
 
-<img src="./Report_Images/SelectionSort/cuda-strong-8.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-9.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-10.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-11.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-12.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-13.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-14.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-strong-8.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-9.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-10.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-11.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-12.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-13.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-14.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^12 Elements
 
-<img src="./Report_Images/SelectionSort/cuda-strong-15.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-16.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-17.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-18.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-19.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-20.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-21.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-strong-15.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-16.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-17.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-18.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-19.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-20.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-21.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^13 Elements
 
-<img src="./Report_Images/SelectionSort/cuda-strong-22.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-23.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-24.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-25.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-26.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-27.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-28.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-strong-22.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-23.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-24.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-25.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-26.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-27.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-28.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^14 Elements
 
-<img src="./Report_Images/SelectionSort/cuda-strong-29.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-30.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-31.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-32.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-33.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-34.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-35.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-strong-29.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-30.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-31.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-32.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-33.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-34.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-35.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^15 Elements
 
-<img src="./Report_Images/SelectionSort/cuda-strong-36.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-37.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-38.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-39.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-40.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-41.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-42.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-strong-36.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-37.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-38.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-39.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-40.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-41.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-42.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ### 2^16 Elements
 
-<img src="./Report_Images/SelectionSort/cuda-strong-43.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-44.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-45.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-46.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-47.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-48.png" alt="Average-Time-main-Strong Scaling" width="400">
-<img src="./Report_Images/SelectionSort/cuda-strong-49.png" alt="Average-Time-main-Strong Scaling" width="400">
+<img src="./Report_Images/SelectionSort/cuda-strong-43.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-44.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-45.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-46.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-47.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-48.png" alt="Average-Time-main-Strong Scaling" width="325">
+<img src="./Report_Images/SelectionSort/cuda-strong-49.png" alt="Average-Time-main-Strong Scaling" width="325">
 
 ## Speedup
 
@@ -1496,27 +1496,27 @@ For the comp_large graphs, there is a general increase and then decrease in spee
 
 ### RANDOM INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/mpi-speed-1.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/SelectionSort/mpi-speed-2.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/SelectionSort/mpi-speed-3.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/SelectionSort/mpi-speed-1.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/SelectionSort/mpi-speed-2.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/SelectionSort/mpi-speed-3.png" alt="speedup-mpi" width="325">
 
 #### SORTED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/mpi-speed-4.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/SelectionSort/mpi-speed-5.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/SelectionSort/mpi-speed-6.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/SelectionSort/mpi-speed-4.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/SelectionSort/mpi-speed-5.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/SelectionSort/mpi-speed-6.png" alt="speedup-mpi" width="325">
 
 #### REVERSE SORTED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/mpi-speed-7.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/SelectionSort/mpi-speed-8.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/SelectionSort/mpi-speed-9.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/SelectionSort/mpi-speed-7.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/SelectionSort/mpi-speed-8.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/SelectionSort/mpi-speed-9.png" alt="speedup-mpi" width="325">
 
 #### 1% PERTURBED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/mpi-speed-10.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/SelectionSort/mpi-speed-11.png" alt="speedup-mpi" width="400">
-<img src="./Report_Images/SelectionSort/mpi-speed-12.png" alt="speedup-mpi" width="400">
+<img src="./Report_Images/SelectionSort/mpi-speed-10.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/SelectionSort/mpi-speed-11.png" alt="speedup-mpi" width="325">
+<img src="./Report_Images/SelectionSort/mpi-speed-12.png" alt="speedup-mpi" width="325">
 
 ### CUDA
 
@@ -1526,28 +1526,28 @@ There is a general decrese across the graphs until around 256 threads. Then ther
 
 #### RANDOM INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/cuda-speed-1.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/SelectionSort/cuda-speed-2.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/SelectionSort/cuda-speed-3.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/SelectionSort/cuda-speed-1.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/SelectionSort/cuda-speed-2.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/SelectionSort/cuda-speed-3.png" alt="speedup-cuda" width="325">
 
 
 #### SORTED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/cuda-speed-4.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/SelectionSort/cuda-speed-5.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/SelectionSort/cuda-speed-6.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/SelectionSort/cuda-speed-4.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/SelectionSort/cuda-speed-5.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/SelectionSort/cuda-speed-6.png" alt="speedup-cuda" width="325">
 
 #### REVERSE SORTED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/cuda-speed-7.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/SelectionSort/cuda-speed-8.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/SelectionSort/cuda-speed-9.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/SelectionSort/cuda-speed-7.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/SelectionSort/cuda-speed-8.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/SelectionSort/cuda-speed-9.png" alt="speedup-cuda" width="325">
 
 #### 1% PERTURBED INPUT ARRAY
 
-<img src="./Report_Images/SelectionSort/cuda-speed-10.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/SelectionSort/cuda-speed-11.png" alt="speedup-cuda" width="400">
-<img src="./Report_Images/SelectionSort/cuda-speed-12.png" alt="speedup-cuda" width="400">
+<img src="./Report_Images/SelectionSort/cuda-speed-10.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/SelectionSort/cuda-speed-11.png" alt="speedup-cuda" width="325">
+<img src="./Report_Images/SelectionSort/cuda-speed-12.png" alt="speedup-cuda" width="325">
 
 # Comparison Analysis
 
@@ -1555,21 +1555,21 @@ For the comparison analysis, we analyzed an input size of 2^16 elements since se
 
 ## CUDA - All
 
-<img src="./Report_Images/Comparisons/comp3.png" alt="comp-cuda" width="400">
-<img src="./Report_Images/Comparisons/comp2.png" alt="comp-cuda" width="400">
-<img src="./Report_Images/Comparisons/comp1.png" alt="comp-cuda" width="400">
+<img src="./Report_Images/Comparisons/comp3.png" alt="comp-cuda" width="325">
+<img src="./Report_Images/Comparisons/comp2.png" alt="comp-cuda" width="325">
+<img src="./Report_Images/Comparisons/comp1.png" alt="comp-cuda" width="325">
 
 ## CUDA - Bitonic, Merge, and Sample Sort
 
 When looking at the main and computation graphs without selection sort, we see they are relatively constant, despite the rises and falls in the graphs, as the y-axis scale is to the order of tenths of a second. We see a spike for bitonic sort at 512 threads in the main region, which could likely be an outlier considering its other data points. When looking at just computation, we see that it remains fairly constant for all three graphs. From this analysis, we can conclude that for CUDA, the order from best to worst scaling sorting algorithms for our implementations is bitonic, sample, merge, and then selection sort.
 
-<img src="./Report_Images/Comparisons/comp6.png" alt="comp-cuda" width="400">
-<img src="./Report_Images/Comparisons/comp5.png" alt="comp-cuda" width="400">
+<img src="./Report_Images/Comparisons/comp6.png" alt="comp-cuda" width="325">
+<img src="./Report_Images/Comparisons/comp5.png" alt="comp-cuda" width="325">
 
 ## MPI
 
 The graph of main shows mostly similar behavior across algorithms outside of merge sort, with the other three sorts hovering well below one for most number processes. Sample sort has a spike in the comm time at higher process counts, which explains the upward jump on the far right. Merge sort's graph shape for main isn't explained by either comp or comm, so other areas such as data initialization likely played a role in its poor performance. Looking at the computation graph, we see that selection sort is by far the worst at lower process counts, which indicates it is a poor-performing algorithm. However, it quickly converges towards 0 starting around 32 processes so it seems to take better advantage of more resources. It is difficult to see on the comp graph, but merge sort is the best performing of our sorting algorithm in MPI. When looking at the comm graph, we see most of the sorting algorithms slightly increase as more processes are added, except for sample sort which jumps up at 1024 processes, as previously discussed, due to the communication overhead of sending both the data and samples between processes.
 
-<img src="./Report_Images/Comparisons/mpi1.png" alt="comp-mpi" width="400">
-<img src="./Report_Images/Comparisons/mpi2.png" alt="comp-mpi" width="400">
-<img src="./Report_Images/Comparisons/mpi3.png" alt="comp-mpi" width="400">
+<img src="./Report_Images/Comparisons/mpi1.png" alt="comp-mpi" width="325">
+<img src="./Report_Images/Comparisons/mpi2.png" alt="comp-mpi" width="325">
+<img src="./Report_Images/Comparisons/mpi3.png" alt="comp-mpi" width="325">
