@@ -847,7 +847,7 @@ When looking at the computation speedups, we see a linear trend between the inpu
 <img src="./Report_Images/MergeSort/scale-mpi8.png" alt="speedup-mpi" width="400">
 <img src="./Report_Images/MergeSort/scale-mpi9.png" alt="speedup-mpi" width="400">
 
-# 1% Perturbed Array
+### 1% Perturbed Array
 
 <img src="./Report_Images/MergeSort/scale-mpi10.png" alt="speedup-mpi" width="400">
 <img src="./Report_Images/MergeSort/scale-mpi11.png" alt="speedup-mpi" width="400">
